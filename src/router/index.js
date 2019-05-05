@@ -6,12 +6,12 @@ import routes from './routes';
 import { NotFound } from 'containers';
 import GuardProvider from './GuardProvider';
 import GuardedRoute from './GuardedRoute';
-import { GUARD_TYPES } from './constants';
+import { GuardTypes } from './constants';
 
 const guard = async () => {
   await new Promise(resolve => setTimeout(resolve, 1000));
   return {
-    type: GUARD_TYPES.ADD_PROPS,
+    type: GuardTypes.withProps,
     payload: { hello: 'world' },
   };
 };

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo } from 'react';
 import { Route, __RouterContext as RouterContext } from 'react-router-dom';
 import { usePrevious, useStateWhenMounted } from 'hooks';
-import { GUARD_TYPES, GuardContext, LoadingPageContext, ErrorPageContext } from './constants';
+import { GuardTypes, GuardContext, LoadingPageContext, ErrorPageContext } from './constants';
 
 const Guard = ({ children, component, render }) => {
   const routeProps = useContext(RouterContext);
@@ -30,7 +30,7 @@ const Guard = ({ children, component, render }) => {
       let props = {};
       while (index < guards.length) {
         const { type, payload } = await guards[index](routeProps);
-        if (type === GUARD_TYPES.ADD_PROPS) {
+        if (type === GuardTypes.withProps) {
           props = Object.assign(props, payload || {});
         }
         index += 1;
