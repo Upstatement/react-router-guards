@@ -8,14 +8,16 @@ import GuardProvider from './GuardProvider';
 import GuardedRoute from './GuardedRoute';
 import { GUARD_TYPES } from './constants';
 
-const guard = async () =>
-  // await new Promise(resolve => setTimeout(resolve, 1000));
-  ({
+const guard = async () => {
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  return {
     type: GUARD_TYPES.ADD_PROPS,
     payload: { hello: 'world' },
-  });
+  };
+};
+
 const Router = ({ children }) => (
-  <GuardProvider guards={[guard]} loading={() => 'Loading...'} error={NotFound}>
+  <GuardProvider guards={[guard]} loading={() => <p>Loading...</p>} error={NotFound}>
     <BrowserRouter history={history}>
       <Route
         render={({ location }) =>

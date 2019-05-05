@@ -66,6 +66,8 @@ const Guard = ({ children, component, render }) => {
     return loadingPage(routeProps);
   } else if (routeError) {
     return errorPage({ ...routeProps, error: routeError });
+  } else if (hasRouteUpdated) {
+    return null;
   }
   return (
     <RouterContext.Provider value={{ ...routeProps, ...pageProps }}>

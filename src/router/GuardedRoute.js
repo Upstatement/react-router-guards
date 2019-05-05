@@ -1,14 +1,9 @@
-import React, { Fragment, useContext, useMemo } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Route } from 'react-router-dom';
+import { useContextWrapper } from 'hooks';
 import Guard from './Guard';
 import { GuardContext, LoadingPageContext, ErrorPageContext } from './constants';
-
-const useContextWrapper = (value, context) => {
-  const wrapper = useMemo(() => (value ? context.Provider : Fragment), [value]);
-  const props = useMemo(() => (value ? { value } : {}), [value]);
-  return [wrapper, props];
-};
 
 const GuardedRoute = ({
   beforeEnter,

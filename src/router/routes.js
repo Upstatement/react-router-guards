@@ -23,11 +23,5 @@ export default () => [
     render(props) {
       return <NotFound {...props} />;
     },
-    beforeEnter() {
-      throw new Error(null);
-    },
-    error() {
-      return 'Not here';
-    },
   },
 ];

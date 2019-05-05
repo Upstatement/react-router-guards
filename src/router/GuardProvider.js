@@ -1,19 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { GuardContext, LoadingPageContext, ErrorPageContext } from './constants';
 
-const GuardProvider = ({ children, guards, loading, error }) => (
-  <GuardContext.Provider value={guards}>
-    <LoadingPageContext.Provider value={loading}>
-      <ErrorPageContext.Provider value={error}>{children}</ErrorPageContext.Provider>
-    </LoadingPageContext.Provider>
-  </GuardContext.Provider>
-);
+const GuardProvider = ({ children, guards, loading, error }) => {
+  const globalGuards = useContext(GuardContext);
+  const loadingPage = useContext(LoadingPageContext);
+  const errorPage = useContext(ErrorPageContext);
+
+  return (
+    <GuardContext.Provider value={[...globalGuards, ...guards]}>
+      <LoadingPageContext.Provider value={loading || loadingPage}>
+        <ErrorPageContext.Provider value={error || errorPage}>{children}</ErrorPageContext.Provider>
+      </LoadingPageContext.Provider>
+    </GuardContext.Provider>
+  );
+};
 
 GuardProvider.defaultProps = {
   guards: [],
-  loading: () => null,
-  error: () => null,
 };
 
 GuardProvider.propTypes = {
