@@ -1,0 +1,10 @@
+.vscode
+node_modules
+npm-*
+.DS_store
+
+# build folders
+dist
+
+# environment variables
+.env
