@@ -7,7 +7,7 @@ import { NotFound } from 'containers';
 import GuardProvider from './GuardProvider';
 import GuardedRoute from './GuardedRoute';
 
-const guard = async (props, next) => {
+const guard = async (to, from, next) => {
   await new Promise(resolve => setTimeout(resolve, 1000));
   next({
     hello: 'world',
@@ -15,8 +15,8 @@ const guard = async (props, next) => {
 };
 
 const Router = ({ children }) => (
-  <GuardProvider guards={[guard]} loading={() => <p>Loading...</p>} error={NotFound}>
-    <BrowserRouter history={history}>
+  <BrowserRouter history={history}>
+    <GuardProvider guards={[guard]} loading={() => <p>Loading...</p>} error={NotFound}>
       <Route
         render={({ location }) =>
           children(
@@ -40,8 +40,8 @@ const Router = ({ children }) => (
           )
         }
       />
-    </BrowserRouter>
-  </GuardProvider>
+    </GuardProvider>
+  </BrowserRouter>
 );
 
 Router.propTypes = {

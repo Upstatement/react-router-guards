@@ -26,6 +26,7 @@
           "utils": "./src/utils"
         }
       }
-    ]
+    ],
+    "babel-plugin-dev-expression",
   ]
 }

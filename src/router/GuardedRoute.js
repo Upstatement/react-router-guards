@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Route } from 'react-router-dom';
+import invariant from 'tiny-invariant';
 import { useContextWrapper } from 'hooks';
 import Guard from './Guard';
-import { GuardContext, LoadingPageContext, ErrorPageContext } from './constants';
+import { ErrorPageContext, GuardContext, LoadingPageContext } from './constants';
 
 const GuardedRoute = ({
   beforeEnter,
@@ -15,6 +16,7 @@ const GuardedRoute = ({
   ...routeProps
 }) => {
   const globalGuards = useContext(GuardContext);
+  invariant(globalGuards, 'You should not use <GuardedRoute> outside a <GuardProvider>');
 
   const guards = [...globalGuards];
   if (beforeEnter) {

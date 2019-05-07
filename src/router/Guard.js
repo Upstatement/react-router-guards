@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo } from 'react';
 import { Route, __RouterContext as RouterContext } from 'react-router-dom';
 import { usePrevious, useStateWhenMounted } from 'hooks';
-import { GuardContext, LoadingPageContext, ErrorPageContext } from './constants';
+import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './constants';
 
 const Guard = ({ children, component, render }) => {
   const routeProps = useContext(RouterContext);
@@ -14,6 +14,7 @@ const Guard = ({ children, component, render }) => {
   const guards = useContext(GuardContext);
   const loadingPage = useContext(LoadingPageContext);
   const errorPage = useContext(ErrorPageContext);
+  const fromRouteProps = useContext(FromRouteContext);
 
   const initialRouteValidated = useMemo(() => guards.length === 0, [guards]);
   const [routeValidated, setRouteValidated] = useStateWhenMounted(initialRouteValidated);
@@ -25,14 +26,13 @@ const Guard = ({ children, component, render }) => {
    * the loop will break and the not found page will be shown.
    */
   const guardRoute = async () => {
-    console.log(routeProps);
     try {
       let index = 0;
       let props = {};
       while (index < guards.length) {
         const payload = await new Promise(async (resolve, reject) => {
           try {
-            await guards[index](routeProps, resolve);
+            await guards[index](routeProps, fromRouteProps, resolve);
           } catch (error) {
             reject(error);
           }
