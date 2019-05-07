@@ -16,11 +16,16 @@ const GuardProvider = ({ children, guards, loading, error }) => {
   const from = usePrevious(routerContext);
 
   const globalGuards = useContext(GuardContext);
+  const providerGuards = [
+    ...(globalGuards || []),
+    ...guards,
+  ];
+
   const loadingPage = useContext(LoadingPageContext);
   const errorPage = useContext(ErrorPageContext);
 
   return (
-    <GuardContext.Provider value={[...(globalGuards || []), ...guards]}>
+    <GuardContext.Provider value={providerGuards}>
       <LoadingPageContext.Provider value={loading || loadingPage}>
         <ErrorPageContext.Provider value={error || errorPage}>
           <FromRouteContext.Provider value={from}>{children}</FromRouteContext.Provider>

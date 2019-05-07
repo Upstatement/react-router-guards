@@ -5,16 +5,16 @@ import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } 
 
 const Guard = ({ children, component, render }) => {
   const routeProps = useContext(RouterContext);
-  const prevRouteProps = usePrevious(routeProps);
+  const routePrevProps = usePrevious(routeProps);
   const hasRouteUpdated = useMemo(
-    () => JSON.stringify(prevRouteProps.match.params) !== JSON.stringify(routeProps.match.params),
-    [routeProps, prevRouteProps],
+    () => JSON.stringify(routePrevProps.match.params) !== JSON.stringify(routeProps.match.params),
+    [routeProps, routePrevProps],
   );
+  const fromRouteProps = useContext(FromRouteContext);
 
   const guards = useContext(GuardContext);
   const loadingPage = useContext(LoadingPageContext);
   const errorPage = useContext(ErrorPageContext);
-  const fromRouteProps = useContext(FromRouteContext);
 
   const initialRouteValidated = useMemo(() => guards.length === 0, [guards]);
   const [routeValidated, setRouteValidated] = useStateWhenMounted(initialRouteValidated);
