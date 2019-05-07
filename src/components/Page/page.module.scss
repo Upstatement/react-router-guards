@@ -9,3 +9,7 @@
   flex: 1;
   flex-direction: column;
 }
+
+nav a:not(:last-child) {
+  margin-right: 10px;
+}

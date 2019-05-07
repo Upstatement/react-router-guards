@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo } from 'react';
 import { Route, __RouterContext as RouterContext } from 'react-router-dom';
 import { usePrevious, useStateWhenMounted } from 'hooks';
-import { GuardTypes, GuardContext, LoadingPageContext, ErrorPageContext } from './constants';
+import { GuardContext, LoadingPageContext, ErrorPageContext } from './constants';
 
 const Guard = ({ children, component, render }) => {
   const routeProps = useContext(RouterContext);
@@ -25,14 +25,19 @@ const Guard = ({ children, component, render }) => {
    * the loop will break and the not found page will be shown.
    */
   const guardRoute = async () => {
+    console.log(routeProps);
     try {
       let index = 0;
       let props = {};
       while (index < guards.length) {
-        const { type, payload } = await guards[index](routeProps);
-        if (type === GuardTypes.withProps) {
-          props = Object.assign(props, payload || {});
-        }
+        const payload = await new Promise(async (resolve, reject) => {
+          try {
+            await guards[index](routeProps, resolve);
+          } catch (error) {
+            reject(error);
+          }
+        });
+        props = Object.assign(props, payload || {});
         index += 1;
       }
       setPageProps(props);
@@ -40,7 +45,7 @@ const Guard = ({ children, component, render }) => {
       let { message } = error;
       try {
         message = JSON.parse(message);
-      } catch (err) {
+      } catch {
         // message not JSON parsable, continue
       }
       setRouteError(message || 'Not found.');
@@ -60,7 +65,7 @@ const Guard = ({ children, component, render }) => {
         guardRoute();
       }
     }
-  }, [initialRouteValidated, hasRouteUpdated]);
+  }, [hasRouteUpdated]);
 
   if (!routeValidated) {
     return loadingPage(routeProps);

@@ -6,14 +6,12 @@ import routes from './routes';
 import { NotFound } from 'containers';
 import GuardProvider from './GuardProvider';
 import GuardedRoute from './GuardedRoute';
-import { GuardTypes } from './constants';
 
-const guard = async () => {
+const guard = async (props, next) => {
   await new Promise(resolve => setTimeout(resolve, 1000));
-  return {
-    type: GuardTypes.withProps,
-    payload: { hello: 'world' },
-  };
+  next({
+    hello: 'world',
+  });
 };
 
 const Router = ({ children }) => (
