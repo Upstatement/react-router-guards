@@ -1,7 +1,9 @@
 import babel from 'rollup-plugin-babel';
+import cleanup from 'rollup-plugin-cleanup';
 import external from 'rollup-plugin-peer-deps-external';
 import filesize from 'rollup-plugin-filesize';
 import resolve from 'rollup-plugin-node-resolve';
+import { terser } from 'rollup-plugin-terser';
 
 import pkg from './package.json';
 
@@ -22,14 +24,15 @@ export default {
     file: pkg[name],
     format,
     name,
-    sourcemap: true,
   })),
   plugins: [
     babel({
       exclude: /node_modules/,
     }),
+    cleanup(),
     external(),
     filesize(),
     resolve(),
+    terser(),
   ],
 };

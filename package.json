@@ -51,9 +51,11 @@
     "pretty-quick": "^1.10.0",
     "rollup": "^1.11.3",
     "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-cleanup": "^3.1.1",
     "rollup-plugin-filesize": "^6.0.1",
     "rollup-plugin-node-resolve": "^4.2.3",
     "rollup-plugin-peer-deps-external": "^2.2.0",
+    "rollup-plugin-terser": "^4.0.4",
     "stylelint": "^10.0.1",
     "stylelint-config-sass-guidelines": "^6.0.0"
   },
