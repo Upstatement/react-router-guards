@@ -15,7 +15,6 @@ export default () => [
     exact: true,
     // eslint-disable-next-line react/prop-types
     render(props) {
-      console.log(props);
       // eslint-disable-next-line react/prop-types
       return <p>Hey there {props.match.params.id} :~)</p>;
     },

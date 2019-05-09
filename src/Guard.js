@@ -22,10 +22,14 @@ const Guard = ({ children, component, render }) => {
   const [pageProps, setPageProps] = useStateWhenMounted({});
   const [routeRedirect, setRouteRedirect] = useStateWhenMounted(null);
 
-  const getNextFn = useCallback(resolve => Object.assign(resolve, {
-    props: props => resolve({ props }),
-    redirect: redirect => resolve({ redirect }),
-  }), []);
+  const getNextFn = useCallback(
+    resolve =>
+      Object.assign(() => resolve(), {
+        props: props => resolve({ props }),
+        redirect: redirect => resolve({ redirect }),
+      }),
+    [],
+  );
 
   /**
    * Loops through all guards in context. If an error is thrown in any guards,
