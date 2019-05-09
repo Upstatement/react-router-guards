@@ -1,32 +1,10 @@
 {
   "presets": [
-    [
-      "@babel/preset-env",
-      {
-        "useBuiltIns": "entry"
-      }
-    ],
+    "@babel/preset-env",
     "@babel/preset-react"
   ],
   "plugins": [
     "@babel/plugin-proposal-class-properties",
-    [
-      "module-resolver",
-      {
-        "alias": {
-          "actions": "./src/store/actions",
-          "components": "./src/components",
-          "containers": "./src/containers",
-          "hooks": "./src/hooks",
-          "reducers": "./src/store/reducers",
-          "router": "./src/router",
-          "static": "./src/static",
-          "store": "./src/store",
-          "style": "./src/style",
-          "utils": "./src/utils"
-        }
-      }
-    ],
-    "babel-plugin-dev-expression",
+    "babel-plugin-dev-expression"
   ]
 }

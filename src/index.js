@@ -1,5 +1,2 @@
-import React from 'react';
-import { render } from 'react-dom';
-import App from 'containers';
-
-render(<App />, document.querySelector('#app'));
+export { default as GuardProvider } from './GuardProvider';
+export { default as GuardedRoute } from './GuardedRoute';

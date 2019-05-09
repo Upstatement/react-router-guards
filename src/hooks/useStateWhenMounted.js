@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { useMounted } from 'hooks';
+import { useEffect, useRef, useState } from 'react';
 
 /**
  * React hook for only updating a component's state when the component is still mounted.
@@ -12,7 +11,8 @@ import { useMounted } from 'hooks';
  * the state
  */
 const useStateWhenMounted = initialState => {
-  const mounted = useMounted();
+  const mounted = useRef(true);
+
   const [state, setState] = useState(initialState);
 
   const setStateWhenMounted = newState => {
@@ -20,6 +20,13 @@ const useStateWhenMounted = initialState => {
       setState(newState);
     }
   };
+
+  useEffect(
+    () => () => {
+      mounted.current = false;
+    },
+    [],
+  );
 
   return [state, setStateWhenMounted];
 };
