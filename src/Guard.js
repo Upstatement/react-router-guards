@@ -3,6 +3,12 @@ import { matchPath, Redirect, Route, __RouterContext as RouterContext } from 're
 import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
 import { usePrevious, useStateWhenMounted } from './hooks';
 
+const GuardTypes = {
+  CONTINUE: 'CONTINUE',
+  PROPS: 'PROPS',
+  REDIRECT: 'REDIRECT',
+};
+
 const Guard = ({ children, component, render }) => {
   const routeProps = useContext(RouterContext);
   const routePrevProps = usePrevious(routeProps);
@@ -26,14 +32,21 @@ const Guard = ({ children, component, render }) => {
    * Memoized callback to get the next callback function used in guards.
    * Assigns the `props` and `redirect` functions to callback.
    */
-  const getNextFn = useCallback(
-    resolve =>
-      Object.assign(() => resolve({}), {
-        props: props => resolve({ props }),
-        redirect: redirect => resolve({ redirect }),
-      }),
-    [],
-  );
+  const getNextFn = useCallback(resolve => {
+    const next = () =>
+      resolve({
+        type: GuardTypes.CONTINUE,
+      });
+
+    const extend = (name, type) => {
+      next[name] = payload => resolve({ type, payload });
+    };
+
+    extend('props', GuardTypes.PROPS);
+    extend('redirect', GuardTypes.REDIRECT);
+
+    return next;
+  }, []);
 
   /**
    * Runs through a single guard, passing it the current route's props,
@@ -61,11 +74,11 @@ const Guard = ({ children, component, render }) => {
     let index = 0;
     let props = {};
     while (!routeRedirect && index < guards.length) {
-      const payload = await runGuard(guards[index]);
-      if (payload.redirect) {
-        setRouteRedirect(payload.redirect);
-      } else if (payload.props) {
-        props = Object.assign(props, payload.props || {});
+      const { type, payload } = await runGuard(guards[index]);
+      if (type === GuardTypes.REDIRECT) {
+        setRouteRedirect(payload);
+      } else if (type === GuardTypes.PROPS) {
+        props = Object.assign(props, payload || {});
       }
       index += 1;
     }
