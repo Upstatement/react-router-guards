@@ -1,30 +1,42 @@
 # react-router-guards
 
-A starter React app for future projects and endeavors
+> Guard middleware for React Router navigation
 
-## Getting started
+## Install
 
-### Dependencies
-
-Follow the instructions in the links below to install the required dependencies on your local machine:
-
-- [node.js](https://nodejs.org/en/download/)
-- [npm](https://www.npmjs.com/get-npm)
-
-### Environment
-
-Fork this repository and clone the new one onto your local machine. In the root directory of the folder, run the following command:
-
-```sh
-$ npm i
+```shell
+npm install --save react-router-guards
 ```
 
-This will install of the necessary dependencies for development. Next, you're going to want to set up a local instance of the project running in a server. To do so, run the following command:
+## Basic usage
 
-```sh
-$ npm start
+```jsx
+import React from 'react';
+import { createBrowserHistory } from 'history';
+import { Router } from 'react-router-dom';
+import { GuardProvider, GuardedRoute } from 'react-router-guards';
+import { About, Home, Loading, Login, NotFound } from 'pages';
+import { getIsLoggedIn } from 'utils';
+
+const history = createBrowserHistory();
+
+const requireLogin = (to, from, next) => {
+  if (getIsLoggedIn()) {
+    next();
+  }
+  next.redirect('/login');
+};
+
+const App = () => (
+  <Router history={history}>
+    <GuardProvider loading={Loading} error={NotFound}>
+      <GuardedRoute path="/login" exact component={Login} />
+      <GuardProvider guards={[requireLogin]}>
+        <GuardedRoute path="/" exact component={Home} />
+        <GuardedRoute path="/about" exact component={About} />
+      </GuardProvider>
+      <GuardedRoute path="*" component={NotFound} />
+    </GuardProvider>
+  </Router>
+);
 ```
-
-You should now be able to visit [localhost](http://localhost:3000) in your browser and begin development!
-
-_**Note:** if at any time you would like to cancel the running server instance, press `CTRL + C` in the open terminal window._

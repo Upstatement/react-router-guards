@@ -1,6 +1,6 @@
 {
-  "short_name": "React Router Guards",
-  "name": "React Router Guards Example",
+  "short_name": "Router Guards Demo",
+  "name": "React Router Guards Demo",
   "icons": [
     {
       "src": "favicon.ico",
