@@ -14,8 +14,10 @@ export default () => [
     path: '/hello/:id',
     exact: true,
     // eslint-disable-next-line react/prop-types
-    render({ match }) {
-      return <p>Hey there {match.params.id} :~)</p>;
+    render(props) {
+      console.log(props);
+      // eslint-disable-next-line react/prop-types
+      return <p>Hey there {props.match.params.id} :~)</p>;
     },
   },
   {
