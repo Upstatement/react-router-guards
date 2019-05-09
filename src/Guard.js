@@ -19,8 +19,8 @@ const Guard = ({ children, component, render }) => {
   const initialRouteValidated = useMemo(() => guards.length === 0, [guards]);
   const [routeValidated, setRouteValidated] = useStateWhenMounted(initialRouteValidated);
   const [routeError, setRouteError] = useStateWhenMounted(null);
-  const [pageProps, setPageProps] = useStateWhenMounted({});
   const [routeRedirect, setRouteRedirect] = useStateWhenMounted(null);
+  const [pageProps, setPageProps] = useStateWhenMounted({});
 
   const getNextFn = useCallback(
     resolve =>
@@ -88,7 +88,8 @@ const Guard = ({ children, component, render }) => {
     return loadingPage(routeProps);
   } else if (routeRedirect) {
     const pathToMatch = typeof routeRedirect === 'string' ? routeRedirect : routeRedirect.path;
-    if (!matchPath(pathToMatch, routeProps.match)) {
+    const { path, isExact: exact } = routeProps.match;
+    if (!matchPath(pathToMatch, { path, exact })) {
       return <Redirect to={routeRedirect} />;
     }
   } else if (routeError) {
