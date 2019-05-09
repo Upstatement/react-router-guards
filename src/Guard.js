@@ -22,9 +22,13 @@ const Guard = ({ children, component, render }) => {
   const [routeRedirect, setRouteRedirect] = useStateWhenMounted(null);
   const [pageProps, setPageProps] = useStateWhenMounted({});
 
+  /**
+   * Memoized callback to get the next callback function used in guards.
+   * Assigns the `props` and `redirect` functions to callback.
+   */
   const getNextFn = useCallback(
     resolve =>
-      Object.assign(() => resolve(), {
+      Object.assign(() => resolve({}), {
         props: props => resolve({ props }),
         redirect: redirect => resolve({ redirect }),
       }),
@@ -32,31 +36,49 @@ const Guard = ({ children, component, render }) => {
   );
 
   /**
-   * Loops through all guards in context. If an error is thrown in any guards,
-   * the loop will break and the not found page will be shown.
+   * Runs through a single guard, passing it the current route's props,
+   * the previous route's props, and the next callback function. If an
+   * error occurs, it will be thrown by the Promise.
+   *
+   * @param {function} guard the guard function
+   * @returns {Promise<object>} a Promise returning the guard payload
    */
-  const guardRoute = async () => {
-    try {
-      let index = 0;
-      let props = {};
-      while (!routeRedirect && index < guards.length) {
-        const payload = await new Promise(async (resolve, reject) => {
-          try {
-            await guards[index](routeProps, fromRouteProps, getNextFn(resolve));
-          } catch (error) {
-            reject(error);
-          }
-        });
-        if (payload) {
-          if (payload.redirect) {
-            setRouteRedirect(payload.redirect);
-          } else if (payload.props) {
-            props = Object.assign(props, payload.props || {});
-          }
-        }
-        index += 1;
+  const runGuard = guard =>
+    new Promise(async (resolve, reject) => {
+      try {
+        await guard(routeProps, fromRouteProps, getNextFn(resolve));
+      } catch (error) {
+        reject(error);
       }
-      setPageProps(props);
+    });
+
+  /**
+   * Loops through all guards in context. If the guard adds new props
+   * to the page or causes a redirect, these are tracked in the state
+   * constants defined above.
+   */
+  const resolveAllGuards = async () => {
+    let index = 0;
+    let props = {};
+    while (!routeRedirect && index < guards.length) {
+      const payload = await runGuard(guards[index]);
+      if (payload.redirect) {
+        setRouteRedirect(payload.redirect);
+      } else if (payload.props) {
+        props = Object.assign(props, payload.props || {});
+      }
+      index += 1;
+    }
+    setPageProps(props);
+  };
+
+  /**
+   * Validates the route using the guards. If an error occurs, it
+   * will toggle the route error state.
+   */
+  const validateRoute = async () => {
+    try {
+      await resolveAllGuards();
     } catch (error) {
       let { message } = error;
       try {
@@ -70,7 +92,7 @@ const Guard = ({ children, component, render }) => {
   };
 
   useEffect(() => {
-    guardRoute();
+    validateRoute();
   }, []);
 
   useEffect(() => {
@@ -79,21 +101,21 @@ const Guard = ({ children, component, render }) => {
       if (!initialRouteValidated) {
         setRouteError(null);
         setRouteRedirect(null);
-        guardRoute();
+        validateRoute();
       }
     }
   }, [hasRouteUpdated]);
 
   if (!routeValidated) {
     return loadingPage(routeProps);
+  } else if (routeError) {
+    return errorPage({ ...routeProps, error: routeError });
   } else if (routeRedirect) {
     const pathToMatch = typeof routeRedirect === 'string' ? routeRedirect : routeRedirect.path;
     const { path, isExact: exact } = routeProps.match;
     if (!matchPath(pathToMatch, { path, exact })) {
       return <Redirect to={routeRedirect} />;
     }
-  } else if (routeError) {
-    return errorPage({ ...routeProps, error: routeError });
   } else if (hasRouteUpdated) {
     return null;
   }
