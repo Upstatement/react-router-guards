@@ -2,7 +2,7 @@ import { createContext } from 'react';
 
 export const ErrorPageContext = createContext(() => null);
 
-export const FromRouteContext = createContext(null);
+export const FromRouteContext = createContext();
 
 export const GuardContext = createContext();
 

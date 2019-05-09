@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo } from 'react';
 import { Route, __RouterContext as RouterContext } from 'react-router-dom';
-import { usePrevious, useStateWhenMounted } from 'hooks';
-import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './constants';
+import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
+import { usePrevious, useStateWhenMounted } from './hooks';
 
 const Guard = ({ children, component, render }) => {
   const routeProps = useContext(RouterContext);
@@ -55,7 +55,7 @@ const Guard = ({ children, component, render }) => {
 
   useEffect(() => {
     guardRoute();
-  }, []);
+  }, [guardRoute]);
 
   useEffect(() => {
     if (hasRouteUpdated) {
@@ -65,7 +65,7 @@ const Guard = ({ children, component, render }) => {
         guardRoute();
       }
     }
-  }, [hasRouteUpdated]);
+  }, [guardRoute, hasRouteUpdated, initialRouteValidated, setRouteError, setRouteValidated]);
 
   if (!routeValidated) {
     return loadingPage(routeProps);
@@ -76,6 +76,7 @@ const Guard = ({ children, component, render }) => {
   }
   return (
     <RouterContext.Provider value={{ ...routeProps, ...pageProps }}>
+      {/* eslint-disable-next-line react/no-children-prop */}
       <Route children={children} component={component} render={render} />
     </RouterContext.Provider>
   );

@@ -2,13 +2,13 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { __RouterContext as RouterContext } from 'react-router-dom';
 import invariant from 'tiny-invariant';
-import { usePrevious } from 'hooks';
 import {
   ErrorPageContext,
   FromRouteContext,
   GuardContext,
   LoadingPageContext,
-} from './constants';
+} from './contexts';
+import { usePrevious } from './hooks';
 
 const GuardProvider = ({ children, guards, loading, error }) => {
   const routerContext = useContext(RouterContext);

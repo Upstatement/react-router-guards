@@ -2,64 +2,60 @@
   "name": "react-router-guards",
   "version": "0.1.0",
   "description": "Guard middleware for React Router navigation",
-  "main": "src/index.js",
-  "scripts": {
-    "build": "webpack --mode=production",
-    "develop": "webpack-dev-server --mode=development --hot --inline",
-    "start": "npm run develop"
-  },
+  "author": "Josh Pensky <joshuapensky@gmail.com>",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/joshpensky/react-starter.git"
   },
-  "author": "Josh Pensky <joshuapensky@gmail.com>",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/joshpensky/react-starter/issues"
   },
   "homepage": "https://github.com/joshpensky/react-starter#readme",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "start": "rollup -c -w"
+  },
+  "peerDependencies": {
+    "prop-types": "^15.6.0",
+    "react": "^16.8.0",
+    "react-router-dom": "^5.0.0"
+  },
   "dependencies": {
-    "@babel/polyfill": "^7.4.4",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-redux": "^7.0.2",
-    "react-router-dom": "^5.0.0",
-    "redux": "^4.0.1",
-    "redux-thunk": "^2.3.0",
     "tiny-invariant": "^1.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
     "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-react": "^7.0.0",
     "@upstatement/eslint-config": "^0.4.2",
     "@upstatement/prettier-config": "^0.3.0",
     "babel-eslint": "^10.0.1",
-    "babel-loader": "^8.0.5",
     "babel-plugin-dev-expression": "^0.2.1",
-    "babel-plugin-module-resolver": "^3.2.0",
-    "copy-webpack-plugin": "^5.0.2",
-    "css-loader": "^2.1.1",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-promise": "^4.1.1",
     "eslint-plugin-react": "^7.12.4",
-    "html-webpack-plugin": "^3.2.0",
+    "eslint-plugin-react-hooks": "^1.6.0",
     "husky": "^1.3.1",
     "lint-staged": "^8.1.5",
     "prettier": "^1.17.0",
     "pretty-quick": "^1.10.0",
-    "redux-devtools-extension": "^2.13.8",
-    "sass": "^1.18.0",
-    "sass-loader": "^7.1.0",
-    "style-loader": "^0.23.1",
+    "rollup": "^1.11.3",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-filesize": "^6.0.1",
+    "rollup-plugin-node-resolve": "^4.2.3",
+    "rollup-plugin-peer-deps-external": "^2.2.0",
     "stylelint": "^10.0.1",
-    "stylelint-config-sass-guidelines": "^5.4.0",
-    "webpack": "^4.30.0",
-    "webpack-cli": "^3.3.0",
-    "webpack-dev-server": "^3.3.1"
+    "stylelint-config-sass-guidelines": "^6.0.0"
   },
   "lint-staged": {
     "*.js": [

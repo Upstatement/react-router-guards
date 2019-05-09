@@ -2,9 +2,9 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Route } from 'react-router-dom';
 import invariant from 'tiny-invariant';
-import { useContextWrapper } from 'hooks';
 import Guard from './Guard';
-import { ErrorPageContext, GuardContext, LoadingPageContext } from './constants';
+import { ErrorPageContext, GuardContext, LoadingPageContext } from './contexts';
+import { useContextWrapper } from './hooks';
 
 const GuardedRoute = ({
   beforeEnter,
@@ -33,6 +33,7 @@ const GuardedRoute = ({
         <GuardContext.Provider value={guards}>
           <LoadingProvider {...loadingProps}>
             <ErrorProvider {...errorProps}>
+              {/* eslint-disable-next-line react/no-children-prop */}
               <Guard children={children} component={component} render={render} />
             </ErrorProvider>
           </LoadingProvider>
