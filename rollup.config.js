@@ -1,9 +1,10 @@
 import babel from 'rollup-plugin-babel';
-import cleanup from 'rollup-plugin-cleanup';
+// import cleanup from 'rollup-plugin-cleanup';
 import external from 'rollup-plugin-peer-deps-external';
 import filesize from 'rollup-plugin-filesize';
 import resolve from 'rollup-plugin-node-resolve';
-import { terser } from 'rollup-plugin-terser';
+// import { terser } from 'rollup-plugin-terser';
+import typescript from 'rollup-plugin-typescript';
 
 import pkg from './package.json';
 
@@ -19,7 +20,7 @@ const outputs = [
 ];
 
 export default {
-  input: 'src/index.js',
+  input: 'src/index.ts',
   output: outputs.map(({ name, format }) => ({
     file: pkg[name],
     format,
@@ -29,10 +30,11 @@ export default {
     babel({
       exclude: /node_modules/,
     }),
-    cleanup(),
+    // cleanup(),
     external(),
     filesize(),
     resolve(),
-    terser(),
+    // terser(),
+    typescript(),
   ],
 };

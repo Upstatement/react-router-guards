@@ -1,25 +1,24 @@
-import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
-import { __RouterContext as RouterContext } from 'react-router-dom';
+import * as React from 'react';
+import { FC, useContext } from 'react';
+import { __RouterContext as RouterContext } from 'react-router';
 import invariant from 'tiny-invariant';
-import {
-  ErrorPageContext,
-  FromRouteContext,
-  GuardContext,
-  LoadingPageContext,
-} from './contexts';
+import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
 import { usePrevious } from './hooks';
+import { PageComponent, GuardFunction } from './types';
 
-const GuardProvider = ({ children, guards, loading, error }) => {
+interface Props {
+  guards: GuardFunction[];
+  loading: PageComponent;
+  error: PageComponent;
+}
+
+const GuardProvider: FC<Props> = ({ children, guards, loading, error }) => {
   const routerContext = useContext(RouterContext);
-  invariant(routerContext, 'You should not use <GuardProvider> outside a <Router>');
+  invariant(!!routerContext, 'You should not use <GuardProvider> outside a <Router>');
   const from = usePrevious(routerContext);
 
   const globalGuards = useContext(GuardContext);
-  const providerGuards = [
-    ...(globalGuards || []),
-    ...guards,
-  ];
+  const providerGuards: GuardFunction[] = [...(globalGuards || []), ...guards];
 
   const loadingPage = useContext(LoadingPageContext);
   const errorPage = useContext(ErrorPageContext);
@@ -37,13 +36,6 @@ const GuardProvider = ({ children, guards, loading, error }) => {
 
 GuardProvider.defaultProps = {
   guards: [],
-};
-
-GuardProvider.propTypes = {
-  children: PropTypes.node,
-  guards: PropTypes.arrayOf(PropTypes.func),
-  loading: PropTypes.func,
-  error: PropTypes.func,
 };
 
 export default GuardProvider;

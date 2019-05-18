@@ -3,11 +3,11 @@ import { useEffect, useRef } from 'react';
 /**
  * React hook for storing the previous value of the
  * given value.
- * 
+ *
  * @param {any} value the value to store
  * @returns the previous value
  */
-const usePrevious = value => {
+function usePrevious<T>(value: T): T {
   const ref = useRef(value);
 
   useEffect(() => {
@@ -15,6 +15,6 @@ const usePrevious = value => {
   });
 
   return ref.current;
-};
+}
 
 export default usePrevious;
