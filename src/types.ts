@@ -1,6 +1,6 @@
 import { ComponentType } from 'react';
+import { LocationDescriptor } from 'history';
 import { RouteChildrenProps } from 'react-router';
-import { RedirectProps } from 'react-router-dom';
 
 export const GuardTypes = Object.freeze({
   CONTINUE: 'CONTINUE',
@@ -8,35 +8,35 @@ export const GuardTypes = Object.freeze({
   REDIRECT: 'REDIRECT',
 });
 
+export type GuardType = GUARD_TYPES_CONTINUE | GUARD_TYPES_PROPS | GUARD_TYPES_REDIRECT;
+
 export type GUARD_TYPES_CONTINUE = typeof GuardTypes.CONTINUE;
-export type GUARD_TYPES_PROPS = typeof GuardTypes.PROPS;
-export type GUARD_TYPES_REDIRECT = typeof GuardTypes.REDIRECT;
-
-export interface NextProps {
-  [key: string]: any;
-}
-
 export interface NextContinueAction {
   type: GUARD_TYPES_CONTINUE;
   payload?: any;
 }
 
+export type GUARD_TYPES_PROPS = typeof GuardTypes.PROPS;
+export interface NextPropsPayload {
+  [key: string]: any;
+}
 export interface NextPropsAction {
   type: GUARD_TYPES_PROPS;
-  payload: NextProps;
+  payload: NextPropsPayload;
 }
 
+export type GUARD_TYPES_REDIRECT = typeof GuardTypes.REDIRECT;
+export type NextRedirectPayload = LocationDescriptor;
 export interface NextRedirectAction {
   type: GUARD_TYPES_REDIRECT;
-  payload: RedirectProps;
+  payload: NextRedirectPayload;
 }
 
 export type NextAction = NextContinueAction | NextPropsAction | NextRedirectAction;
-
 export interface Next {
   (): void;
-  props(props: NextProps): void;
-  redirect(to: RedirectProps): void;
+  props(props: NextPropsPayload): void;
+  redirect(to: LocationDescriptor): void;
 }
 
 export type GuardFunction = (

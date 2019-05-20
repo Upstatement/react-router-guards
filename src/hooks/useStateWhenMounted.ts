@@ -8,8 +8,8 @@ type SetState<T> = (newState: React.SetStateAction<T>) => void;
  *
  * The interface in which this hook is used is identical to that of `useState`.
  *
- * @param {any} initialState the initial value of the state variable
- * @returns {Array} an array containing the state variable and the function to update
+ * @param initialState the initial value of the state variable
+ * @returns an array containing the state variable and the function to update
  * the state
  */
 function useStateWhenMounted<T>(initialState: T): [T, SetState<T>] {

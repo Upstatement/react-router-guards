@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
  * React hook for storing the previous value of the
  * given value.
  *
- * @param {any} value the value to store
+ * @param value the value to store
  * @returns the previous value
  */
 function usePrevious<T>(value: T): T {

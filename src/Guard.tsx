@@ -1,13 +1,24 @@
 import * as React from 'react';
 import { Fragment, useCallback, useContext, useEffect, useMemo } from 'react';
-import * as H from 'history';
 import { __RouterContext as RouterContext, RouteProps } from 'react-router';
 import { matchPath, Redirect, Route } from 'react-router-dom';
 import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
 import { usePrevious, useStateWhenMounted } from './hooks';
-import { GuardFunction, GuardTypes, Next, NextAction, PageComponent } from './types';
+import {
+  GuardFunction,
+  GuardType,
+  GuardTypes,
+  Next,
+  NextAction,
+  NextPropsPayload,
+  NextRedirectPayload,
+  PageComponent,
+} from './types';
 
 interface Props extends RouteProps {}
+
+type RouteError = string | { [key: string]: any } | null;
+type RouteRedirect = NextRedirectPayload | null;
 
 const Guard: React.FunctionComponent<Props> = ({ children, component, render }) => {
   const routeProps = useContext(RouterContext);
@@ -26,18 +37,17 @@ const Guard: React.FunctionComponent<Props> = ({ children, component, render }) 
     guards,
   ]);
   const [routeValidated, setRouteValidated] = useStateWhenMounted<boolean>(initialRouteValidated);
-  const [routeError, setRouteError] = useStateWhenMounted<string | Object | null>(null);
-  const [routeRedirect, setRouteRedirect] = useStateWhenMounted<
-    string | H.LocationDescriptor | null
-  >(null);
-  const [pageProps, setPageProps] = useStateWhenMounted<Object>({});
+  const [routeError, setRouteError] = useStateWhenMounted<RouteError>(null);
+  const [routeRedirect, setRouteRedirect] = useStateWhenMounted<RouteRedirect>(null);
+  const [pageProps, setPageProps] = useStateWhenMounted<NextPropsPayload>({});
 
   /**
    * Memoized callback to get the next callback function used in guards.
    * Assigns the `props` and `redirect` functions to callback.
    */
   const getNextFn = useCallback((resolve: Function): Next => {
-    const getResolveFn = type => payload => resolve({ type, payload });
+    const getResolveFn = (type: GuardType) => (payload: NextPropsPayload | NextRedirectPayload) =>
+      resolve({ type, payload });
 
     return Object.assign(() => getResolveFn(GuardTypes.CONTINUE), {
       props: getResolveFn(GuardTypes.PROPS),
@@ -50,8 +60,8 @@ const Guard: React.FunctionComponent<Props> = ({ children, component, render }) 
    * the previous route's props, and the next callback function. If an
    * error occurs, it will be thrown by the Promise.
    *
-   * @param {function} guard the guard function
-   * @returns {Promise<object>} a Promise returning the guard payload
+   * @param guard the guard function
+   * @returns a Promise returning the guard payload
    */
   const runGuard = (guard: GuardFunction): Promise<NextAction> =>
     new Promise(async (resolve, reject) => {
