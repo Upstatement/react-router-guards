@@ -17,14 +17,14 @@ function useStateWhenMounted<T>(initialState: T): [T, SetState<T>] {
 
   const [state, setState] = useState(initialState);
 
-  const setStateWhenMounted: SetState<T> = newState => {
+  const setStateWhenMounted: SetState<T> = (newState): void => {
     if (mounted.current) {
       setState(newState);
     }
   };
 
   useEffect(
-    () => () => {
+    (): (() => void) => (): void => {
       mounted.current = false;
     },
     [],

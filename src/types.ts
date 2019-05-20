@@ -17,9 +17,7 @@ export interface NextContinueAction {
 }
 
 export type GUARD_TYPES_PROPS = typeof GuardTypes.PROPS;
-export interface NextPropsPayload {
-  [key: string]: any;
-}
+export type NextPropsPayload = Record<string, any>;
 export interface NextPropsAction {
   type: GUARD_TYPES_PROPS;
   payload: NextPropsPayload;
@@ -33,6 +31,7 @@ export interface NextRedirectAction {
 }
 
 export type NextAction = NextContinueAction | NextPropsAction | NextRedirectAction;
+
 export interface Next {
   (): void;
   props(props: NextPropsPayload): void;

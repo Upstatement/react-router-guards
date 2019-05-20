@@ -39,6 +39,8 @@
     "@babel/preset-react": "^7.0.0",
     "@types/react": "^16.8.17",
     "@types/react-router-dom": "^4.3.3",
+    "@typescript-eslint/eslint-plugin": "^1.9.0",
+    "@typescript-eslint/parser": "^1.9.0",
     "@upstatement/eslint-config": "^0.4.2",
     "@upstatement/prettier-config": "^0.3.0",
     "babel-eslint": "^10.0.1",

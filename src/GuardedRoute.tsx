@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useContext } from 'react';
 import { Route, RouteProps } from 'react-router-dom';
 import invariant from 'tiny-invariant';
 import ContextWrapper from './ContextWrapper';
@@ -21,8 +20,8 @@ const GuardedRoute: React.FunctionComponent<Props> = ({
   loading,
   render,
   ...routeProps
-}) => {
-  const globalGuards = useContext(GuardContext);
+}): React.ReactElement => {
+  const globalGuards = React.useContext(GuardContext);
   invariant(!!globalGuards, 'You should not use <GuardedRoute> outside a <GuardProvider>');
 
   const guards = [...(globalGuards || [])];
@@ -33,7 +32,7 @@ const GuardedRoute: React.FunctionComponent<Props> = ({
   return (
     <Route
       {...routeProps}
-      render={() => (
+      render={(): React.ReactElement => (
         <GuardContext.Provider value={guards}>
           <ContextWrapper<PageComponent> context={LoadingPageContext} value={loading}>
             <ContextWrapper<PageComponent> context={ErrorPageContext} value={error}>
