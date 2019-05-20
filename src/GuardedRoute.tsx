@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { FC, useContext } from 'react';
+import { useContext } from 'react';
 import { Route, RouteProps } from 'react-router-dom';
 import invariant from 'tiny-invariant';
 import ContextWrapper from './ContextWrapper';
 import Guard from './Guard';
 import { ErrorPageContext, GuardContext, LoadingPageContext } from './contexts';
-import { PageComponent, GuardFunction } from './types';
+import { GuardFunction, PageComponent } from './types';
 
 interface Props extends RouteProps {
   beforeEnter?: GuardFunction;
@@ -13,7 +13,7 @@ interface Props extends RouteProps {
   loading?: PageComponent;
 }
 
-const GuardedRoute: FC<Props> = ({
+const GuardedRoute: React.FunctionComponent<Props> = ({
   beforeEnter,
   children,
   component,

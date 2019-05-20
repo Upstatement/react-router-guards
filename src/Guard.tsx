@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { ComponentType, Fragment, useCallback, useContext, useEffect, useMemo } from 'react';
+import { Fragment, useCallback, useContext, useEffect, useMemo } from 'react';
 import * as H from 'history';
-import { __RouterContext as RouterContext, RouteProps, RedirectProps } from 'react-router';
+import { __RouterContext as RouterContext, RouteProps } from 'react-router';
 import { matchPath, Redirect, Route } from 'react-router-dom';
 import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
 import { usePrevious, useStateWhenMounted } from './hooks';
-import { GuardFunction, GuardTypes, Next, NextAction } from './types';
+import { GuardFunction, GuardTypes, Next, NextAction, PageComponent } from './types';
 
-interface GuardProps extends RouteProps {}
+interface Props extends RouteProps {}
 
-const Guard: React.FunctionComponent<GuardProps> = ({ children, component, render }) => {
+const Guard: React.FunctionComponent<Props> = ({ children, component, render }) => {
   const routeProps = useContext(RouterContext);
   const routePrevProps = usePrevious(routeProps);
   const hasRouteUpdated = useMemo(
@@ -105,14 +105,18 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, rende
     setRouteValidated(true);
   };
 
-  const renderNode = (
-    node: ComponentType | null | undefined | string | boolean | number,
-    props: Object,
-  ): React.ReactElement | null => {
-    if (!node) {
+  /**
+   * Renders a page with the given props.
+   *
+   * @param page the page component to render
+   * @param props the props to pass to the page
+   * @returns the page component
+   */
+  const renderPage = (page: PageComponent, props: Object): React.ReactElement | null => {
+    if (!page) {
       return null;
-    } else if (typeof node !== 'string' && typeof node !== 'boolean' && typeof node !== 'number') {
-      return React.createElement(node, props);
+    } else if (typeof page !== 'string' && typeof page !== 'boolean' && typeof page !== 'number') {
+      return React.createElement(page, props);
     }
     return <Fragment>node</Fragment>;
   };
@@ -133,9 +137,9 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, rende
   }, [hasRouteUpdated]);
 
   if (!routeValidated) {
-    return renderNode(LoadingPage, routeProps);
+    return renderPage(LoadingPage, routeProps);
   } else if (routeError) {
-    return renderNode(ErrorPage, { ...routeProps, error: routeError });
+    return renderPage(ErrorPage, { ...routeProps, error: routeError });
   } else if (routeRedirect) {
     const pathToMatch = typeof routeRedirect === 'string' ? routeRedirect : routeRedirect.pathname;
     const { path, isExact: exact } = routeProps.match;

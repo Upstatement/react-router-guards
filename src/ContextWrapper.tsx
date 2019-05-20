@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Fragment, FunctionComponent, ReactNode } from 'react';
+import { Fragment } from 'react';
 
 interface Props<T> {
   context: React.Context<T>;

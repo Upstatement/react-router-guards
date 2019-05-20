@@ -4,7 +4,10 @@
     "module": "es6", // specify module code generation
     "jsx": "react", // use typescript to transpile jsx to js
     "target": "es5", // specify ECMAScript target version
-    "allowJs": true, // allow a partial TypeScript and JavaScript codebase
-    "moduleResolution": "node"
-  }
+    "allowJs": false, // allow a partial TypeScript and JavaScript codebase
+    "moduleResolution": "node",
+    "declaration": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "demo/**/*"]
 }

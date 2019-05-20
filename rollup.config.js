@@ -4,7 +4,7 @@ import external from 'rollup-plugin-peer-deps-external';
 import filesize from 'rollup-plugin-filesize';
 import resolve from 'rollup-plugin-node-resolve';
 // import { terser } from 'rollup-plugin-terser';
-import typescript from 'rollup-plugin-typescript';
+import typescript from 'rollup-plugin-typescript2';
 
 import pkg from './package.json';
 

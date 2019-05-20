@@ -14,6 +14,7 @@
   "homepage": "https://github.com/joshpensky/react-starter#readme",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -59,7 +60,7 @@
     "rollup-plugin-node-resolve": "^4.2.3",
     "rollup-plugin-peer-deps-external": "^2.2.0",
     "rollup-plugin-terser": "^4.0.4",
-    "rollup-plugin-typescript": "^1.0.1",
+    "rollup-plugin-typescript2": "^0.21.1",
     "stylelint": "^10.0.1",
     "stylelint-config-sass-guidelines": "^6.0.0",
     "tslib": "^1.9.3",

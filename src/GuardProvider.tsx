@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { FC, useContext } from 'react';
+import { useContext } from 'react';
 import { __RouterContext as RouterContext } from 'react-router';
 import invariant from 'tiny-invariant';
 import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
 import { usePrevious } from './hooks';
-import { PageComponent, GuardFunction } from './types';
+import { GuardFunction, PageComponent } from './types';
 
 interface Props {
   guards: GuardFunction[];
@@ -12,7 +12,7 @@ interface Props {
   error: PageComponent;
 }
 
-const GuardProvider: FC<Props> = ({ children, guards, loading, error }) => {
+const GuardProvider: React.FunctionComponent<Props> = ({ children, guards, loading, error }) => {
   const routerContext = useContext(RouterContext);
   invariant(!!routerContext, 'You should not use <GuardProvider> outside a <Router>');
   const from = usePrevious(routerContext);

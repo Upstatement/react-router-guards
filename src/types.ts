@@ -12,6 +12,10 @@ export type GUARD_TYPES_CONTINUE = typeof GuardTypes.CONTINUE;
 export type GUARD_TYPES_PROPS = typeof GuardTypes.PROPS;
 export type GUARD_TYPES_REDIRECT = typeof GuardTypes.REDIRECT;
 
+export interface NextProps {
+  [key: string]: any;
+}
+
 export interface NextContinueAction {
   type: GUARD_TYPES_CONTINUE;
   payload?: any;
@@ -19,7 +23,7 @@ export interface NextContinueAction {
 
 export interface NextPropsAction {
   type: GUARD_TYPES_PROPS;
-  payload: Object;
+  payload: NextProps;
 }
 
 export interface NextRedirectAction {
@@ -31,7 +35,7 @@ export type NextAction = NextContinueAction | NextPropsAction | NextRedirectActi
 
 export interface Next {
   (): void;
-  props(props: Object): void;
+  props(props: NextProps): void;
   redirect(to: RedirectProps): void;
 }
 
