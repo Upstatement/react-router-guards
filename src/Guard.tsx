@@ -17,16 +17,11 @@ import {
 type RouteError = string | Record<string, any> | null;
 type RouteRedirect = NextRedirectPayload | null;
 
-const Guard: React.FunctionComponent<RouteProps> = ({
-  children,
-  component,
-  render,
-}): React.ReactElement | null => {
+const Guard: React.FunctionComponent<RouteProps> = ({ children, component, render }) => {
   const routeProps = useContext(RouterContext);
   const routePrevProps = usePrevious(routeProps);
   const hasRouteUpdated = useMemo(
-    (): boolean =>
-      JSON.stringify(routePrevProps.match.params) !== JSON.stringify(routeProps.match.params),
+    () => JSON.stringify(routePrevProps.match.params) !== JSON.stringify(routeProps.match.params),
     [routeProps, routePrevProps],
   );
   const fromRouteProps = useContext(FromRouteContext);
@@ -35,10 +30,9 @@ const Guard: React.FunctionComponent<RouteProps> = ({
   const LoadingPage = useContext(LoadingPageContext);
   const ErrorPage = useContext(ErrorPageContext);
 
-  const initialRouteValidated = useMemo(
-    (): boolean => !!(guards && guards.length && guards.length === 0),
-    [guards],
-  );
+  const initialRouteValidated = useMemo(() => !!(guards && guards.length && guards.length === 0), [
+    guards,
+  ]);
   const [routeValidated, setRouteValidated] = useStateWhenMounted<boolean>(initialRouteValidated);
   const [routeError, setRouteError] = useStateWhenMounted<RouteError>(null);
   const [routeRedirect, setRouteRedirect] = useStateWhenMounted<RouteRedirect>(null);
@@ -49,11 +43,10 @@ const Guard: React.FunctionComponent<RouteProps> = ({
    * Assigns the `props` and `redirect` functions to callback.
    */
   const getNextFn = useCallback((resolve: Function): Next => {
-    const getResolveFn = (type: GuardType): ((payload?: any) => void) => (
-      payload: NextPropsPayload | NextRedirectPayload,
-    ): void => resolve({ type, payload });
+    const getResolveFn = (type: GuardType) => (payload: NextPropsPayload | NextRedirectPayload) =>
+      resolve({ type, payload });
 
-    return Object.assign((): Function => getResolveFn(GuardTypes.CONTINUE), {
+    return Object.assign(() => getResolveFn(GuardTypes.CONTINUE), {
       props: getResolveFn(GuardTypes.PROPS),
       redirect: getResolveFn(GuardTypes.REDIRECT),
     });
@@ -140,11 +133,11 @@ const Guard: React.FunctionComponent<RouteProps> = ({
     return <Fragment>node</Fragment>;
   };
 
-  useEffect((): void => {
+  useEffect(() => {
     validateRoute();
   }, []);
 
-  useEffect((): void => {
+  useEffect(() => {
     if (hasRouteUpdated) {
       setRouteValidated(initialRouteValidated);
       if (!initialRouteValidated) {

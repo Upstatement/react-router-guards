@@ -5,11 +5,7 @@ interface Props<T> {
   value: T;
 }
 
-function ContextWrapper<T>({
-  children,
-  context,
-  value,
-}: React.PropsWithChildren<Props<T>>): React.ReactElement {
+function ContextWrapper<T>({ children, context, value }: React.PropsWithChildren<Props<T>>) {
   if (value) {
     const { Provider } = context;
     return <Provider value={value}>{children}</Provider>;

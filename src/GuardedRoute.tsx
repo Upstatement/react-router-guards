@@ -20,7 +20,7 @@ const GuardedRoute: React.FunctionComponent<Props> = ({
   loading,
   render,
   ...routeProps
-}): React.ReactElement => {
+}) => {
   const globalGuards = useContext(GuardContext);
   invariant(!!globalGuards, 'You should not use <GuardedRoute> outside a <GuardProvider>');
 

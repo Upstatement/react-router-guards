@@ -11,12 +11,7 @@ interface Props {
   error: PageComponent;
 }
 
-const GuardProvider: React.FunctionComponent<Props> = ({
-  children,
-  guards,
-  loading,
-  error,
-}): React.ReactElement => {
+const GuardProvider: React.FunctionComponent<Props> = ({ children, guards, loading, error }) => {
   const routerContext = useContext(RouterContext);
   invariant(!!routerContext, 'You should not use <GuardProvider> outside a <Router>');
   const from = usePrevious(routerContext);
