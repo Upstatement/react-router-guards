@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import { __RouterContext as RouterContext } from 'react-router';
 import invariant from 'tiny-invariant';
 import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
@@ -17,15 +17,15 @@ const GuardProvider: React.FunctionComponent<Props> = ({
   loading,
   error,
 }): React.ReactElement => {
-  const routerContext = React.useContext(RouterContext);
+  const routerContext = useContext(RouterContext);
   invariant(!!routerContext, 'You should not use <GuardProvider> outside a <Router>');
   const from = usePrevious(routerContext);
 
-  const globalGuards = React.useContext(GuardContext);
+  const globalGuards = useContext(GuardContext);
   const providerGuards: GuardFunction[] = [...(globalGuards || []), ...guards];
 
-  const loadingPage = React.useContext(LoadingPageContext);
-  const errorPage = React.useContext(ErrorPageContext);
+  const loadingPage = useContext(LoadingPageContext);
+  const errorPage = useContext(ErrorPageContext);
 
   return (
     <GuardContext.Provider value={providerGuards}>

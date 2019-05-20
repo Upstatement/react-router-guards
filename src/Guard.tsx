@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { createElement, Fragment, useCallback, useContext, useEffect, useMemo } from 'react';
 import { __RouterContext as RouterContext, RouteProps } from 'react-router';
 import { matchPath, Redirect, Route } from 'react-router-dom';
 import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
@@ -22,20 +22,20 @@ const Guard: React.FunctionComponent<RouteProps> = ({
   component,
   render,
 }): React.ReactElement | null => {
-  const routeProps = React.useContext(RouterContext);
+  const routeProps = useContext(RouterContext);
   const routePrevProps = usePrevious(routeProps);
-  const hasRouteUpdated = React.useMemo(
+  const hasRouteUpdated = useMemo(
     (): boolean =>
       JSON.stringify(routePrevProps.match.params) !== JSON.stringify(routeProps.match.params),
     [routeProps, routePrevProps],
   );
-  const fromRouteProps = React.useContext(FromRouteContext);
+  const fromRouteProps = useContext(FromRouteContext);
 
-  const guards = React.useContext(GuardContext);
-  const LoadingPage = React.useContext(LoadingPageContext);
-  const ErrorPage = React.useContext(ErrorPageContext);
+  const guards = useContext(GuardContext);
+  const LoadingPage = useContext(LoadingPageContext);
+  const ErrorPage = useContext(ErrorPageContext);
 
-  const initialRouteValidated = React.useMemo(
+  const initialRouteValidated = useMemo(
     (): boolean => !!(guards && guards.length && guards.length === 0),
     [guards],
   );
@@ -48,7 +48,7 @@ const Guard: React.FunctionComponent<RouteProps> = ({
    * Memoized callback to get the next callback function used in guards.
    * Assigns the `props` and `redirect` functions to callback.
    */
-  const getNextFn = React.useCallback((resolve: Function): Next => {
+  const getNextFn = useCallback((resolve: Function): Next => {
     const getResolveFn = (type: GuardType): ((payload?: any) => void) => (
       payload: NextPropsPayload | NextRedirectPayload,
     ): void => resolve({ type, payload });
@@ -135,16 +135,16 @@ const Guard: React.FunctionComponent<RouteProps> = ({
     if (!page) {
       return null;
     } else if (typeof page !== 'string' && typeof page !== 'boolean' && typeof page !== 'number') {
-      return React.createElement(page, props);
+      return createElement(page, props);
     }
-    return <React.Fragment>node</React.Fragment>;
+    return <Fragment>node</Fragment>;
   };
 
-  React.useEffect((): void => {
+  useEffect((): void => {
     validateRoute();
   }, []);
 
-  React.useEffect((): void => {
+  useEffect((): void => {
     if (hasRouteUpdated) {
       setRouteValidated(initialRouteValidated);
       if (!initialRouteValidated) {

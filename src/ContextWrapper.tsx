@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { Fragment } from 'react';
 
 interface Props<T> {
   context: React.Context<T>;
@@ -14,7 +14,7 @@ function ContextWrapper<T>({
     const { Provider } = context;
     return <Provider value={value}>{children}</Provider>;
   }
-  return <React.Fragment>{children}</React.Fragment>;
+  return <Fragment>{children}</Fragment>;
 }
 
 export default ContextWrapper;
