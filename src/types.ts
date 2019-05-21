@@ -42,8 +42,8 @@ export interface Next {
 }
 
 export type GuardFunction = (
-  to: RouteComponentProps,
-  from: RouteComponentProps | null,
+  to: RouteComponentProps<Record<string, any>>,
+  from: RouteComponentProps<Record<string, any>> | null,
   next: Next,
 ) => void;
 
