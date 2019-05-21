@@ -19,7 +19,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "rollup -c",
+    "build": "rollup -c --environment PRODUCTION",
     "start": "rollup -c -w"
   },
   "peerDependencies": {
