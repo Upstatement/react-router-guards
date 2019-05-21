@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Route, Router as BrowserRouter, Switch } from 'react-router-dom';
+import { Route, Router as BrowserRouter, Switch, RouteComponentProps } from 'react-router-dom';
 import { GuardProvider, GuardedRoute } from 'react-router-guards';
 import history from './history';
 import getRoutes from './routes';
@@ -8,7 +8,7 @@ import { waitOneSecond } from './guards';
 import { NotFound } from 'containers';
 
 interface Props {
-  children(content: React.ReactElement, routeProps: Record<string, any>): React.ReactElement;
+  children(content: React.ReactElement, routeProps: RouteComponentProps): React.ReactElement;
 }
 
 const Router: React.FunctionComponent<Props> = ({ children }) => {
@@ -21,20 +21,17 @@ const Router: React.FunctionComponent<Props> = ({ children }) => {
           render={routeProps =>
             children(
               <Switch>
-                {routes.map(
-                  ({ beforeEnter, component, error, exact, loading, path, render }, i) => (
-                    <GuardedRoute
-                      key={i}
-                      beforeEnter={beforeEnter}
-                      component={component}
-                      error={error}
-                      exact={exact}
-                      path={path}
-                      loading={loading}
-                      render={render}
-                    />
-                  ),
-                )}
+                {routes.map(({ beforeEnter, component, error, exact, loading, path }, i) => (
+                  <GuardedRoute
+                    key={i}
+                    beforeEnter={beforeEnter}
+                    component={component}
+                    error={error}
+                    exact={exact}
+                    path={path}
+                    loading={loading}
+                  />
+                ))}
               </Switch>,
               routeProps,
             )
