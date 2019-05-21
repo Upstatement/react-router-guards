@@ -8,13 +8,14 @@ export default () => [
     component: Home,
     loading: 'Definitely not loading...',
     error: 'Definitely not an error',
-    beforeEnter: requireLogin,
+    guards: [requireLogin],
+    ignoreGlobal: true,
   },
   {
     path: '/hello/:id',
     exact: true,
     component: Hello,
-    beforeEnter: requireLogin,
+    guards: [requireLogin],
   },
   {
     path: '/login',

@@ -21,17 +21,20 @@ const Router: React.FunctionComponent<Props> = ({ children }) => {
           render={routeProps =>
             children(
               <Switch>
-                {routes.map(({ beforeEnter, component, error, exact, loading, path }, i) => (
-                  <GuardedRoute
-                    key={i}
-                    beforeEnter={beforeEnter}
-                    component={component}
-                    error={error}
-                    exact={exact}
-                    path={path}
-                    loading={loading}
-                  />
-                ))}
+                {routes.map(
+                  ({ component, error, exact, guards, ignoreGlobal, loading, path }, i) => (
+                    <GuardedRoute
+                      key={i}
+                      guards={guards}
+                      ignoreGlobal={ignoreGlobal}
+                      component={component}
+                      error={error}
+                      exact={exact}
+                      path={path}
+                      loading={loading}
+                    />
+                  ),
+                )}
               </Switch>,
               routeProps,
             )

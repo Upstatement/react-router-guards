@@ -4,19 +4,17 @@ import invariant from 'tiny-invariant';
 import ContextWrapper from './ContextWrapper';
 import Guard from './Guard';
 import { ErrorPageContext, GuardContext, LoadingPageContext } from './contexts';
-import { GuardFunction, PageComponent } from './types';
+import { useGlobalGuards } from './hooks';
+import { GuardProps, PageComponent } from './types';
 
-interface Props extends RouteProps {
-  beforeEnter?: GuardFunction;
-  error?: PageComponent;
-  loading?: PageComponent;
-}
+type Props = GuardProps & RouteProps;
 
 const GuardedRoute: React.FunctionComponent<Props> = ({
-  beforeEnter,
   children,
   component,
   error,
+  guards,
+  ignoreGlobal,
   loading,
   render,
   ...routeProps
@@ -24,16 +22,13 @@ const GuardedRoute: React.FunctionComponent<Props> = ({
   const globalGuards = useContext(GuardContext);
   invariant(!!globalGuards, 'You should not use <GuardedRoute> outside a <GuardProvider>');
 
-  const guards = [...(globalGuards || [])];
-  if (beforeEnter) {
-    guards.push(beforeEnter);
-  }
+  const routeGuards = useGlobalGuards(guards, ignoreGlobal);
 
   return (
     <Route
       {...routeProps}
-      render={(): React.ReactElement => (
-        <GuardContext.Provider value={guards}>
+      render={() => (
+        <GuardContext.Provider value={routeGuards}>
           <ContextWrapper<PageComponent> context={LoadingPageContext} value={loading}>
             <ContextWrapper<PageComponent> context={ErrorPageContext} value={error}>
               <Guard component={component} render={render}>
@@ -45,6 +40,11 @@ const GuardedRoute: React.FunctionComponent<Props> = ({
       )}
     />
   );
+};
+
+GuardedRoute.defaultProps = {
+  guards: [],
+  ignoreGlobal: false,
 };
 
 export default GuardedRoute;
