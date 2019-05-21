@@ -46,7 +46,7 @@ const Guard: React.FunctionComponent<RouteProps> = ({ children, component, rende
     const getResolveFn = (type: GuardType) => (payload: NextPropsPayload | NextRedirectPayload) =>
       resolve({ type, payload });
 
-    return Object.assign(() => getResolveFn(GuardTypes.CONTINUE), {
+    return Object.assign(() => resolve({ type: GuardTypes.CONTINUE }), {
       props: getResolveFn(GuardTypes.PROPS),
       redirect: getResolveFn(GuardTypes.REDIRECT),
     });
@@ -64,7 +64,8 @@ const Guard: React.FunctionComponent<RouteProps> = ({ children, component, rende
     new Promise(
       async (resolve, reject): Promise<void> => {
         try {
-          await guard(routeProps, fromRouteProps, getNextFn(resolve));
+          const next = getNextFn(resolve);
+          await guard(routeProps, fromRouteProps, next);
         } catch (error) {
           reject(error);
         }
@@ -130,7 +131,7 @@ const Guard: React.FunctionComponent<RouteProps> = ({ children, component, rende
     } else if (typeof page !== 'string' && typeof page !== 'boolean' && typeof page !== 'number') {
       return createElement(page, props);
     }
-    return <Fragment>node</Fragment>;
+    return <Fragment>{page}</Fragment>;
   };
 
   useEffect(() => {

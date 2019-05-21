@@ -9,6 +9,6 @@
     "declaration": true,
     "esModuleInterop": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "demo/**/*"]
+  "include": ["src/**/*", "demo/**/*"],
+  "exclude": ["node_modules"]
 }

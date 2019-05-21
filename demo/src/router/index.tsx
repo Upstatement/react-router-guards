@@ -7,7 +7,11 @@ import getRoutes from './routes';
 import { waitOneSecond } from './guards';
 import { NotFound } from 'containers';
 
-const Router = ({ children }) => {
+interface Props {
+  children(content: React.ReactElement, routeProps: Record<string, any>): React.ReactElement;
+}
+
+const Router: React.FunctionComponent<Props> = ({ children }) => {
   const globalGuards = useMemo(() => [waitOneSecond], []);
   const routes = useMemo(() => getRoutes(), []);
   return (

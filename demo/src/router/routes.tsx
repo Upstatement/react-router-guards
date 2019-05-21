@@ -1,23 +1,22 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { Home, NotFound } from 'containers';
-import { requireLogin } from './guards';
+import { requireLogin } from 'router/guards';
 
 export default () => [
   {
     path: '/',
     exact: true,
     component: Home,
-    loading() {
-      return 'Definitely not loading...';
-    },
+    loading: 'Definitely not loading...',
+    error: 'Definitely not an error',
     beforeEnter: requireLogin,
   },
   {
     path: '/hello/:id',
     exact: true,
     // eslint-disable-next-line react/prop-types
-    render({ match }) {
+    render({ match }: Record<string, any>) {
       return <p>Hey there {match.params.id} :~)</p>;
     },
     beforeEnter: requireLogin,
@@ -26,7 +25,7 @@ export default () => [
     path: '/login',
     exact: true,
     // eslint-disable-next-line react/prop-types
-    render({ history }) {
+    render({ history }: Record<string, any>) {
       if (localStorage.getItem('isLoggedIn') === 'true') {
         return <Redirect to="/" />;
       }
@@ -39,7 +38,7 @@ export default () => [
   },
   {
     path: '*',
-    render(props) {
+    render(props: Record<string, any>) {
       return <NotFound {...props} />;
     },
   },
