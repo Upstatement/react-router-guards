@@ -16,7 +16,7 @@ const Router: React.FunctionComponent<Props> = ({ children }) => {
   const routes = useMemo(() => getRoutes(), []);
   return (
     <BrowserRouter history={history}>
-      <GuardProvider guards={globalGuards} loading={() => <p>Loading...</p>} error={NotFound}>
+      <GuardProvider guards={globalGuards} loading={() => <h3>Loading...</h3>} error={NotFound}>
         <Route
           render={routeProps =>
             children(
