@@ -1,21 +1,18 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { GuardFunction } from 'react-router-guards';
+import { Header } from 'components';
 import { Pokemon } from 'types';
-import { api, getName } from 'utils';
+import { api } from 'utils';
 
 interface Props {
   pokemon: Pokemon;
 }
 
 const Detail: React.FC<Props> = ({ pokemon }) => {
-  const name = useMemo(() => getName(pokemon.name), [pokemon]);
-
+  console.log(pokemon);
   return (
     <div>
-      <header>
-        <img src={pokemon.sprites.front_default || ''} alt={`Sprite of ${name}`} />
-        <h1>{name}</h1>
-      </header>
+      <Header pokemon={pokemon} />
     </div>
   );
 };

@@ -1,0 +1,8 @@
+@import '../../style/abstracts';
+
+.container {
+  @include padding($site-padding);
+  @include sticky(0 x x x);
+  display: flex;
+  flex-direction: row;
+}

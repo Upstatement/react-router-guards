@@ -9,6 +9,8 @@ export interface ListResult {
 export interface Pokemon {
   id: number;
   name: Name;
+  height: number;
+  weight: number;
   sprites: {
     front_default: Sprite;
     front_shiny: Sprite;

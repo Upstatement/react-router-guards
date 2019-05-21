@@ -1,0 +1,92 @@
+@mixin shorthander($position, $value) {
+  $position-prefix: '';
+
+  @if $position == 'margin' or $position == 'padding' {
+    $position-prefix: $position + '-';
+  } @else if $position == 'null' {
+    // do nothing
+  } @else {
+    position: $position;
+  }
+
+  @if length($value) == 1 and $value != 'n' and $value != 'x' and $value != 'null' {
+    #{$position-prefix}top: $value;
+    #{$position-prefix}right: $value;
+    #{$position-prefix}bottom: $value;
+    #{$position-prefix}left: $value;
+  }
+
+  @if length($value) == 2 {
+    $value-y: nth($value, 1);
+    $value-x: nth($value, 2);
+    @if $value-y != 'n' and $value-y != 'x' and $value-y != 'null' {
+      #{$position-prefix}top: $value-y;
+      #{$position-prefix}bottom: $value-y;
+    }
+    @if $value-x != 'n' and $value-x != 'x' and $value-x != 'null' {
+      #{$position-prefix}left: $value-x;
+      #{$position-prefix}right: $value-x;
+    }
+  }
+
+  @if length($value) == 3 {
+    $value-y-top: nth($value, 1);
+    $value-x: nth($value, 2);
+    $value-y-bottom: nth($value, 3);
+
+    @if $value-y-top != 'n' and $value-y-top != 'x' and $value-y-top != 'null' {
+      #{$position-prefix}top: $value-y-top;
+    }
+    @if $value-x != 'n' and $value-x != 'x' and $value-x != 'null' {
+      #{$position-prefix}right: $value-x;
+      #{$position-prefix}left: $value-x;
+    }
+    @if $value-y-bottom != 'n' and $value-y-bottom != 'x' and $value-y-bottom != 'null' {
+      #{$position-prefix}bottom: $value-y-bottom;
+    }
+  }
+
+  @if length($value) == 4 {
+    $value-top: nth($value, 1);
+    $value-right: nth($value, 2);
+    $value-bottom: nth($value, 3);
+    $value-left: nth($value, 4);
+
+    @if $value-top != 'n' and $value-top != 'x' and $value-top != 'null' {
+      #{$position-prefix}top: $value-top;
+    }
+    @if $value-right != 'n' and $value-right != 'x' and $value-right != 'null' {
+      #{$position-prefix}right: $value-right;
+    }
+    @if $value-bottom != 'n' and $value-bottom != 'x' and $value-bottom != 'null' {
+      #{$position-prefix}bottom: $value-bottom;
+    }
+    @if $value-left != 'n' and $value-left != 'x' and $value-left != 'null' {
+      #{$position-prefix}left: $value-left;
+    }
+  }
+}
+
+@mixin absolute($value) {
+  @include shorthander(absolute, $value);
+}
+
+@mixin fixed($value) {
+  @include shorthander(fixed, $value);
+}
+
+@mixin relative($value) {
+  @include shorthander(relative, $value);
+}
+
+@mixin sticky($value) {
+  @include shorthander(sticky, $value);
+}
+
+@mixin padding($value) {
+  @include shorthander(padding, $value);
+}
+
+@mixin margin($value) {
+  @include shorthander(margin, $value);
+}

@@ -1,0 +1,9 @@
+@import '../../style/abstracts';
+
+.container {
+  @include padding(0 $site-padding $site-padding);
+}
+
+.copyright {
+  margin-bottom: $spacing--xs;
+}
