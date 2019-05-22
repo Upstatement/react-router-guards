@@ -11,6 +11,8 @@ $color--white: #ffffff;
 $color--black: #000000;
 $color--gray: #535353;
 $color--gray-light: #eeeeee;
+$color--red: #ff3232;
+$color--red-light: mix($color--white, $color--red, 50%);
 
 $color--bg-light: $color--gray-light;
 $color--text: $color--black;

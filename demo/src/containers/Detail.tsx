@@ -8,7 +8,7 @@ interface Props {
   pokemon: Pokemon;
 }
 
-const Detail: React.FC<Props> = ({ pokemon }) => {
+const Detail: React.FunctionComponent<Props> = ({ pokemon }) => {
   console.log(pokemon);
   return (
     <div>

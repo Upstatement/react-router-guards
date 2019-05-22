@@ -7,7 +7,7 @@ interface Props {
   pokemon: Pokemon;
 }
 
-const Header: React.FC<Props> = ({ pokemon }) => {
+const Header: React.FunctionComponent<Props> = ({ pokemon }) => {
   const name = useMemo(() => getName(pokemon.name), [pokemon]);
   const entryNumber = useMemo(() => getEntryNumber(pokemon.id), [pokemon]);
   const height = useMemo(() => getHeight(pokemon.height), [pokemon]);
