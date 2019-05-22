@@ -1,9 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
 import styles from './page.module.scss';
 
-const Page = ({ children, history }) => {
+const Page: React.FunctionComponent<RouteComponentProps> = ({ children, history }) => {
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
   const logout = () => {
@@ -24,11 +24,6 @@ const Page = ({ children, history }) => {
       <footer>&copy; 2019 Josh Pensky :~)</footer>
     </div>
   );
-};
-
-Page.propTypes = {
-  children: PropTypes.node,
-  history: PropTypes.object.isRequired,
 };
 
 export default Page;

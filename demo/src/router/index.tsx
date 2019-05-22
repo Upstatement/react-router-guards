@@ -1,33 +1,37 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Route, Router as BrowserRouter, Switch } from 'react-router-dom';
+import { Route, Router as BrowserRouter, Switch, RouteComponentProps } from 'react-router-dom';
 import { GuardProvider, GuardedRoute } from 'react-router-guards';
 import history from './history';
 import getRoutes from './routes';
 import { waitOneSecond } from './guards';
 import { NotFound } from 'containers';
 
-const Router = ({ children }) => {
+interface Props {
+  children(content: React.ReactElement, routeProps: RouteComponentProps): React.ReactElement;
+}
+
+const Router: React.FunctionComponent<Props> = ({ children }) => {
   const globalGuards = useMemo(() => [waitOneSecond], []);
   const routes = useMemo(() => getRoutes(), []);
   return (
     <BrowserRouter history={history}>
-      <GuardProvider guards={globalGuards} loading={() => <p>Loading...</p>} error={NotFound}>
+      <GuardProvider guards={globalGuards} loading={() => <h3>Loading...</h3>} error={NotFound}>
         <Route
           render={routeProps =>
             children(
               <Switch>
                 {routes.map(
-                  ({ beforeEnter, component, error, exact, loading, path, render }, i) => (
+                  ({ component, error, exact, guards, ignoreGlobal, loading, path }, i) => (
                     <GuardedRoute
                       key={i}
-                      beforeEnter={beforeEnter}
+                      guards={guards}
+                      ignoreGlobal={ignoreGlobal}
                       component={component}
                       error={error}
                       exact={exact}
                       path={path}
                       loading={loading}
-                      render={render}
                     />
                   ),
                 )}

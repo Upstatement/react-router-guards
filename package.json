@@ -14,16 +14,18 @@
   "homepage": "https://github.com/joshpensky/react-starter#readme",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "rollup -c",
+    "build": "rollup -c --environment PRODUCTION",
     "start": "rollup -c -w"
   },
   "peerDependencies": {
     "prop-types": "^15.6.0",
     "react": "^16.8.0",
+    "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0"
   },
   "dependencies": {
@@ -35,6 +37,10 @@
     "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-react": "^7.0.0",
+    "@types/react": "^16.8.17",
+    "@types/react-router-dom": "^4.3.3",
+    "@typescript-eslint/eslint-plugin": "^1.9.0",
+    "@typescript-eslint/parser": "^1.9.0",
     "@upstatement/eslint-config": "^0.4.2",
     "@upstatement/prettier-config": "^0.3.0",
     "babel-eslint": "^10.0.1",
@@ -56,11 +62,14 @@
     "rollup-plugin-node-resolve": "^4.2.3",
     "rollup-plugin-peer-deps-external": "^2.2.0",
     "rollup-plugin-terser": "^4.0.4",
+    "rollup-plugin-typescript2": "^0.21.1",
     "stylelint": "^10.0.1",
-    "stylelint-config-sass-guidelines": "^6.0.0"
+    "stylelint-config-sass-guidelines": "^6.0.0",
+    "tslib": "^1.9.3",
+    "typescript": "^3.4.5"
   },
   "lint-staged": {
-    "*.js": [
+    "*.{js,ts,tsx}": [
       "eslint --fix",
       "git add"
     ],
