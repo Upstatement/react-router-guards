@@ -1,7 +1,15 @@
 @import '../../style/abstracts';
 
 .container {
-  @include padding(0 $site-padding $site-padding);
+  @include padding($site-padding $site-padding $spacing--md);
+  border: $border--thin $color--border;
+  display: flex;
+  justify-content: space-between;
+
+  p,
+  a {
+    font-size: $font-size--md;
+  }
 }
 
 .copyright {

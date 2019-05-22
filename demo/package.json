@@ -11,6 +11,7 @@
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.0",
     "react-scripts": "3.0.1",
+    "react-waypoint": "^9.0.2",
     "typescript": "3.4.5"
   },
   "scripts": {

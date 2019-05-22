@@ -1,0 +1,39 @@
+@import '../../style/abstracts';
+
+.container,
+.list {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  @include padding(x $site-padding);
+}
+
+.list {
+  @include padding($site-padding x);
+}
+
+.link {
+  @include h1;
+  @include padding($spacing--xs x);
+  text-decoration: none;
+  width: 100%;
+
+  @media (hover: hover) {
+    .list:hover & {
+      opacity: 0.5;
+      transition: opacity 100ms ease-in-out;
+    }
+
+    .list:hover &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.loader {
+  @include margin(-$spacing--sm x $site-padding);
+  @include size(56px);
+}

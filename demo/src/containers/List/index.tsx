@@ -1,8 +1,11 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Waypoint } from 'react-waypoint';
+import { Pokeball } from 'svgs';
 import { ListResult } from 'types';
 import { api, getName } from 'utils';
 import { LIST_FETCH_LIMIT } from 'utils/constants';
+import styles from './list.module.scss';
 
 interface PokemonResult {
   name: string;
@@ -11,6 +14,7 @@ interface PokemonResult {
 
 const List = () => {
   const [results, setResults] = useState<PokemonResult[]>([]);
+  const [hasMore, setHasMore] = useState(true);
   const [offset, setOffset] = useState(0);
 
   const serializeResults = (results: ListResult[]) =>
@@ -20,8 +24,9 @@ const List = () => {
     }));
 
   const getPokemon = useCallback(async () => {
-    const newResults = await api.list(offset);
+    const { next, results: newResults } = await api.list(offset);
     setResults([...results, ...serializeResults(newResults)]);
+    setHasMore(!!next);
     setOffset(offset + LIST_FETCH_LIMIT);
   }, [results, offset]);
 
@@ -31,15 +36,20 @@ const List = () => {
   }, []);
 
   return (
-    <div>
-      <ul>
+    <div className={styles.container}>
+      <ul className={styles.list}>
         {results.map(({ fullName, name }) => (
-          <Link key={name} to={`/${name}`}>
+          <Link className={styles.link} key={name} to={`/${name}`}>
             {fullName}
           </Link>
         ))}
       </ul>
-      <button onClick={getPokemon}>Load more</button>
+      <Waypoint onEnter={getPokemon} />
+      {hasMore && (
+        <div className={styles.loader}>
+          <Pokeball isAnimated />
+        </div>
+      )}
     </div>
   );
 };

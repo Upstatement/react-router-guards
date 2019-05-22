@@ -1,5 +1,17 @@
 * {
-  font-family: $font--system;
+  font-family: $font--dia;
+}
+
+h1 {
+  @include h1;
+}
+
+p {
+  @include body;
+}
+
+a {
+  @include link;
 }
 
 figcaption {

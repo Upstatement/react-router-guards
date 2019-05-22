@@ -31,11 +31,10 @@ interface List {
 
 export default {
   async list(offset: number) {
-    const { results } = await (fetchFromAPI('/pokemon', {
+    return fetchFromAPI('/pokemon', {
       offset,
       limit: LIST_FETCH_LIMIT,
-    }) as Promise<List>);
-    return results;
+    }) as Promise<List>;
   },
   get(name: string) {
     return fetchFromAPI(`/pokemon/${name}`) as Promise<Pokemon>;

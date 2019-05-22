@@ -1,8 +1,23 @@
 @import '../../style/abstracts';
 
 .container {
-  @include padding($site-padding);
+  @include padding($spacing--base $site-padding);
   @include sticky(0 x x x);
+  background-color: rgba($color--bg, 0.9);
+  border-bottom: $border--thin $color--border;
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  z-index: $z-index--nav;
+}
+
+.link {
+  @include size(32px);
+  transition: transform 200ms ease-out;
+
+  @media (hover: hover) {
+    &:hover {
+      transform: rotate(-30deg);
+    }
+  }
 }

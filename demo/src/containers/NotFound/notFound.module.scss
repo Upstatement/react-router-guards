@@ -7,3 +7,17 @@
   flex-direction: column;
   justify-content: center;
 }
+
+.image {
+  height: 200px;
+  image-rendering: pixelated;
+  margin-bottom: $spacing--xl;
+}
+
+.title {
+  margin-bottom: $spacing--base;
+}
+
+.body {
+  margin-bottom: $spacing--xl;
+}

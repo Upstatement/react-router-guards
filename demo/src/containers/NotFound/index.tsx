@@ -1,10 +1,17 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styles from './notFound.module.scss';
 
 const NotFound = () => (
   <div className={styles.container}>
-    <h1>Page not found</h1>
-    <p>Look for something else</p>
+    <img
+      className={styles.image}
+      src={`${process.env.PUBLIC_URL}/img/missingno.png`}
+      alt="Not found"
+    />
+    <h1 className={styles.title}>Uh-oh!</h1>
+    <p className={styles.body}>We couldn't find that Pokémon.</p>
+    <Link to="/">Go home</Link>
   </div>
 );
 
