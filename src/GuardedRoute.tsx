@@ -1,15 +1,13 @@
 import React, { useContext } from 'react';
-import { Route, RouteProps } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import invariant from 'tiny-invariant';
 import ContextWrapper from './ContextWrapper';
 import Guard from './Guard';
 import { ErrorPageContext, GuardContext, LoadingPageContext } from './contexts';
 import { useGlobalGuards } from './hooks';
-import { GuardProps, PageComponent } from './types';
+import { GuardedRouteProps, PageComponent } from './types';
 
-type Props = GuardProps & RouteProps;
-
-const GuardedRoute: React.FunctionComponent<Props> = ({
+const GuardedRoute: React.FunctionComponent<GuardedRouteProps> = ({
   children,
   component,
   error,

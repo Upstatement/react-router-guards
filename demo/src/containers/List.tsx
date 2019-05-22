@@ -9,7 +9,7 @@ interface PokemonResult {
   fullName: string;
 }
 
-const Home = () => {
+const List = () => {
   const [results, setResults] = useState<PokemonResult[]>([]);
   const [offset, setOffset] = useState(0);
 
@@ -44,4 +44,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default List;

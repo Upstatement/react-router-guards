@@ -1,9 +1,8 @@
 import React from 'react';
-import { RouteComponentProps } from 'react-router';
 import { Footer, Nav } from 'components';
 import styles from './page.module.scss';
 
-const Page: React.FunctionComponent<RouteComponentProps> = ({ children }) => (
+const Page: React.FunctionComponent<{}> = ({ children }) => (
   <div className={styles.page}>
     <Nav />
     <main className={styles.main}>{children}</main>

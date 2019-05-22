@@ -30,10 +30,8 @@ const Guard: React.FunctionComponent<RouteProps> = ({ children, component, rende
   const LoadingPage = useContext(LoadingPageContext);
   const ErrorPage = useContext(ErrorPageContext);
 
-  const initialRouteValidated = useMemo(() => !!(guards && guards.length && guards.length === 0), [
-    guards,
-  ]);
-  const [routeValidated, setRouteValidated] = useStateWhenMounted<boolean>(initialRouteValidated);
+  const hasGuards = useMemo(() => !!(guards && guards.length === 0), [guards]);
+  const [routeValidated, setRouteValidated] = useStateWhenMounted<boolean>(hasGuards);
   const [routeError, setRouteError] = useStateWhenMounted<RouteError>(null);
   const [routeRedirect, setRouteRedirect] = useStateWhenMounted<RouteRedirect>(null);
   const [pageProps, setPageProps] = useStateWhenMounted<NextPropsPayload>({});
@@ -80,7 +78,7 @@ const Guard: React.FunctionComponent<RouteProps> = ({ children, component, rende
   const resolveAllGuards = async (): Promise<void> => {
     let index = 0;
     let props = {};
-    if (guards && guards.length) {
+    if (guards) {
       while (!routeRedirect && index < guards.length) {
         const { type, payload } = await runGuard(guards[index]);
         if (payload) {
@@ -140,8 +138,8 @@ const Guard: React.FunctionComponent<RouteProps> = ({ children, component, rende
 
   useEffect(() => {
     if (hasRouteUpdated) {
-      setRouteValidated(initialRouteValidated);
-      if (!initialRouteValidated) {
+      setRouteValidated(hasGuards);
+      if (!hasGuards) {
         setRouteError(null);
         setRouteRedirect(null);
         validateRoute();
