@@ -1,6 +1,6 @@
 import { ComponentType } from 'react';
 import { LocationDescriptor } from 'history';
-import { RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, RouteProps } from 'react-router-dom';
 
 /**
  * Guard Function Types
@@ -61,3 +61,5 @@ export interface GuardProps {
   loading?: PageComponent;
   error?: PageComponent;
 }
+
+export type GuardedRouteProps = GuardProps & RouteProps;

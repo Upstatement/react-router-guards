@@ -5,7 +5,7 @@ interface HelloParams {
   id: string;
 }
 
-const Hello: React.FC<RouteComponentProps<HelloParams>> = ({ match }) => (
+const Hello: React.FunctionComponent<RouteComponentProps<HelloParams>> = ({ match }) => (
   <p>Hey there {match.params.id} :~)</p>
 );
 

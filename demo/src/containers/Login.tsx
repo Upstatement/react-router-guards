@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect, RouteComponentProps } from 'react-router-dom';
 
-const Login: React.FC<RouteComponentProps> = ({ history }) => {
+const Login: React.FunctionComponent<RouteComponentProps> = ({ history }) => {
   if (localStorage.getItem('isLoggedIn') === 'true') {
     return <Redirect to="/" />;
   }
