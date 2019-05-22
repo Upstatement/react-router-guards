@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Router as BrowserRouter, Switch, RouteComponentProps } from 'react-router-dom';
 import { GuardProvider, GuardedRoute } from 'react-router-guards';
-import history from './history';
-import { NotFound, List, Detail } from 'containers';
+import { Detail, List, Loading, NotFound } from 'containers';
 import { beforeRouteEnter as detailBeforeEnter } from 'containers/Detail';
+import { waitOneSecond } from './guards';
+import history from './history';
 
 interface Props {
   children(content: React.ReactElement, routeProps: RouteComponentProps): React.ReactElement;
@@ -12,7 +13,7 @@ interface Props {
 
 const Router: React.FunctionComponent<Props> = ({ children }) => (
   <BrowserRouter history={history}>
-    <GuardProvider loading={() => <h3>Loading...</h3>} error={NotFound}>
+    <GuardProvider guards={[waitOneSecond]} loading={Loading} error={NotFound}>
       <Route
         render={routeProps =>
           children(
