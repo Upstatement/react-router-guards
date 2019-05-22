@@ -12,9 +12,13 @@ p {
 
 a {
   @include link;
+  transition: color $transition--fast;
+
+  &:hover {
+    color: $color--red;
+  }
 }
 
 figcaption {
   @include caption;
-  color: $color--text-light;
 }

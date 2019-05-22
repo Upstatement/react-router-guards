@@ -28,6 +28,7 @@
     }
 
     .list:hover &:hover {
+      color: $color--text;
       opacity: 1;
     }
   }

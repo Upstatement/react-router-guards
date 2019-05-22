@@ -11,7 +11,7 @@ const NotFound = () => (
     />
     <h1 className={styles.title}>Uh-oh!</h1>
     <p className={styles.body}>We couldn't find that Pokémon.</p>
-    <Link to="/">Go home</Link>
+    <Link to="/">Viem 'em all</Link>
   </div>
 );
 

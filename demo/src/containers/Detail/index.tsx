@@ -1,8 +1,9 @@
 import React from 'react';
 import { GuardFunction } from 'react-router-guards';
-import { Header } from 'components';
+import { Header, SpriteList } from 'components';
 import { Pokemon } from 'types';
 import { api } from 'utils';
+import styles from './detail.module.scss';
 
 interface Props {
   pokemon: Pokemon;
@@ -11,7 +12,8 @@ interface Props {
 const Detail: React.FunctionComponent<Props> = ({ pokemon }) => {
   console.log(pokemon);
   return (
-    <div>
+    <div className={styles.container}>
+      <SpriteList sprites={pokemon.sprites} />
       <Header pokemon={pokemon} />
     </div>
   );

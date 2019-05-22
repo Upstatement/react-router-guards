@@ -1,0 +1,28 @@
+@import '../../style/abstracts';
+
+.container {
+  @include padding($spacing--xxl);
+  @include relative(x);
+  border-radius: $border-radius--sm;
+  display: inline-flex;
+  flex-direction: column;
+  justify-self: flex-start;
+  transition: background-color $transition--fast;
+}
+
+.sprite {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  image-rendering: pixelated;
+  padding-top: 100%;
+  width: 200px;
+  z-index: 1;
+}
+
+.caption {
+  @include absolute(x x 0 0);
+  @include padding(x x $spacing--sm $spacing--sm);
+  margin-top: $spacing--sm;
+  z-index: 2;
+}

@@ -2,42 +2,13 @@
 
 .container {
   @include padding($site-padding);
-  background-color: $color--bg-light;
   display: flex;
-}
-
-.image {
-  margin-right: $spacing--md;
-}
-
-.sprite {
-  @include size(150px);
-  background-color: $color--white;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  border-radius: $border-radius--sm;
-  image-rendering: pixelated;
-}
-
-.caption {
-  margin-top: $spacing--sm;
 }
 
 .meta {
   align-items: flex-start;
   display: flex;
   flex-direction: column;
-}
-
-.entry {
-  @include padding($spacing--xs);
-  background-color: $color--white;
-  border-radius: $border-radius--md;
-  color: $color--text-light;
-  display: flex;
-  font-size: $font-size--sm;
-  margin-bottom: $spacing--sm;
 }
 
 .sections {

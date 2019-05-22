@@ -15,13 +15,6 @@ const Header: React.FunctionComponent<Props> = ({ pokemon }) => {
 
   return (
     <header className={styles.container}>
-      <figure className={styles.image}>
-        <div
-          className={styles.sprite}
-          style={{ backgroundImage: `url(${pokemon.sprites.front_default})` }}
-        />
-        <figcaption className={styles.caption}>Sprite of {name}</figcaption>
-      </figure>
       <div className={styles.meta}>
         <p className={styles.entry}>{entryNumber}</p>
         <h1 className={styles.title}>{name}</h1>

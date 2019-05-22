@@ -1,0 +1,18 @@
+@import '../../style/abstracts';
+
+.container {
+  @include padding($site-padding);
+  height: calc(100vh - #{$nav-height});
+  overflow-y: auto;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  &:not(:last-child) {
+    margin-bottom: $spacing--md;
+  }
+}

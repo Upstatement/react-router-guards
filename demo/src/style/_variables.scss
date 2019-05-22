@@ -2,7 +2,7 @@
 $border--thin: 1px solid;
 
 /* Border radii */
-$border-radius--sm: 2px;
+$border-radius--sm: 3px;
 $border-radius--md: 5px;
 
 /* Colors */
@@ -39,9 +39,16 @@ $spacing--base: 15px;
 $spacing--md: 20px;
 $spacing--lg: 30px;
 $spacing--xl: 40px;
+$spacing--xxl: 60px;
 
 /* Sizes */
 $site-padding: $spacing--lg;
+$nav-icon-height: 32px;
+$nav-top-padding: $spacing--base;
+$nav-height: ($nav-top-padding * 2) + $nav-icon-height;
+
+/* Transitions */
+$transition--fast: 100ms ease-out;
 
 /* Z indices */
 $z-index--nav: 1000;
