@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
-import { PokemonMove, MoveLearn } from 'types';
+import { PokemonMove, MoveLearnType } from 'types';
 import { getName } from 'utils';
 
 interface Move {
@@ -9,7 +9,7 @@ interface Move {
 }
 
 const getMoves = (moves: PokemonMove[]) => {
-  const movesMap: Record<MoveLearn, Move[]> = Object.values(MoveLearn).reduce(
+  const movesMap: Record<MoveLearnType, Move[]> = Object.values(MoveLearnType).reduce(
     (acc, key) => ({ ...acc, [key]: [] }),
     {},
   );
@@ -28,16 +28,16 @@ const getMoves = (moves: PokemonMove[]) => {
   const sortByMove = (a: Move, b: Move) => a.name.localeCompare(b.name);
 
   return {
-    [MoveLearn.Egg]: movesMap[MoveLearn.Egg].sort(sortByMove),
-    [MoveLearn.LevelUp]: movesMap[MoveLearn.LevelUp].sort((a, b) => {
+    [MoveLearnType.Egg]: movesMap[MoveLearnType.Egg].sort(sortByMove),
+    [MoveLearnType.LevelUp]: movesMap[MoveLearnType.LevelUp].sort((a, b) => {
       const levelDiff = a.level - b.level;
       if (levelDiff === 0) {
         return sortByMove(a, b);
       }
       return levelDiff;
     }),
-    [MoveLearn.Machine]: movesMap[MoveLearn.Machine].sort(sortByMove),
-    [MoveLearn.Tutor]: movesMap[MoveLearn.Tutor].sort(sortByMove),
+    [MoveLearnType.Machine]: movesMap[MoveLearnType.Machine].sort(sortByMove),
+    [MoveLearnType.Tutor]: movesMap[MoveLearnType.Tutor].sort(sortByMove),
   };
 };
 

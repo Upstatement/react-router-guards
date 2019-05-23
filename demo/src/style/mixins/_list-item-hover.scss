@@ -1,8 +1,9 @@
 @mixin list-item-hover($list-class, $opacity: 0.5) {
+  transition: opacity 100ms ease-in-out;
+
   @media (hover: hover) {
     #{$list-class}:hover & {
       opacity: $opacity;
-      transition: opacity 100ms ease-in-out;
     }
 
     #{$list-class}:hover &:hover {

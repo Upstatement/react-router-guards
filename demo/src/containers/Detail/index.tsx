@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { GuardFunction } from 'react-router-guards';
-import { LabeledSection, Recirculation, SpriteList, Type } from 'components';
+import { LabeledSection, Recirculation, SpriteList, StatChart, Type } from 'components';
 import { useSerializePokemon } from 'hooks';
-import { Pokemon, MoveLearn } from 'types';
+import { Pokemon, MoveLearnType } from 'types';
 import { api, className } from 'utils';
 import styles from './detail.module.scss';
 
@@ -15,10 +15,8 @@ const Detail: React.FunctionComponent<Props> = ({ pokemon }) => {
     pokemon,
   );
 
-  console.log(stats);
-
   const renderMoveList = useCallback(
-    (type: MoveLearn, renderLevel: boolean = false) => (
+    (type: MoveLearnType, renderLevel: boolean = false) => (
       <ul className={styles.list}>
         {moves[type].map(({ name, level }) => (
           <li key={name} className={styles.listItem}>
@@ -74,11 +72,13 @@ const Detail: React.FunctionComponent<Props> = ({ pokemon }) => {
           <LabeledSection className={styles.statsSection} label="Base Experience Yield">
             <p>{pokemon.base_experience} XP</p>
           </LabeledSection>
-          <LabeledSection className={styles.statsSection} label="Base Stats" />
+          <LabeledSection className={styles.statsSection} label="Base Stats">
+            <StatChart stats={stats} />
+          </LabeledSection>
         </section>
         <section className={styles.moves}>
           <h2 className={styles.sectionHeader}>Moves</h2>
-          {moves[MoveLearn.LevelUp].length > 0 && (
+          {moves[MoveLearnType.LevelUp].length > 0 && (
             <LabeledSection className={styles.moveSection} label="By leveling up" large>
               <ul className={styles.table}>
                 <li className={styles.tableRow}>
@@ -88,7 +88,7 @@ const Detail: React.FunctionComponent<Props> = ({ pokemon }) => {
                   />
                   <LabeledSection className={styles.tableColumn} label="Move" />
                 </li>
-                {moves[MoveLearn.LevelUp].map(({ name, level }) => (
+                {moves[MoveLearnType.LevelUp].map(({ name, level }) => (
                   <li key={name} {...className(styles.tableRow, styles.listItem)}>
                     <p {...className(styles.tableColumn, styles.tableColumnLevels)}>{level}</p>
                     <p className={styles.tableColumn}>{name}</p>
@@ -97,19 +97,19 @@ const Detail: React.FunctionComponent<Props> = ({ pokemon }) => {
               </ul>
             </LabeledSection>
           )}
-          {moves[MoveLearn.Egg].length > 0 && (
+          {moves[MoveLearnType.Egg].length > 0 && (
             <LabeledSection className={styles.moveSection} label="From Egg" large>
-              {renderMoveList(MoveLearn.Egg)}
+              {renderMoveList(MoveLearnType.Egg)}
             </LabeledSection>
           )}
-          {moves[MoveLearn.Machine].length > 0 && (
+          {moves[MoveLearnType.Machine].length > 0 && (
             <LabeledSection className={styles.moveSection} label="From TM/HM" large>
-              {renderMoveList(MoveLearn.Machine)}
+              {renderMoveList(MoveLearnType.Machine)}
             </LabeledSection>
           )}
-          {moves[MoveLearn.Tutor].length > 0 && (
+          {moves[MoveLearnType.Tutor].length > 0 && (
             <LabeledSection className={styles.moveSection} label="From Tutor" large>
-              {renderMoveList(MoveLearn.Tutor)}
+              {renderMoveList(MoveLearnType.Tutor)}
             </LabeledSection>
           )}
           <Recirculation id={pokemon.id} />

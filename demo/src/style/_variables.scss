@@ -89,6 +89,7 @@ $nav-height: ($nav-top-padding * 2) + $nav-icon-height;
 
 /* Transitions */
 $transition--fast: 100ms ease-out;
+$ease-out-cubic: cubic-bezier(0.79, 0.16, 0.43, 0.99);
 
 /* Z indices */
 $z-index--nav: 1000;

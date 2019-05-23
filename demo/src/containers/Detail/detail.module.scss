@@ -61,7 +61,7 @@
 }
 
 .list-item {
-  @include list-item-hover('.list');
+  @include list-item-hover('.list', 0.3);
   align-items: center;
   display: flex;
 
@@ -96,7 +96,7 @@
   display: flex;
 
   &:not(:first-child) {
-    @include list-item-hover('.table');
+    @include list-item-hover('.table', 0.3);
   }
 }
 

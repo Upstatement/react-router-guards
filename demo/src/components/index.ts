@@ -5,4 +5,5 @@ export { default as Page } from './Page';
 export { default as Recirculation } from './Recirculation';
 export { default as Sprite } from './Sprite';
 export { default as SpriteList } from './SpriteList';
+export { default as StatChart } from './StatChart';
 export { default as Type } from './Type';

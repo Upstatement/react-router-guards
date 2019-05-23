@@ -1,6 +1,7 @@
 .section {
   display: flex;
   flex-direction: column;
+  padding-right: $site-padding;
 }
 
 .label {

@@ -1,0 +1,89 @@
+@keyframes grow {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: var(--width);
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  &::after {
+    @include absolute(0 x x 0);
+    border-right: $border--thin $color--border;
+    content: '';
+    height: 100%;
+    min-width: 100px;
+    pointer-events: none;
+    width: 10%;
+  }
+}
+
+.row {
+  @include list-item-hover('.container', 0.3);
+  @include padding($spacing--sm x);
+  align-items: center;
+  display: flex;
+
+  &:first-child {
+    margin-top: -$spacing--sm;
+  }
+
+  &:last-child {
+    margin-bottom: -$spacing--sm;
+  }
+}
+
+.type {
+  line-height: 1;
+  min-width: 100px;
+  width: 10%;
+}
+
+.value {
+  box-sizing: content-box;
+  line-height: 1;
+  padding-left: $spacing--md;
+  width: 70px;
+}
+
+$bar-height: 14px;
+$color--bar-bg: #f1f1f1;
+$color--bar-value-base: #ffee9d;
+$bar-colors: (#ff653b, #ffa53b, #e8d128, #10aac6, #10c647, #fa30e2);
+
+.bar {
+  background-color: $color--bar-bg;
+  border-radius: $bar-height / 2;
+  flex: 1;
+  height: $bar-height;
+}
+
+.bar-value {
+  animation: grow 500ms $ease-out-cubic;
+  border-radius: $bar-height / 2;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  width: var(--width);
+
+  &::after {
+    @include absolute(0 x x 0);
+    content: '';
+    height: 100%;
+    width: 100%;
+
+    @each $color in $bar-colors {
+      $i: index($bar-colors, $color) - 1;
+
+      .row-#{$i} & {
+        background: linear-gradient(to right, $color, $color--bar-value-base var(--grad-width));
+      }
+    }
+  }
+}
