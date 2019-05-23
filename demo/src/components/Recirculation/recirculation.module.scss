@@ -1,0 +1,34 @@
+.container {
+  @include padding($site-padding $site-padding x x);
+  border-top: $border--thin $color--border;
+  display: flex;
+  justify-content: space-between;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+
+  &--next {
+    text-align: right;
+  }
+}
+
+.label {
+  @include label;
+  margin-bottom: $spacing--base;
+}
+
+.name {
+  transition: color $transition--fast;
+
+  @media (hover: hover) {
+    .link:hover & {
+      color: $color--red;
+    }
+  }
+}

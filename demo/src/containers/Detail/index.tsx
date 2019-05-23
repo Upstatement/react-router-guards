@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { GuardFunction } from 'react-router-guards';
-import { LabeledSection, SpriteList, Type } from 'components';
+import { LabeledSection, Recirculation, SpriteList, Type } from 'components';
 import { useSerializePokemon } from 'hooks';
 import { Pokemon, MoveLearn } from 'types';
 import { api, className } from 'utils';
@@ -112,6 +112,7 @@ const Detail: React.FunctionComponent<Props> = ({ pokemon }) => {
               {renderMoveList(MoveLearn.Tutor)}
             </LabeledSection>
           )}
+          <Recirculation id={pokemon.id} />
         </section>
       </div>
     </div>

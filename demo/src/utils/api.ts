@@ -36,7 +36,7 @@ export default {
       limit: LIST_FETCH_LIMIT,
     }) as Promise<List>;
   },
-  get(name: string) {
-    return fetchFromAPI(`/pokemon/${name}`) as Promise<Pokemon>;
+  get(identifier: string | number) {
+    return fetchFromAPI(`/pokemon/${identifier}`) as Promise<Pokemon>;
   },
 };
