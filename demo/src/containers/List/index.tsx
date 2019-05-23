@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { Waypoint } from 'react-waypoint';
 import { Pokeball } from 'svgs';
 import { ListResult } from 'types';
-import { api, getName } from 'utils';
-import { LIST_FETCH_LIMIT } from 'utils/constants';
+import { api, getIsMissingNo, getName } from 'utils';
+import { LIST_FETCH_LIMIT, MISSINGNO } from 'utils/constants';
 import styles from './list.module.scss';
 
 interface PokemonResult {
@@ -40,14 +40,15 @@ const List = () => {
       <ul className={styles.list}>
         {results.map(({ fullName, name }, i) => (
           <Fragment key={i}>
-            {i > 0 && i % 13 === 0 && (
-              <Link className={styles.link} to={`/missingo`}>
-                MissingNo
+            {getIsMissingNo(i + 1) ? (
+              <Link className={styles.link} to={`/${MISSINGNO.NAME}`}>
+                {MISSINGNO.FULL_NAME}
+              </Link>
+            ) : (
+              <Link className={styles.link} to={`/${name}`}>
+                {fullName}
               </Link>
             )}
-            <Link className={styles.link} to={`/${name}`}>
-              {fullName}
-            </Link>
           </Fragment>
         ))}
       </ul>

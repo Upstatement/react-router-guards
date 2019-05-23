@@ -4,7 +4,7 @@
 }
 
 .main {
-  @include padding($site-padding 0 $site-padding $spacing--sm);
+  @include padding($site-padding 0 $site-padding $site-padding);
   display: flex;
   flex: 1;
   flex-direction: column;

@@ -31,6 +31,7 @@ const SpriteList: React.FunctionComponent<Props> = ({ sprites }) => {
     ],
     [sprites],
   );
+  const hasSprites = useMemo(() => Object.values(sprites).some(sprite => sprite), [sprites]);
 
   const getColor = async () => {
     if (sprites.front_default) {
@@ -44,6 +45,10 @@ const SpriteList: React.FunctionComponent<Props> = ({ sprites }) => {
     getColor();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sprites]);
+
+  if (!hasSprites) {
+    return null;
+  }
 
   return (
     <div className={styles.container}>
