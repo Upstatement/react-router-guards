@@ -7,6 +7,25 @@ export interface ListResult {
 
 type Sprite = string | null;
 
+export interface Slotted {
+  slot: number;
+}
+
+interface PokemonType extends Slotted {
+  type: {
+    name: string;
+    url: string;
+  };
+}
+
+interface Ability extends Slotted {
+  is_hidden: boolean;
+  ability: {
+    name: string;
+    url: string;
+  };
+}
+
 export interface PokemonSprites {
   front_default: Sprite;
   front_shiny: Sprite;
@@ -24,4 +43,7 @@ export interface Pokemon {
   height: number;
   weight: number;
   sprites: PokemonSprites;
+  types: PokemonType[];
+  abilities: Ability[];
+  base_experience: number;
 }

@@ -6,7 +6,15 @@ h1 {
   @include h1;
 }
 
-p {
+h2 {
+  @include h2;
+  border-bottom: $border--thin $color--border;
+  padding-bottom: $spacing--base;
+  width: 100%;
+}
+
+p,
+li {
   @include body;
 }
 

@@ -1,0 +1,19 @@
+$type-top-padding: 8px;
+$type-side-padding: 14px;
+
+.type {
+  @include padding($type-top-padding $type-side-padding);
+  border-radius: $type-top-padding + ($font-size--md / 2);
+  color: $color--text-light;
+  display: inline-flex;
+  font-family: $font--dia;
+  font-size: $font-size--md;
+  font-weight: 600;
+  line-height: 1;
+}
+
+@each $type, $color in $type-colors {
+  .type--#{$type} {
+    background-color: $color;
+  }
+}

@@ -1,3 +1,93 @@
 .container {
   display: flex;
+  flex: 1;
+}
+
+.main {
+  @include padding($site-padding 0 $site-padding $spacing--sm);
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.header {
+  align-items: center;
+  display: flex;
+  margin-bottom: $spacing--md;
+}
+
+.title {
+  margin-right: $spacing--base;
+}
+
+.types {
+  display: flex;
+  margin-bottom: $spacing--xl;
+}
+
+.types-item {
+  margin-right: $spacing--sm;
+}
+
+.label {
+  @include label;
+  margin-bottom: $spacing--base;
+}
+
+.physique {
+  display: flex;
+  margin-bottom: $spacing--lg;
+}
+
+.physique-section {
+  display: flex;
+  flex-direction: column;
+  margin-right: $spacing--xxl;
+}
+
+.physique-list {
+  display: flex;
+}
+
+.physique-item {
+  &:not(:last-child) {
+    margin-right: $spacing--md;
+  }
+}
+
+.abilities,
+.stats {
+  margin-bottom: $spacing--xxl;
+}
+
+.ability-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.ability-item {
+  align-items: center;
+  display: flex;
+
+  &:not(:last-child) {
+    margin-bottom: $spacing--xs;
+  }
+}
+
+.label--small {
+  @include label--small;
+  margin-left: $spacing--md;
+}
+
+.section-header {
+  margin-bottom: $spacing--lg;
+}
+
+.stats-section {
+  display: flex;
+  flex-direction: column;
+
+  &:not(:last-child) {
+    margin-bottom: $spacing--lg;
+  }
 }

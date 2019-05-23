@@ -6,6 +6,14 @@
   line-height: 1;
 }
 
+@mixin h2 {
+  color: $color--text;
+  font-family: $font--dia;
+  font-size: $font-size--lg;
+  font-weight: 600;
+  line-height: 1;
+}
+
 @mixin body {
   color: $color--text;
   font-family: $font--dia;
@@ -29,4 +37,19 @@
   color: $color--text;
   font-family: $font--dia;
   font-size: $font-size--md;
+}
+
+@mixin label {
+  color: $color--text;
+  font-family: $font--dia;
+  font-size: $font-size--sm;
+  font-weight: 800;
+  letter-spacing: 1px;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+@mixin label--small {
+  @include label;
+  font-weight: 600;
 }
