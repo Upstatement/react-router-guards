@@ -1,5 +1,3 @@
-@import '../../style/abstracts';
-
 .container {
   @include padding($site-padding);
   height: calc(100vh - #{$nav-height});

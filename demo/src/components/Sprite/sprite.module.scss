@@ -1,5 +1,3 @@
-@import '../../style/abstracts';
-
 .container {
   @include padding($spacing--xxl);
   @include relative(x);

@@ -7,7 +7,7 @@ interface Props {
 }
 
 const Pokeball: React.FunctionComponent<Props> = ({ isAnimated }) => (
-  <div {...className(styles.wrapper, isAnimated && styles['wrapper--animated'])}>
+  <div {...className(styles.wrapper, isAnimated && styles.wrapperAnimated)}>
     <svg
       viewBox="0 0 134 134"
       version="1.1"
@@ -30,7 +30,7 @@ const Pokeball: React.FunctionComponent<Props> = ({ isAnimated }) => (
         fillRule="nonzero"
       />
       <circle
-        {...className(styles.button, isAnimated && styles['button--animated'])}
+        {...className(styles.button, isAnimated && styles.buttonAnimated)}
         cx="67"
         cy="67"
         r="20"

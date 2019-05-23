@@ -1,5 +1,3 @@
-@import '../../style/abstracts';
-
 .container {
   @include padding($nav-top-padding $site-padding);
   @include sticky(0 x x x);

@@ -1,5 +1,3 @@
-@import '../../style/abstracts';
-
 .container {
   @include padding($site-padding $site-padding $spacing--md);
   border: $border--thin $color--border;
