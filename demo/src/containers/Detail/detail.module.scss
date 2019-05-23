@@ -56,17 +56,23 @@
 }
 
 .list {
+  align-self: flex-start;
   display: flex;
   flex-direction: column;
 }
 
 .list-item {
+  @include padding($spacing--xs x);
   @include list-item-hover('.list', 0.3);
   align-items: center;
   display: flex;
 
-  &:not(:last-child) {
-    margin-bottom: $spacing--xs;
+  &:first-child {
+    margin-top: -$spacing--xs;
+  }
+
+  &:last-child {
+    margin-bottom: -$spacing--xs;
   }
 }
 
@@ -88,6 +94,7 @@
 }
 
 .table {
+  align-self: flex-start;
   display: flex;
   flex-direction: column;
 }
@@ -103,10 +110,8 @@
 .table-column {
   display: flex;
   flex-direction: column;
-  width: 100%;
 
   &--levels {
     min-width: 100px;
-    width: 20%;
   }
 }
