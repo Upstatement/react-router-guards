@@ -29,20 +29,15 @@
   margin-right: $spacing--sm;
 }
 
-.label {
-  @include label;
-  margin-bottom: $spacing--base;
-}
-
 .physique {
   display: flex;
   margin-bottom: $spacing--lg;
 }
 
 .physique-section {
-  display: flex;
-  flex-direction: column;
-  margin-right: $spacing--xxl;
+  &:not(:last-child) {
+    margin-right: $spacing--xxl;
+  }
 }
 
 .physique-list {
@@ -60,12 +55,13 @@
   margin-bottom: $spacing--xxl;
 }
 
-.ability-list {
+.list {
   display: flex;
   flex-direction: column;
 }
 
-.ability-item {
+.list-item {
+  @include list-item-hover('.list');
   align-items: center;
   display: flex;
 
@@ -74,8 +70,9 @@
   }
 }
 
-.label--small {
+.hidden-label {
   @include label--small;
+  color: $color--text-light;
   margin-left: $spacing--md;
 }
 
@@ -83,11 +80,33 @@
   margin-bottom: $spacing--lg;
 }
 
-.stats-section {
-  display: flex;
-  flex-direction: column;
-
+.stats-section,
+.move-section {
   &:not(:last-child) {
     margin-bottom: $spacing--lg;
+  }
+}
+
+.table {
+  display: flex;
+  flex-direction: column;
+}
+
+.table-row {
+  display: flex;
+
+  &:not(:first-child) {
+    @include list-item-hover('.table');
+  }
+}
+
+.table-column {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  &--levels {
+    min-width: 100px;
+    width: 20%;
   }
 }

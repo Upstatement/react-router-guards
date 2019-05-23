@@ -8,7 +8,7 @@ $border-radius--md: 5px;
 /* Colors */
 $color--white: #ffffff;
 $color--black: #000000;
-$color--gray: #535353;
+$color--gray: #898989;
 $color--gray-light: #d8d8d8;
 $color--red: #ff3232;
 $color--red-light: mix($color--white, $color--red, 50%);
@@ -55,10 +55,10 @@ $type-colors: (
 
 /* Colors applied */
 $color--bg: $color--white;
-$color--bg-light: $color--gray-light;
 $color--border: $color--gray-light;
 $color--text: $color--black;
-$color--text-light: $color--white;
+$color--text-light: $color--gray;
+$color--text-white: $color--white;
 
 /* Fonts */
 $font--system: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
@@ -66,11 +66,11 @@ $font--system: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
 $font--dia: 'Dia', $font--system;
 
 /* Font sizes */
-$font-size--sm: 14px;
-$font-size--md: 18px;
+$font-size--xs: 14px;
+$font-size--sm: 18px;
 $font-size--base: 24px;
-$font-size--lg: 32px;
-$font-size--xl: 60px;
+$font-size--md: 32px;
+$font-size--lg: 60px;
 
 /* Spacing */
 $spacing--xs: 5px;

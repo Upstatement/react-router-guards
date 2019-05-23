@@ -1,0 +1,13 @@
+.section {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  @include label;
+  margin-bottom: $spacing--base;
+}
+
+.label-large {
+  margin-bottom: $spacing--md;
+}

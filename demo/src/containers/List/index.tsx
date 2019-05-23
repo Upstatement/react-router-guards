@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Waypoint } from 'react-waypoint';
 import { Pokeball } from 'svgs';
@@ -38,10 +38,17 @@ const List = () => {
   return (
     <div className={styles.container}>
       <ul className={styles.list}>
-        {results.map(({ fullName, name }) => (
-          <Link className={styles.link} key={name} to={`/${name}`}>
-            {fullName}
-          </Link>
+        {results.map(({ fullName, name }, i) => (
+          <Fragment key={i}>
+            {i > 0 && i % 13 === 0 && (
+              <Link className={styles.link} to={`/missingo`}>
+                MissingNo
+              </Link>
+            )}
+            <Link className={styles.link} to={`/${name}`}>
+              {fullName}
+            </Link>
+          </Fragment>
         ))}
       </ul>
       <Waypoint onEnter={getPokemon} />

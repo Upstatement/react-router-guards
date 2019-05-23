@@ -1,6 +1,7 @@
 .container {
   @include hide-scrolling;
   @include padding($site-padding);
+  @include sticky($nav-height x x 0);
   flex-shrink: 0;
   height: calc(100vh - #{$nav-height});
   -webkit-overflow-scrolling: smooth;

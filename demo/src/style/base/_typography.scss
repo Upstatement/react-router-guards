@@ -13,6 +13,10 @@ h2 {
   width: 100%;
 }
 
+h3 {
+  @include h3;
+}
+
 p,
 li {
   @include body;

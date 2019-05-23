@@ -10,7 +10,7 @@ const NotFound = () => (
       alt="Not found"
     />
     <h1 className={styles.title}>Uh-oh!</h1>
-    <p className={styles.body}>We couldn't find that Pokémon.</p>
+    <p className={styles.body}>We couldn't catch that Pokémon.</p>
     <Link to="/">Viem 'em all</Link>
   </div>
 );

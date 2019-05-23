@@ -20,7 +20,7 @@
 
 .caption {
   @include absolute(x x 0 0);
-  @include padding(x x $spacing--sm $spacing--sm);
+  @include padding(x x $spacing--sm $spacing--base);
   margin-top: $spacing--sm;
   z-index: 2;
 }

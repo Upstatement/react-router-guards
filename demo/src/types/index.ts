@@ -1,5 +1,10 @@
 type Name = string;
 
+export interface Resource<T> {
+  name: T;
+  url: string;
+}
+
 export interface ListResult {
   name: Name;
   url: string;
@@ -12,18 +17,43 @@ export interface Slotted {
 }
 
 interface PokemonType extends Slotted {
-  type: {
-    name: string;
-    url: string;
-  };
+  type: Resource<string>;
 }
 
-interface Ability extends Slotted {
+export interface PokemonAbility extends Slotted {
   is_hidden: boolean;
-  ability: {
-    name: string;
-    url: string;
-  };
+  ability: Resource<string>;
+}
+
+export enum MoveLearn {
+  Egg = 'egg',
+  LevelUp = 'level-up',
+  Machine = 'machine',
+  Tutor = 'tutor',
+}
+
+export interface PokemonMove {
+  move: Resource<string>;
+  version_group_details: {
+    level_learned_at: number;
+    move_learn_method: Resource<MoveLearn>;
+    version_group: Resource<string>;
+  }[];
+}
+
+export enum StatType {
+  Attack = 'attack',
+  Defense = 'defense',
+  HP = 'hp',
+  SpecialAttack = 'special-attack',
+  SpecialDefense = 'special-defense',
+  Speed = 'speed',
+}
+
+export interface PokemonStat {
+  base_stat: number;
+  effort: number;
+  stat: Resource<StatType>;
 }
 
 export interface PokemonSprites {
@@ -44,6 +74,8 @@ export interface Pokemon {
   weight: number;
   sprites: PokemonSprites;
   types: PokemonType[];
-  abilities: Ability[];
+  abilities: PokemonAbility[];
   base_experience: number;
+  moves: PokemonMove[];
+  stats: PokemonStat[];
 }

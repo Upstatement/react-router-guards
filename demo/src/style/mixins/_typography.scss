@@ -1,7 +1,7 @@
 @mixin h1 {
   color: $color--text;
   font-family: $font--dia;
-  font-size: $font-size--xl;
+  font-size: $font-size--lg;
   font-weight: 600;
   line-height: 1;
 }
@@ -9,7 +9,15 @@
 @mixin h2 {
   color: $color--text;
   font-family: $font--dia;
-  font-size: $font-size--lg;
+  font-size: $font-size--md;
+  font-weight: 600;
+  line-height: 1;
+}
+
+@mixin h3 {
+  color: $color--text;
+  font-family: $font--dia;
+  font-size: $font-size--base;
   font-weight: 600;
   line-height: 1;
 }
@@ -24,7 +32,7 @@
 
 @mixin body--small {
   @include body;
-  font-size: $font-size--md;
+  font-size: $font-size--sm;
 }
 
 @mixin link {
@@ -36,13 +44,13 @@
 @mixin caption {
   color: $color--text;
   font-family: $font--dia;
-  font-size: $font-size--md;
+  font-size: $font-size--sm;
 }
 
 @mixin label {
   color: $color--text;
   font-family: $font--dia;
-  font-size: $font-size--sm;
+  font-size: $font-size--xs;
   font-weight: 800;
   letter-spacing: 1px;
   line-height: 1;

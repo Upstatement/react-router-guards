@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/camelcase */
-
-import React, { useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { GuardFunction } from 'react-router-guards';
-import { SpriteList, Type } from 'components';
-import { Pokemon } from 'types';
-import { api, getEntryNumber, getHeight, getName, getWeight, sortSlots } from 'utils';
+import { LabeledSection, SpriteList, Type } from 'components';
+import { useSerializePokemon } from 'hooks';
+import { Pokemon, MoveLearn } from 'types';
+import { api, className } from 'utils';
 import styles from './detail.module.scss';
 
 interface Props {
@@ -12,19 +11,23 @@ interface Props {
 }
 
 const Detail: React.FunctionComponent<Props> = ({ pokemon }) => {
-  console.log(pokemon);
-  const name = useMemo(() => getName(pokemon.name), [pokemon]);
-  const entryNumber = useMemo(() => getEntryNumber(pokemon.id), [pokemon]);
-  const types = useMemo(() => sortSlots(pokemon.types).map(({ type }) => type.name), [pokemon]);
-  const height = useMemo(() => getHeight(pokemon.height), [pokemon]);
-  const weight = useMemo(() => getWeight(pokemon.weight), [pokemon]);
-  const abilities = useMemo(
-    () =>
-      sortSlots(pokemon.abilities).map(({ is_hidden, ability }) => ({
-        isHidden: is_hidden,
-        name: getName(ability.name),
-      })),
-    [pokemon],
+  const { abilities, entryNumber, height, moves, name, stats, types, weight } = useSerializePokemon(
+    pokemon,
+  );
+
+  console.log(stats);
+
+  const renderMoveList = useCallback(
+    (type: MoveLearn, renderLevel: boolean = false) => (
+      <ul className={styles.list}>
+        {moves[type].map(({ name, level }) => (
+          <li key={name} className={styles.listItem}>
+            {renderLevel ? level : name}
+          </li>
+        ))}
+      </ul>
+    ),
+    [moves],
   );
 
   return (
@@ -43,44 +46,72 @@ const Detail: React.FunctionComponent<Props> = ({ pokemon }) => {
           ))}
         </ul>
         <section className={styles.physique}>
-          <div className={styles.physiqueSection}>
-            <p className={styles.label}>Height</p>
+          <LabeledSection className={styles.physiqueSection} label="Height">
             <ul className={styles.physiqueList}>
               <li className={styles.physiqueItem}>{height.metric}</li>
               <li className={styles.physiqueItem}>{height.imperial}</li>
             </ul>
-          </div>
-          <div className={styles.physiqueSection}>
-            <p className={styles.label}>Weight</p>
+          </LabeledSection>
+          <LabeledSection className={styles.physiqueSection} label="Weight">
             <ul className={styles.physiqueList}>
               <li className={styles.physiqueItem}>{weight.metric}</li>
               <li className={styles.physiqueItem}>{weight.imperial}</li>
             </ul>
-          </div>
+          </LabeledSection>
         </section>
-        <section className={styles.abilities}>
-          <p className={styles.label}>Abilities</p>
-          <ul className={styles.abilityList}>
+        <LabeledSection className={styles.abilities} label="Abilities">
+          <ul className={styles.list}>
             {abilities.map(({ isHidden, name }) => (
-              <li key={name} className={styles.abilityItem}>
+              <li key={name} className={styles.listItem}>
                 {name}
-                {isHidden && <span className={styles.labelSmall}>Hidden Ability</span>}
+                {isHidden && <span className={styles.hiddenLabel}>Hidden Ability</span>}
               </li>
             ))}
           </ul>
-        </section>
+        </LabeledSection>
         <section className={styles.stats}>
           <h2 className={styles.sectionHeader}>Statistics</h2>
-          <div className={styles.statsSection}>
-            <p className={styles.label}>Base Experience Yield</p>
+          <LabeledSection className={styles.statsSection} label="Base Experience Yield">
             <p>{pokemon.base_experience} XP</p>
-          </div>
-          <div className={styles.statsSection}>
-            <p className={styles.label}>Base Stats</p>
-          </div>
+          </LabeledSection>
+          <LabeledSection className={styles.statsSection} label="Base Stats" />
         </section>
         <section className={styles.moves}>
           <h2 className={styles.sectionHeader}>Moves</h2>
+          {moves[MoveLearn.LevelUp].length > 0 && (
+            <LabeledSection className={styles.moveSection} label="By leveling up" large>
+              <ul className={styles.table}>
+                <li className={styles.tableRow}>
+                  <LabeledSection
+                    {...className(styles.tableColumn, styles.tableColumnLevels)}
+                    label="Level"
+                  />
+                  <LabeledSection className={styles.tableColumn} label="Move" />
+                </li>
+                {moves[MoveLearn.LevelUp].map(({ name, level }) => (
+                  <li key={name} {...className(styles.tableRow, styles.listItem)}>
+                    <p {...className(styles.tableColumn, styles.tableColumnLevels)}>{level}</p>
+                    <p className={styles.tableColumn}>{name}</p>
+                  </li>
+                ))}
+              </ul>
+            </LabeledSection>
+          )}
+          {moves[MoveLearn.Egg].length > 0 && (
+            <LabeledSection className={styles.moveSection} label="From Egg" large>
+              {renderMoveList(MoveLearn.Egg)}
+            </LabeledSection>
+          )}
+          {moves[MoveLearn.Machine].length > 0 && (
+            <LabeledSection className={styles.moveSection} label="From TM/HM" large>
+              {renderMoveList(MoveLearn.Machine)}
+            </LabeledSection>
+          )}
+          {moves[MoveLearn.Tutor].length > 0 && (
+            <LabeledSection className={styles.moveSection} label="From Tutor" large>
+              {renderMoveList(MoveLearn.Tutor)}
+            </LabeledSection>
+          )}
         </section>
       </div>
     </div>
