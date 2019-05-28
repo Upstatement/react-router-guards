@@ -144,10 +144,10 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
 
   useEffect(() => {
     if (hasRouteUpdated) {
+      setRouteError(null);
+      setRouteRedirect(null);
       setRouteValidated(hasGuards);
       if (!hasGuards) {
-        setRouteError(null);
-        setRouteRedirect(null);
         validateRoute();
       }
     }

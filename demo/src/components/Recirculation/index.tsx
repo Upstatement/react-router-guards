@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'components';
 import { useFetchPokemon } from 'hooks';
 import { Pokemon } from 'types';
 import { className, getIsMissingNo, getName } from 'utils';

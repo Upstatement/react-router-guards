@@ -1,6 +1,6 @@
 import React, { Fragment, useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Waypoint } from 'react-waypoint';
+import { Link } from 'components';
 import { Pokeball } from 'svgs';
 import { ListResult } from 'types';
 import { api, getIsMissingNo, getName } from 'utils';
