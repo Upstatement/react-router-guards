@@ -3,6 +3,11 @@ import { LocationDescriptor } from 'history';
 import { RouteComponentProps, RouteProps } from 'react-router-dom';
 
 /**
+ * General
+ */
+export type Meta = Record<string, any>;
+
+/**
  * Guard Function Types
  */
 export const GuardTypes = Object.freeze({
@@ -43,7 +48,7 @@ export interface Next {
 
 export type GuardFunctionRouteProps = RouteComponentProps<Record<string, any>>;
 export type GuardToRoute = GuardFunctionRouteProps & {
-  meta: Record<string, any>;
+  meta: Meta;
 };
 export type GuardFunction = (
   to: GuardToRoute,
@@ -67,7 +72,7 @@ export interface BaseGuardProps {
 }
 
 export type PropsWithMeta<T> = T & {
-  meta?: Record<string, any>;
+  meta?: Meta;
 };
 
 export type GuardProviderProps = BaseGuardProps;
