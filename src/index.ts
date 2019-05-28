@@ -1,3 +1,10 @@
 export { default as GuardProvider } from './GuardProvider';
 export { default as GuardedRoute } from './GuardedRoute';
-export { GuardedRouteProps, GuardFunction, GuardProps, Next, PageComponent } from './types';
+export {
+  BaseGuardProps,
+  GuardedRouteProps,
+  GuardFunction,
+  GuardProviderProps,
+  Next,
+  PageComponent,
+} from './types';

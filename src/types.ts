@@ -41,9 +41,13 @@ export interface Next {
   redirect(to: LocationDescriptor): void;
 }
 
+export type GuardFunctionRouteProps = RouteComponentProps<Record<string, any>>;
+export type GuardToRoute = GuardFunctionRouteProps & {
+  meta: Record<string, any>;
+};
 export type GuardFunction = (
-  to: RouteComponentProps<Record<string, any>>,
-  from: RouteComponentProps<Record<string, any>> | null,
+  to: GuardToRoute,
+  from: GuardFunctionRouteProps | null,
   next: Next,
 ) => void;
 
@@ -55,11 +59,17 @@ export type PageComponent = ComponentType | null | undefined | string | boolean 
 /**
  * Props
  */
-export interface GuardProps {
+export interface BaseGuardProps {
   guards?: GuardFunction[];
   ignoreGlobal?: boolean;
   loading?: PageComponent;
   error?: PageComponent;
 }
 
-export type GuardedRouteProps = GuardProps & RouteProps;
+export type PropsWithMeta<T> = T & {
+  meta?: Record<string, any>;
+};
+
+export type GuardProviderProps = BaseGuardProps;
+export type GuardedRouteProps = PropsWithMeta<BaseGuardProps & RouteProps>;
+export type GuardProps = PropsWithMeta<RouteProps>;

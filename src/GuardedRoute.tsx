@@ -14,6 +14,7 @@ const GuardedRoute: React.FunctionComponent<GuardedRouteProps> = ({
   guards,
   ignoreGlobal,
   loading,
+  meta,
   render,
   ...routeProps
 }) => {
@@ -29,7 +30,7 @@ const GuardedRoute: React.FunctionComponent<GuardedRouteProps> = ({
         <GuardContext.Provider value={routeGuards}>
           <ContextWrapper<PageComponent> context={LoadingPageContext} value={loading}>
             <ContextWrapper<PageComponent> context={ErrorPageContext} value={error}>
-              <Guard component={component} render={render}>
+              <Guard component={component} meta={meta} render={render}>
                 {children}
               </Guard>
             </ContextWrapper>
