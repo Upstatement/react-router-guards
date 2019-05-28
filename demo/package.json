@@ -17,10 +17,10 @@
     "typescript": "3.4.5"
   },
   "scripts": {
-    "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "link": "cd ..; npm link; cd demo; npm link react-router-guards",
+    "start": "react-scripts start",
+    "test": "react-scripts test"
   },
   "browserslist": {
     "production": [
