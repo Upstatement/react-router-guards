@@ -1,10 +1,11 @@
 import React, { createElement, Fragment, useCallback, useContext, useEffect, useMemo } from 'react';
-import { __RouterContext as RouterContext, RouteProps } from 'react-router';
+import { __RouterContext as RouterContext } from 'react-router';
 import { matchPath, Redirect, Route } from 'react-router-dom';
 import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
 import { usePrevious, useStateWhenMounted } from './hooks';
 import {
   GuardFunction,
+  GuardProps,
   GuardType,
   GuardTypes,
   Next,
@@ -17,7 +18,7 @@ import {
 type RouteError = string | Record<string, any> | null;
 type RouteRedirect = NextRedirectPayload | null;
 
-const Guard: React.FunctionComponent<RouteProps> = ({ children, component, render }) => {
+const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta, render }) => {
   const routeProps = useContext(RouterContext);
   const routePrevProps = usePrevious(routeProps);
   const hasRouteUpdated = useMemo(
@@ -62,8 +63,11 @@ const Guard: React.FunctionComponent<RouteProps> = ({ children, component, rende
     new Promise(
       async (resolve, reject): Promise<void> => {
         try {
-          const next = getNextFn(resolve);
-          await guard(routeProps, fromRouteProps, next);
+          const to = {
+            ...routeProps,
+            meta: meta || {},
+          };
+          await guard(to, fromRouteProps, getNextFn(resolve));
         } catch (error) {
           reject(error);
         }
@@ -78,18 +82,20 @@ const Guard: React.FunctionComponent<RouteProps> = ({ children, component, rende
   const resolveAllGuards = async (): Promise<void> => {
     let index = 0;
     let props = {};
+    let redirect = null;
     if (guards) {
-      while (!routeRedirect && index < guards.length) {
+      while (!redirect && index < guards.length) {
         const { type, payload } = await runGuard(guards[index]);
         if (payload) {
           if (type === GuardTypes.REDIRECT) {
-            setRouteRedirect(payload);
+            redirect = payload;
           } else if (type === GuardTypes.PROPS) {
             props = Object.assign(props, payload);
           }
         }
         index += 1;
       }
+      setRouteRedirect(redirect);
       setPageProps(props);
     }
   };

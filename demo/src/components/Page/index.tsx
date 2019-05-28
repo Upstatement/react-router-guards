@@ -17,6 +17,7 @@ const Page: React.FunctionComponent<RouteComponentProps> = ({ children, history 
         <Link to="/">Home</Link>
         <Link to="/hello/1">First page</Link>
         <Link to="/hello/2">Second page</Link>
+        <Link to="/goodbye">Non-auth page</Link>
         <Link to="/asdf">404</Link>
         {isLoggedIn && <button onClick={logout}>Log out</button>}
       </nav>

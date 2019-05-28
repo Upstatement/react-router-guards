@@ -3,6 +3,12 @@ import { LocationDescriptor } from 'history';
 import { RouteComponentProps, RouteProps } from 'react-router-dom';
 
 /**
+ * General
+ */
+export type Meta = Record<string, any>;
+export type RouteMatchParams = Record<string, string>;
+
+/**
  * Guard Function Types
  */
 export const GuardTypes = Object.freeze({
@@ -41,9 +47,13 @@ export interface Next {
   redirect(to: LocationDescriptor): void;
 }
 
+export type GuardFunctionRouteProps = RouteComponentProps<RouteMatchParams>;
+export type GuardToRoute = GuardFunctionRouteProps & {
+  meta: Meta;
+};
 export type GuardFunction = (
-  to: RouteComponentProps<Record<string, any>>,
-  from: RouteComponentProps<Record<string, any>> | null,
+  to: GuardToRoute,
+  from: GuardFunctionRouteProps | null,
   next: Next,
 ) => void;
 
@@ -55,11 +65,17 @@ export type PageComponent = ComponentType | null | undefined | string | boolean 
 /**
  * Props
  */
-export interface GuardProps {
+export interface BaseGuardProps {
   guards?: GuardFunction[];
   ignoreGlobal?: boolean;
   loading?: PageComponent;
   error?: PageComponent;
 }
 
-export type GuardedRouteProps = GuardProps & RouteProps;
+export type PropsWithMeta<T> = T & {
+  meta?: Meta;
+};
+
+export type GuardProviderProps = BaseGuardProps;
+export type GuardedRouteProps = PropsWithMeta<BaseGuardProps & RouteProps>;
+export type GuardProps = PropsWithMeta<RouteProps>;

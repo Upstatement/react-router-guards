@@ -1,5 +1,5 @@
-import { Hello, Home, Login, NotFound } from 'containers';
-import { requireLogin } from 'router/guards';
+import { GoodBye, Hello, Home, Login, NotFound } from 'containers';
+import { AUTH_ONLY } from 'router/types';
 
 export default () => [
   {
@@ -8,14 +8,22 @@ export default () => [
     component: Home,
     loading: 'Definitely not loading...',
     error: 'Definitely not an error',
-    guards: [requireLogin],
-    ignoreGlobal: true,
+    meta: {
+      [AUTH_ONLY]: true,
+    },
   },
   {
     path: '/hello/:id',
     exact: true,
     component: Hello,
-    guards: [requireLogin],
+    meta: {
+      [AUTH_ONLY]: true,
+    },
+  },
+  {
+    path: '/goodbye',
+    exact: true,
+    component: GoodBye,
   },
   {
     path: '/login',
@@ -25,5 +33,6 @@ export default () => [
   {
     path: '*',
     component: NotFound,
+    ignoreGlobal: true,
   },
 ];
