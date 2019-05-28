@@ -3,9 +3,9 @@ import { __RouterContext as RouterContext } from 'react-router';
 import invariant from 'tiny-invariant';
 import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
 import { useGlobalGuards, usePrevious } from './hooks';
-import { GuardProps } from './types';
+import { GuardProviderProps } from './types';
 
-const GuardProvider: React.FunctionComponent<GuardProps> = ({
+const GuardProvider: React.FunctionComponent<GuardProviderProps> = ({
   children,
   guards,
   ignoreGlobal,
