@@ -20,7 +20,7 @@
 
 .label {
   @include label;
-  margin-bottom: $spacing--base;
+  margin-bottom: $spacing--sm;
 }
 
 .name {

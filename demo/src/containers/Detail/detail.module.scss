@@ -4,7 +4,7 @@
 }
 
 .main {
-  @include padding($site-padding 0 $site-padding $site-padding);
+  @include padding($site-padding 0 0 $site-padding);
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -93,6 +93,10 @@
   }
 }
 
+.moves {
+  margin-bottom: $site-padding;
+}
+
 .table {
   align-self: flex-start;
   display: flex;
@@ -114,4 +118,10 @@
   &--levels {
     min-width: 100px;
   }
+}
+
+.recirculation {
+  @include sticky(x x 0);
+  background-color: $color--bg;
+  padding-bottom: $spacing--md;
 }

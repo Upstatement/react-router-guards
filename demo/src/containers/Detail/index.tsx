@@ -95,6 +95,22 @@ const Detail: React.FunctionComponent<Props> = ({ pokemon }) => {
                   </li>
                 ))}
               </ul>
+              {/* <table>
+                <thead>
+                  <tr>
+                    <td>Level</td>
+                    <td>Move</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {moves[MoveLearnType.LevelUp].map(({ level, name }) => (
+                    <tr key={name}>
+                      <td className={styles.tableColumn}>{level}</td>
+                      <td className={styles.tableColumn}>{name}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table> */}
             </LabeledSection>
           )}
           {moves[MoveLearnType.Egg].length > 0 && (
@@ -112,6 +128,8 @@ const Detail: React.FunctionComponent<Props> = ({ pokemon }) => {
               {renderMoveList(MoveLearnType.Tutor)}
             </LabeledSection>
           )}
+        </section>
+        <section className={styles.recirculation}>
           <Recirculation id={pokemon.id} />
         </section>
       </div>

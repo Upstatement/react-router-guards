@@ -35,15 +35,25 @@ const StatChart: React.FunctionComponent<Props> = ({ stats }) => {
 
   return (
     <div className={styles.container}>
-      {statData.map(({ name, value, barStyle }, i) => (
-        <div key={i} {...className(styles.row, styles[`row${i}`])}>
-          <p className={styles.type}>{name}</p>
-          <p className={styles.value}>{value}</p>
-          <div className={styles.bar}>
-            <div className={styles.barValue} style={barStyle} />
-          </div>
-        </div>
-      ))}
+      <table>
+        <tbody className={styles.table}>
+          {statData.map(({ name, value, barStyle }, i) => (
+            <tr key={i} {...className(styles.row, styles[`row${i}`])}>
+              <td className={styles.tableColumnMin}>
+                <span className={styles.type}>{name}</span>
+              </td>
+              <td className={styles.tableColumnMin}>
+                <span className={styles.value}>{value}</span>
+              </td>
+              <td>
+                <div className={styles.bar}>
+                  <div className={styles.barValue} style={barStyle} />
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
