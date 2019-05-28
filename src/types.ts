@@ -6,6 +6,7 @@ import { RouteComponentProps, RouteProps } from 'react-router-dom';
  * General
  */
 export type Meta = Record<string, any>;
+export type RouteMatchParams = Record<string, string>;
 
 /**
  * Guard Function Types
@@ -46,7 +47,7 @@ export interface Next {
   redirect(to: LocationDescriptor): void;
 }
 
-export type GuardFunctionRouteProps = RouteComponentProps<Record<string, any>>;
+export type GuardFunctionRouteProps = RouteComponentProps<RouteMatchParams>;
 export type GuardToRoute = GuardFunctionRouteProps & {
   meta: Meta;
 };
