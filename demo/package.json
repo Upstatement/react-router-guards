@@ -13,6 +13,7 @@
     "react-router-dom": "^5.0.0",
     "react-waypoint": "^9.0.2",
     "rgbaster": "^2.1.1",
+    "tinycolor2": "^1.4.1",
     "typescript": "3.4.5"
   },
   "scripts": {

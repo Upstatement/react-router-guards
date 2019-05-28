@@ -1,4 +1,5 @@
 /// <reference types="react-scripts" />
 
-declare module 'rgbaster';
 declare module '*.scss';
+declare module 'rgbaster';
+declare module 'tinycolor2';

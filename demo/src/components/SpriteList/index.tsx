@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import getColorFromImg from 'rgbaster';
+import tinycolor from 'tinycolor2';
 import { Sprite } from 'components';
 import { PokemonSprites } from 'types';
 import styles from './spriteList.module.scss';
@@ -35,9 +36,26 @@ const SpriteList: React.FunctionComponent<Props> = ({ sprites }) => {
 
   const getColor = async () => {
     if (sprites.front_default) {
-      const color = await getColorFromImg(sprites.front_default);
-      const rgb = color[0].color.replace(/(rgb\(|\))+/g, '');
-      setColor(`rgba(${rgb}, 0.1)`);
+      const colorOptions = await getColorFromImg(sprites.front_default);
+      let index = 0;
+      let rgb = [255, 255, 255];
+      while (index < colorOptions.length - 1) {
+        const [r, g, b] = colorOptions[index].color
+          .replace(/(rgb\(|\))+/g, '')
+          .split(',')
+          .map((v: string) => parseInt(v) || 0);
+        index += 1;
+        if (!(r === 0 && g === 0 && b === 0) && !(r === 255 && g === 255 && b === 255)) {
+          rgb = [r, g, b];
+          break;
+        }
+      }
+      const rgba = tinycolor(`rgba(${rgb.join(',')}, 0.1)`);
+      const luminance = Math.round(rgba.getLuminance() * 100);
+      if (luminance >= 80) {
+        rgba.darken(100 - luminance || 20);
+      }
+      setColor(rgba.toRgbString());
     }
   };
 
