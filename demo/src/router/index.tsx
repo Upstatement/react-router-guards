@@ -13,13 +13,18 @@ interface Props {
 
 const Router: React.FunctionComponent<Props> = ({ children }) => (
   <BrowserRouter history={history}>
-    <GuardProvider guards={[waitOneSecond]} loading={Loading} error={NotFound}>
+    <GuardProvider loading={Loading} error={NotFound}>
       <Route
         render={routeProps =>
           children(
             <Switch>
               <GuardedRoute path="/" exact component={List} />
-              <GuardedRoute path="/:name" exact component={Detail} guards={[detailBeforeEnter]} />
+              <GuardedRoute
+                path="/:name"
+                exact
+                component={Detail}
+                guards={[detailBeforeEnter, waitOneSecond]}
+              />
               <GuardedRoute path="*" component={NotFound} />
             </Switch>,
             routeProps,

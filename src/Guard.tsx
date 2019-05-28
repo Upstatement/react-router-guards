@@ -163,7 +163,7 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
     if (pathToMatch && !matchPath(pathToMatch, { path, exact })) {
       return <Redirect to={routeRedirect} />;
     }
-  } else if (hasRouteUpdated) {
+  } else if (hasRouteUpdated && Object.keys(routeProps.match.params).length) {
     return null;
   }
   return (
