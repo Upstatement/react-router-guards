@@ -3,11 +3,11 @@ $type-side-padding: 14px;
 
 .type {
   @include padding($type-top-padding $type-side-padding);
-  border-radius: $type-top-padding + ($font-size--sm / 2);
+  border-radius: $type-top-padding + ($font-size--xs / 2);
   color: $color--text-white;
   display: inline-flex;
   font-family: $font--dia;
-  font-size: $font-size--sm;
+  font-size: $font-size--xs;
   font-weight: 600;
   line-height: 1;
 }

@@ -1,9 +1,14 @@
+/* Border Radii */
+$border-radius--sm: 3px;
+$border-radius--md: 5px;
+
 /* Borders */
 $border--thin: 1px solid;
 
-/* Border radii */
-$border-radius--sm: 3px;
-$border-radius--md: 5px;
+/* Breakpoints */
+$bp--tablet: 850px;
+$bp--tablet-sm: 675px;
+$bp--mobile: 485px;
 
 /* Colors */
 $color--white: #ffffff;
@@ -13,7 +18,14 @@ $color--gray-light: #d8d8d8;
 $color--red: #ff3232;
 $color--red-light: mix($color--white, $color--red, 50%);
 
-/* Type Colors */
+/* Colors Applied */
+$color--bg: $color--white;
+$color--border: $color--gray-light;
+$color--text: $color--black;
+$color--text-light: $color--gray;
+$color--text-white: $color--white;
+
+/* Colors - Types */
 $color--bug: #748553;
 $color--dark: #270d3e;
 $color--dragon: #1f8f9b;
@@ -53,24 +65,20 @@ $type-colors: (
   water: $color--water,
 );
 
-/* Colors applied */
-$color--bg: $color--white;
-$color--border: $color--gray-light;
-$color--text: $color--black;
-$color--text-light: $color--gray;
-$color--text-white: $color--white;
-
 /* Fonts */
 $font--system: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
   'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 $font--dia: 'Dia', $font--system;
 
-/* Font sizes */
-$font-size--xs: 14px;
-$font-size--sm: 18px;
+/* Font Sizes */
+$font-size--xxs: 14px;
+$font-size--xs: 18px;
+$font-size--sm: 21px;
 $font-size--base: 24px;
-$font-size--md: 32px;
-$font-size--lg: 60px;
+$font-size--md: 28px;
+$font-size--lg: 32px;
+$font-size--xl: 44px;
+$font-size--xxl: 60px;
 
 /* Spacing */
 $spacing--xs: 5px;
@@ -83,13 +91,15 @@ $spacing--xxl: 60px;
 
 /* Sizes */
 $site-padding: $spacing--lg;
-$nav-icon-height: 32px;
+$site-padding--sm: $spacing--md;
+$nav-icon-size: 32px;
 $nav-top-padding: $spacing--base;
-$nav-height: ($nav-top-padding * 2) + $nav-icon-height;
+$nav-height: ($nav-top-padding * 2) + $nav-icon-size;
 
 /* Transitions */
 $transition--fast: 100ms ease-out;
 $ease-out-cubic: cubic-bezier(0.79, 0.16, 0.43, 0.99);
 
 /* Z indices */
-$z-index--nav: 1000;
+$z-index--recirc: 1000;
+$z-index--nav: 1001;

@@ -15,8 +15,12 @@
   image-rendering: pixelated;
   padding-top: 100%;
   transition: transform $transition--fast;
-  width: 200px;
+  width: 125px;
   z-index: 1;
+
+  @include mq($bp--tablet) {
+    width: 200px;
+  }
 
   @media (hover: hover) {
     .container:hover & {

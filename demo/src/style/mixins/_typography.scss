@@ -1,17 +1,21 @@
 @mixin h1 {
+  @include fluid-type($bp--mobile, $bp--tablet, $font-size--xl, $font-size--xxl);
   color: $color--text;
   font-family: $font--dia;
-  font-size: $font-size--lg;
   font-weight: 600;
   line-height: 1;
 }
 
 @mixin h2 {
+  @include fluid(margin-bottom, $bp--mobile, $bp--tablet, $spacing--md, $spacing--lg);
+  @include fluid(padding-bottom, $bp--mobile, $bp--tablet, $spacing--sm, $spacing--base);
+  @include fluid-type($bp--mobile, $bp--tablet, $font-size--md, $font-size--lg);
+  border-bottom: $border--thin $color--border;
   color: $color--text;
   font-family: $font--dia;
-  font-size: $font-size--md;
   font-weight: 600;
   line-height: 1;
+  width: 100%;
 }
 
 @mixin h3 {
@@ -23,16 +27,16 @@
 }
 
 @mixin body {
+  @include fluid-type($bp--mobile, $bp--tablet, $font-size--sm, $font-size--base);
   color: $color--text;
   font-family: $font--dia;
-  font-size: $font-size--base;
   font-weight: 400;
   line-height: 1.3;
 }
 
 @mixin body--small {
   @include body;
-  font-size: $font-size--sm;
+  font-size: $font-size--xs;
 }
 
 @mixin link {
@@ -44,13 +48,13 @@
 @mixin caption {
   color: $color--text;
   font-family: $font--dia;
-  font-size: $font-size--sm;
+  font-size: $font-size--xs;
 }
 
 @mixin label {
   color: $color--text;
   font-family: $font--dia;
-  font-size: $font-size--xs;
+  font-size: $font-size--xxs;
   font-weight: 800;
   letter-spacing: 1px;
   line-height: 1;

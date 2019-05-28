@@ -6,11 +6,19 @@
 }
 
 .container {
-  @include padding(x $site-padding);
+  @include padding(x $site-padding--sm);
+
+  @include mq($bp--mobile) {
+    @include padding(x $site-padding);
+  }
 }
 
 .list {
-  @include padding($site-padding x);
+  @include padding($site-padding--sm x);
+
+  @include mq($bp--mobile) {
+    @include padding($site-padding x);
+  }
 }
 
 .link {
@@ -28,6 +36,10 @@
 }
 
 .loader {
-  @include margin(-$spacing--sm x $site-padding);
+  @include margin(-$spacing--sm x $site-padding--sm);
   @include size(56px);
+
+  @include mq($bp--mobile) {
+    margin-bottom: $site-padding;
+  }
 }

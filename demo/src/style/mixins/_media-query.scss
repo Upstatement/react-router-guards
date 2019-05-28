@@ -1,0 +1,19 @@
+@mixin mq($bp-1, $bp-2: null) {
+  @if $bp-1 == 'max' {
+    @media (max-width: $bp-2 - 1) {
+      @content;
+    }
+  } @else if $bp-2 == 'max' {
+    @media (max-width: $bp-1 - 1) {
+      @content;
+    }
+  } @else if $bp-2 == null {
+    @media (min-width: $bp-1) {
+      @content;
+    }
+  } @else {
+    @media (min-width: $bp-1) and (max-width: $bp-2 - 1) {
+      @content;
+    }
+  }
+}

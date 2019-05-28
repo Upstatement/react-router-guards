@@ -21,7 +21,7 @@ const Recirculation: React.FunctionComponent<Props> = ({ id }) => {
     const section = (
       <div {...className(styles.section, styles[`section${label}`])}>
         <p className={styles.label}>{label}</p>
-        <p className={styles.name}>
+        <p {...className(styles.name, isFetching && styles.nameLoading)}>
           {isFetching ? 'Loading...' : showMissingno ? MISSINGNO.FULL_NAME : getName(name)}
         </p>
       </div>

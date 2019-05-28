@@ -12,10 +12,14 @@ $table-padding: $spacing--base;
 $table-row-border: $table-padding solid $color--bg;
 
 .container {
-  @include margin(-$table-padding x);
+  @include margin(-$spacing--sm x -$table-padding);
   display: flex;
   flex-direction: column;
   position: relative;
+
+  @include mq($bp--mobile) {
+    margin-top: -$table-padding;
+  }
 }
 
 .row {

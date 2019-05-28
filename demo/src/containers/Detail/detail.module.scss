@@ -1,23 +1,40 @@
 .container {
   display: flex;
   flex: 1;
+  flex-direction: column;
+
+  @include mq($bp--tablet) {
+    flex-direction: row;
+  }
 }
 
 .main {
-  @include padding($site-padding 0 0 $site-padding);
   display: flex;
   flex: 1;
   flex-direction: column;
+  padding-left: $site-padding--sm;
+
+  @include mq($bp--mobile) {
+    padding-left: $site-padding;
+  }
+
+  @include mq($bp--tablet) {
+    @include padding($site-padding 0 0 x);
+  }
 }
 
 .header {
-  align-items: center;
   display: flex;
+  flex-direction: column;
   margin-bottom: $spacing--md;
 }
 
 .title {
   margin-right: $spacing--base;
+}
+
+.entry {
+  color: $color--text-light;
 }
 
 .types {
@@ -31,12 +48,22 @@
 
 .physique {
   display: flex;
+  flex-direction: column;
   margin-bottom: $spacing--lg;
+
+  @include mq($bp--mobile) {
+    flex-direction: row;
+  }
 }
 
 .physique-section {
   &:not(:last-child) {
-    margin-right: $spacing--xxl;
+    margin-bottom: $spacing--lg;
+
+    @include mq($bp--mobile) {
+      margin-bottom: 0;
+      margin-right: $spacing--xxl;
+    }
   }
 }
 
@@ -82,10 +109,6 @@
   margin-left: $spacing--md;
 }
 
-.section-header {
-  margin-bottom: $spacing--lg;
-}
-
 .stats-section,
 .move-section {
   &:not(:last-child) {
@@ -123,5 +146,10 @@
 .recirculation {
   @include sticky(x x 0);
   background-color: $color--bg;
-  padding-bottom: $spacing--md;
+  padding-bottom: $spacing--base;
+  z-index: $z-index--recirc;
+
+  @include mq($bp--mobile) {
+    padding-bottom: $spacing--md;
+  }
 }

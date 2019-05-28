@@ -1,9 +1,15 @@
 .container {
+  @include padding(x $site-padding--sm);
   align-items: center;
   display: flex;
   flex: 1;
   flex-direction: column;
   justify-content: center;
+  text-align: center;
+
+  @include mq($bp--mobile) {
+    @include padding(x $site-padding--sm);
+  }
 }
 
 .image {
@@ -17,5 +23,9 @@
 }
 
 .body {
-  margin-bottom: $spacing--xl;
+  margin-bottom: $spacing--lg;
+
+  @include mq($bp--mobile) {
+    margin-bottom: $spacing--xl;
+  }
 }

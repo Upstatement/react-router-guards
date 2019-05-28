@@ -1,12 +1,17 @@
 .section {
   display: flex;
   flex-direction: column;
-  padding-right: $site-padding;
+  padding-right: $site-padding--sm;
+
+  @include mq($bp--mobile) {
+    padding-right: $site-padding;
+  }
 }
 
 .label {
+  @include fluid(margin-bottom, $bp--mobile, $bp--tablet, $spacing--sm, $spacing--base);
   @include label;
-  margin-bottom: $spacing--base;
+  z-index: 2;
 }
 
 .label-large {

@@ -1,8 +1,22 @@
 .container {
-  @include padding($site-padding $site-padding x x);
+  @include relative(0);
+  @include padding($site-padding--sm $site-padding--sm x);
   border-top: $border--thin $color--border;
   display: flex;
   justify-content: space-between;
+  left: -$site-padding--sm;
+  width: 100vw;
+
+  @include mq($bp--mobile) {
+    @include padding($site-padding $site-padding x);
+    left: -$site-padding;
+  }
+
+  @include mq($bp--tablet) {
+    left: 0;
+    padding-left: 0;
+    width: auto;
+  }
 }
 
 .link {
@@ -25,6 +39,10 @@
 
 .name {
   transition: color $transition--fast;
+
+  &--loading {
+    color: $color--text-light;
+  }
 
   @media (hover: hover) {
     .link:hover & {

@@ -34,7 +34,7 @@ const Detail: React.FunctionComponent<Props> = ({ pokemon }) => {
       <div className={styles.main}>
         <header className={styles.header}>
           <h1 className={styles.title}>{name}</h1>
-          <p>{entryNumber}</p>
+          <p className={styles.entry}>{entryNumber}</p>
         </header>
         <ul className={styles.types}>
           {types.map(type => (
