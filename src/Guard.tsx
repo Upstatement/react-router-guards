@@ -178,6 +178,10 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
   };
 
   useEffect(() => {
+    validateRoute();
+  }, []);
+
+  useEffect(() => {
     if (hasPathChanged || haveMatchParamsChanged) {
       validationsRequested.current += 1;
       setRouteError(null);
