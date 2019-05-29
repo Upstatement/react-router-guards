@@ -1,0 +1,37 @@
+.container {
+  @include padding($spacing--xxl);
+  @include relative(x);
+  border-radius: $border-radius--sm;
+  display: inline-flex;
+  flex-direction: column;
+  justify-self: flex-start;
+  transition: background-color $transition--basic;
+}
+
+.sprite {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  image-rendering: pixelated;
+  padding-top: 100%;
+  transition: transform $transition--basic;
+  width: 125px;
+  z-index: 1;
+
+  @include mq($bp--tablet) {
+    width: 200px;
+  }
+
+  @media (hover: hover) {
+    .container:hover & {
+      transform: scale(1.1);
+    }
+  }
+}
+
+.caption {
+  @include absolute(x x 0 0);
+  @include padding(x x $spacing--sm $spacing--base);
+  margin-top: $spacing--sm;
+  z-index: 2;
+}

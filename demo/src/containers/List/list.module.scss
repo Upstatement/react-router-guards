@@ -1,0 +1,45 @@
+.container,
+.list {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  @include padding(x $site-padding--sm);
+
+  @include mq($bp--mobile) {
+    @include padding(x $site-padding);
+  }
+}
+
+.list {
+  @include margin($site-padding--sm x);
+
+  @include mq($bp--mobile) {
+    @include margin($site-padding x);
+  }
+}
+
+.link {
+  @include h1;
+  @include list-item-hover('.list');
+  @include padding($spacing--xs x);
+  text-decoration: none;
+  width: 100%;
+
+  @media (hover: hover) {
+    &:hover {
+      color: $color--text;
+    }
+  }
+}
+
+.loader {
+  @include margin(-$spacing--sm x $site-padding--sm);
+  @include size(56px);
+
+  @include mq($bp--mobile) {
+    margin-bottom: $site-padding;
+  }
+}

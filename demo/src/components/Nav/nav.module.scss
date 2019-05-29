@@ -1,0 +1,25 @@
+.container {
+  @include padding($nav-top-padding $site-padding);
+  @include sticky(0 x x x);
+  background-color: rgba($color--bg, 0.9);
+  border-bottom: $border--thin $color--border;
+  display: flex;
+  flex-direction: row;
+  z-index: $z-index--nav;
+}
+
+.link {
+  @include margin(0 auto);
+}
+
+.icon {
+  @include size($nav-icon-size);
+  border-radius: 50%;
+  transition: transform $duration--fast $ease-out;
+
+  @media (hover: hover) {
+    .link:hover & {
+      transform: rotate(-30deg);
+    }
+  }
+}

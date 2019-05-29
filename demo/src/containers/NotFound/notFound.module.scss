@@ -1,0 +1,31 @@
+.container {
+  @include padding(x $site-padding--sm);
+  align-items: center;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+
+  @include mq($bp--mobile) {
+    @include padding(x $site-padding);
+  }
+}
+
+.image {
+  height: 200px;
+  image-rendering: pixelated;
+  margin-bottom: $spacing--xl;
+}
+
+.title {
+  margin-bottom: $spacing--base;
+}
+
+.body {
+  margin-bottom: $spacing--lg;
+
+  @include mq($bp--mobile) {
+    margin-bottom: $spacing--xl;
+  }
+}

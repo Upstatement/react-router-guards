@@ -1,0 +1,24 @@
+.container {
+  @include padding($site-padding--sm);
+  border: $border--thin $color--border;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  @include mq($bp--mobile) {
+    @include padding($site-padding $site-padding $spacing--md);
+  }
+
+  @include mq($bp--tablet-sm) {
+    flex-direction: row;
+  }
+
+  p,
+  a {
+    font-size: $font-size--xs;
+  }
+}
+
+.copyright {
+  margin-bottom: $spacing--xs;
+}

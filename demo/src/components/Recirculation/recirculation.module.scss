@@ -1,0 +1,52 @@
+.container {
+  @include relative(0);
+  @include padding($site-padding--sm $site-padding--sm x);
+  border-top: $border--thin $color--border;
+  display: flex;
+  justify-content: space-between;
+  left: -$site-padding--sm;
+  width: 100vw;
+
+  @include mq($bp--mobile) {
+    @include padding($site-padding $site-padding x);
+    left: -$site-padding;
+  }
+
+  @include mq($bp--tablet) {
+    left: 0;
+    padding-left: 0;
+    width: auto;
+  }
+}
+
+.link {
+  text-decoration: none;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+
+  &--next {
+    text-align: right;
+  }
+}
+
+.label {
+  @include label;
+  margin-bottom: $spacing--sm;
+}
+
+.name {
+  transition: color $transition--basic;
+
+  &--loading {
+    color: $color--text-light;
+  }
+
+  @media (hover: hover) {
+    .link:hover & {
+      color: $color--red;
+    }
+  }
+}

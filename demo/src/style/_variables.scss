@@ -1,3 +1,122 @@
+/* Border Radii */
+$border-radius--sm: 3px;
+$border-radius--md: 5px;
+
+/* Borders */
+$border--thin: 1px solid;
+
+/* Breakpoints */
+$bp--tablet: 850px;
+$bp--tablet-sm: 675px;
+$bp--mobile: 485px;
+
+/* Colors */
+$color--white: #ffffff;
+$color--black: #000000;
+$color--gray: #898989;
+$color--gray-light: #d8d8d8;
+$color--gray-xlight: #f1f1f1;
+$color--red: #ff3232;
+$color--red-light: mix($color--white, $color--red, 50%);
+$color--yellow: #ffee9d;
+
+/* Colors Applied */
+$color--bg: $color--white;
+$color--bg-light: $color--gray-xlight;
+$color--border: $color--gray-light;
+$color--text: $color--black;
+$color--text-light: $color--gray;
+$color--text-white: $color--white;
+
+/* Colors - Stats */
+$color--base-stat: $color--yellow;
+$color--hp: #ff653b;
+$color--atk: #ffa53b;
+$color--def: #e8d128;
+$color--sp-atk: #10aac6;
+$color--sp-def: #10c647;
+$color--speed: #fa30e2;
+$stat-colors: ($color--hp, $color--atk, $color--def, $color--sp-atk, $color--sp-def, $color--speed);
+
+/* Colors - Types */
+$color--bug: #748553;
+$color--dark: #270d3e;
+$color--dragon: #1f8f9b;
+$color--electric: #dabb00;
+$color--fairy: #cf7cb9;
+$color--fighting: #c85a19;
+$color--fire: #ff3500;
+$color--flying: #9facc4;
+$color--ghost: #715482;
+$color--grass: #03b653;
+$color--ground: #823f1b;
+$color--ice: #6ac7c4;
+$color--normal: #cab2cc;
+$color--poison: #9840d1;
+$color--psychic: #d140a3;
+$color--rock: #646159;
+$color--steel: #9ea4a2;
+$color--water: #0696e3;
+$type-colors: (
+  bug: $color--bug,
+  dark: $color--dark,
+  dragon: $color--dragon,
+  electric: $color--electric,
+  fairy: $color--fairy,
+  fighting: $color--fighting,
+  fire: $color--fire,
+  flying: $color--flying,
+  ghost: $color--ghost,
+  grass: $color--grass,
+  ground: $color--ground,
+  ice: $color--ice,
+  normal: $color--normal,
+  poison: $color--poison,
+  psychic: $color--psychic,
+  rock: $color--rock,
+  steel: $color--steel,
+  water: $color--water,
+);
+
 /* Fonts */
 $font--system: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
   'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+
+/* Font Sizes */
+$font-size--xxs: 14px;
+$font-size--xs: 18px;
+$font-size--sm: 21px;
+$font-size--base: 24px;
+$font-size--md: 28px;
+$font-size--lg: 32px;
+$font-size--xl: 44px;
+$font-size--xxl: 60px;
+
+/* Spacing */
+$spacing--xs: 5px;
+$spacing--sm: 10px;
+$spacing--base: 15px;
+$spacing--md: 20px;
+$spacing--lg: 30px;
+$spacing--xl: 40px;
+$spacing--xxl: 60px;
+
+/* Sizes */
+$site-padding: $spacing--lg;
+$site-padding--sm: $spacing--md;
+$nav-icon-size: 32px;
+$nav-top-padding: $spacing--base;
+$nav-height: ($nav-top-padding * 2) + $nav-icon-size;
+
+/* Transitions */
+$duration--xfast: 100ms;
+$duration--fast: 200ms;
+$duration--reg: 500ms;
+$duration--slow: 1500ms;
+$ease-out: ease-out;
+$ease-out-cubic: cubic-bezier(0.79, 0.16, 0.43, 0.99);
+$transition--basic: $duration--xfast $ease-out;
+
+/* Z indices */
+$z-index--recirc: 1000;
+$z-index--nav: 1001;

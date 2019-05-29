@@ -1,0 +1,20 @@
+$type-font-size: $font-size--xs;
+$type-side-padding: 14px;
+$type-vert-padding: 8px;
+
+.type {
+  @include padding($type-vert-padding $type-side-padding);
+  border-radius: $type-vert-padding + ($type-font-size / 2);
+  color: $color--text-white;
+  display: inline-flex;
+  font-family: $font--system;
+  font-size: $type-font-size;
+  font-weight: 600;
+  line-height: 1;
+}
+
+@each $type, $color in $type-colors {
+  .type--#{$type} {
+    background-color: $color;
+  }
+}

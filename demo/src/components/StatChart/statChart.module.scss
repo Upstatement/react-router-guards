@@ -1,0 +1,79 @@
+@keyframes grow {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: var(--width);
+  }
+}
+
+$table-padding: $spacing--base;
+$table-row-border: $table-padding solid $color--bg;
+
+.container {
+  @include margin(-$spacing--sm x -$table-padding);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  @include mq($bp--mobile) {
+    margin-top: -$table-padding;
+  }
+}
+
+.row {
+  @include list-item-hover('.table', 0.3);
+  align-items: center;
+  border-bottom: $table-row-border;
+  border-top: $table-row-border;
+}
+
+.table-column-min {
+  padding-right: $spacing--lg;
+  white-space: nowrap;
+  width: 1%;
+}
+
+.type,
+.value {
+  @include body;
+  line-height: 1;
+}
+
+.type {
+  color: $color--text-light;
+}
+
+$bar-height: $spacing--base;
+
+.bar {
+  background-color: $color--bg-light;
+  border-radius: $bar-height / 2;
+  flex: 1;
+  height: $bar-height;
+}
+
+.bar-value {
+  animation: grow $duration--reg $ease-out-cubic;
+  border-radius: $bar-height / 2;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  width: var(--width);
+
+  &::after {
+    @include absolute(0 x x 0);
+    content: '';
+    height: 100%;
+    width: 100%;
+
+    @each $color in $stat-colors {
+      $i: index($stat-colors, $color) - 1;
+
+      .row-#{$i} & {
+        background: linear-gradient(to right, $color, $color--base-stat var(--grad-width));
+      }
+    }
+  }
+}

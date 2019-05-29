@@ -1,4 +1,12 @@
-import React, { createElement, Fragment, useCallback, useContext, useEffect, useMemo } from 'react';
+import React, {
+  createElement,
+  Fragment,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
 import { __RouterContext as RouterContext } from 'react-router';
 import { matchPath, Redirect, Route } from 'react-router-dom';
 import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
@@ -15,13 +23,19 @@ import {
   PageComponent,
 } from './types';
 
+type PageProps = NextPropsPayload;
 type RouteError = string | Record<string, any> | null;
 type RouteRedirect = NextRedirectPayload | null;
 
 const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta, render }) => {
   const routeProps = useContext(RouterContext);
   const routePrevProps = usePrevious(routeProps);
-  const hasRouteUpdated = useMemo(
+  const hasPathChanged = useMemo(() => routeProps.match.path !== routePrevProps.match.path, [
+    routePrevProps,
+    routeProps,
+  ]);
+  const hasMatchParams = useMemo(() => routeProps.match.path.includes(':'), [routeProps]);
+  const haveMatchParamsChanged = useMemo(
     () => JSON.stringify(routePrevProps.match.params) !== JSON.stringify(routeProps.match.params),
     [routeProps, routePrevProps],
   );
@@ -31,11 +45,21 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
   const LoadingPage = useContext(LoadingPageContext);
   const ErrorPage = useContext(ErrorPageContext);
 
-  const hasGuards = useMemo(() => !!(guards && guards.length === 0), [guards]);
-  const [routeValidated, setRouteValidated] = useStateWhenMounted<boolean>(hasGuards);
+  const hasNoGuards = useMemo(() => !!(guards && guards.length === 0), [guards]);
+  const validationsRequested = useRef(0);
+  const [routeValidated, setRouteValidated] = useStateWhenMounted<boolean>(hasNoGuards);
   const [routeError, setRouteError] = useStateWhenMounted<RouteError>(null);
   const [routeRedirect, setRouteRedirect] = useStateWhenMounted<RouteRedirect>(null);
-  const [pageProps, setPageProps] = useStateWhenMounted<NextPropsPayload>({});
+  const [pageProps, setPageProps] = useStateWhenMounted<PageProps>({});
+
+  /**
+   * Memoized callback to get the current number of validations requested.
+   * This is used in order to see if new validations were requested in the
+   * middle of a validation execution.
+   */
+  const getCurrentValidationsRequested = useCallback(() => validationsRequested.current, [
+    validationsRequested,
+  ]);
 
   /**
    * Memoized callback to get the next callback function used in guards.
@@ -74,12 +98,17 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
       },
     );
 
+  interface GuardsResolve {
+    props: PageProps;
+    redirect: RouteRedirect;
+  }
+
   /**
    * Loops through all guards in context. If the guard adds new props
    * to the page or causes a redirect, these are tracked in the state
    * constants defined above.
    */
-  const resolveAllGuards = async (): Promise<void> => {
+  const resolveAllGuards = async (): Promise<GuardsResolve> => {
     let index = 0;
     let props = {};
     let redirect = null;
@@ -95,9 +124,11 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
         }
         index += 1;
       }
-      setRouteRedirect(redirect);
-      setPageProps(props);
     }
+    return {
+      props,
+      redirect,
+    };
   };
 
   /**
@@ -105,8 +136,16 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
    * will toggle the route error state.
    */
   const validateRoute = async (): Promise<void> => {
+    const currentRequests = validationsRequested.current;
+
+    let pageProps: PageProps = {};
+    let routeError: RouteError = null;
+    let routeRedirect: RouteRedirect = null;
+
     try {
-      await resolveAllGuards();
+      const { props, redirect } = await resolveAllGuards();
+      pageProps = props;
+      routeRedirect = redirect;
     } catch (error) {
       let { message } = error;
       try {
@@ -114,9 +153,15 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
       } catch {
         // message not JSON parsable, continue
       }
-      setRouteError(message || 'Not found.');
+      routeError = message || 'Not found.';
     }
-    setRouteValidated(true);
+
+    if (currentRequests === getCurrentValidationsRequested()) {
+      setPageProps(pageProps);
+      setRouteError(routeError);
+      setRouteRedirect(routeRedirect);
+      setRouteValidated(true);
+    }
   };
 
   /**
@@ -126,10 +171,7 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
    * @param props the props to pass to the page
    * @returns the page component
    */
-  const renderPage = (
-    page: PageComponent,
-    props: Record<string, any>,
-  ): React.ReactElement | null => {
+  const renderPage = (page: PageComponent, props: PageProps): React.ReactElement | null => {
     if (!page) {
       return null;
     } else if (typeof page !== 'string' && typeof page !== 'boolean' && typeof page !== 'number') {
@@ -143,15 +185,16 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
   }, []);
 
   useEffect(() => {
-    if (hasRouteUpdated) {
-      setRouteValidated(hasGuards);
-      if (!hasGuards) {
-        setRouteError(null);
-        setRouteRedirect(null);
+    if (hasPathChanged || haveMatchParamsChanged) {
+      validationsRequested.current += 1;
+      setRouteError(null);
+      setRouteRedirect(null);
+      setRouteValidated(hasNoGuards);
+      if (!hasNoGuards) {
         validateRoute();
       }
     }
-  }, [hasRouteUpdated]);
+  }, [hasPathChanged, haveMatchParamsChanged]);
 
   if (!routeValidated) {
     return renderPage(LoadingPage, routeProps);
@@ -163,7 +206,7 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
     if (pathToMatch && !matchPath(pathToMatch, { path, exact })) {
       return <Redirect to={routeRedirect} />;
     }
-  } else if (hasRouteUpdated) {
+  } else if (hasPathChanged && hasMatchParams && haveMatchParamsChanged) {
     return null;
   }
   return (

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useDebugValue } from 'react';
 
 /**
  * React hook for storing the previous value of the
@@ -13,6 +13,8 @@ function usePrevious<T>(value: T): T {
   useEffect(() => {
     ref.current = value;
   });
+
+  useDebugValue(ref.current);
 
   return ref.current;
 }

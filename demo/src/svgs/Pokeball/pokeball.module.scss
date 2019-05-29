@@ -1,0 +1,78 @@
+@import '../../style/abstracts';
+
+@keyframes catching {
+  0%,
+  5% {
+    transform: rotate(0deg);
+  }
+
+  30% {
+    transform: rotate(-30deg);
+  }
+
+  55% {
+    transform: rotate(30deg);
+  }
+
+  80%,
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  10% {
+    fill: $color--white;
+  }
+
+  20% {
+    fill: $color--red-light;
+  }
+
+  40%,
+  50% {
+    fill: $color--white;
+  }
+
+  70% {
+    fill: $color--red-light;
+  }
+
+  90%,
+  100% {
+    fill: $color--white;
+  }
+}
+
+.wrapper {
+  @include size(100%);
+
+  &--animated {
+    animation: catching $duration--slow infinite;
+  }
+}
+
+.top {
+  fill: #ff3232;
+
+  &--disabled {
+    fill: #bebebe;
+  }
+}
+
+.outline {
+  fill: $color--black;
+}
+
+.button {
+  fill: $color--white;
+
+  &--animated {
+    animation: pulse $duration--slow infinite;
+  }
+}
+
+.bottom {
+  fill: $color--white;
+}

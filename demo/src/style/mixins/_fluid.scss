@@ -1,0 +1,22 @@
+@mixin fluid($property, $min-vw, $max-vw, $min-val, $max-val) {
+  $u1: unit($min-vw);
+  $u2: unit($max-vw);
+  $u3: unit($min-val);
+  $u4: unit($max-val);
+
+  @if $u1 == $u2 and $u1 == $u3 and $u1 == $u4 {
+    #{$property}: $min-val;
+    @media screen and (min-width: $min-vw) {
+      $font-diff: strip-unit($max-val - $min-val);
+      $vw-diff: strip-unit($max-vw - $min-vw);
+      #{$property}: calc(#{$min-val} + #{$font-diff} * ((100vw - #{$min-vw}) / #{$vw-diff}));
+    }
+    @media screen and (min-width: $max-vw) {
+      #{$property}: $max-val;
+    }
+  }
+}
+
+@mixin fluid-type($min-vw, $max-vw, $min-font-size, $max-font-size) {
+  @include fluid(font-size, $min-vw, $max-vw, $min-font-size, $max-font-size);
+}

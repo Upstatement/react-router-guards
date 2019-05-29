@@ -1,47 +1,34 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Route, Router as BrowserRouter, Switch, RouteComponentProps } from 'react-router-dom';
+import { Router as BrowserRouter, Switch } from 'react-router-dom';
 import { GuardProvider, GuardedRoute } from 'react-router-guards';
-import { NotFound } from 'containers';
+import { Detail, List, Loading, NotFound } from 'containers';
+import { beforeRouteEnter as detailBeforeEnter } from 'containers/Detail';
 import history from './history';
-import getRoutes from './routes';
-import { requireLogin, waitOneSecond } from './guards';
+import { waitOneSecond } from './guards';
 
 interface Props {
-  children(content: React.ReactElement, routeProps: RouteComponentProps): React.ReactElement;
+  children(content: React.ReactElement): React.ReactElement;
 }
 
-const Router: React.FunctionComponent<Props> = ({ children }) => {
-  const globalGuards = useMemo(() => [requireLogin, waitOneSecond], []);
-  const routes = useMemo(() => getRoutes(), []);
-  return (
-    <BrowserRouter history={history}>
-      <GuardProvider guards={globalGuards} loading={() => <h3>Loading...</h3>} error={NotFound}>
-        <Route
-          render={routeProps =>
-            children(
-              <Switch>
-                {routes.map(({ component, error, exact, ignoreGlobal, loading, meta, path }, i) => (
-                  <GuardedRoute
-                    key={i}
-                    component={component}
-                    error={error}
-                    exact={exact}
-                    ignoreGlobal={ignoreGlobal}
-                    loading={loading}
-                    meta={meta}
-                    path={path}
-                  />
-                ))}
-              </Switch>,
-              routeProps,
-            )
-          }
-        />
-      </GuardProvider>
-    </BrowserRouter>
-  );
-};
+const Router: React.FunctionComponent<Props> = ({ children }) => (
+  <BrowserRouter history={history}>
+    <GuardProvider loading={Loading} error={NotFound}>
+      {children(
+        <Switch>
+          <GuardedRoute path="/" exact component={List} />
+          <GuardedRoute
+            path="/:name"
+            exact
+            component={Detail}
+            guards={[waitOneSecond, detailBeforeEnter]}
+          />
+          <GuardedRoute path="*" component={NotFound} />
+        </Switch>,
+      )}
+    </GuardProvider>
+  </BrowserRouter>
+);
 
 Router.propTypes = {
   children: PropTypes.func.isRequired,

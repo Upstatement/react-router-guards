@@ -1,3 +1,33 @@
 * {
   font-family: $font--system;
 }
+
+h1 {
+  @include h1;
+}
+
+h2 {
+  @include h2;
+}
+
+h3 {
+  @include h3;
+}
+
+p,
+li {
+  @include body;
+}
+
+a {
+  @include link;
+  transition: color $transition--basic;
+
+  &:hover {
+    color: $color--red;
+  }
+}
+
+figcaption {
+  @include caption;
+}

@@ -1,0 +1,13 @@
+@mixin list-item-hover($list-class, $opacity: 0.5) {
+  transition: opacity $transition--basic;
+
+  @media (hover: hover) {
+    #{$list-class}:hover & {
+      opacity: $opacity;
+    }
+
+    #{$list-class}:hover &:hover {
+      opacity: 1;
+    }
+  }
+}

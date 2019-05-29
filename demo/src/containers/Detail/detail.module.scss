@@ -1,0 +1,155 @@
+.container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+
+  @include mq($bp--tablet) {
+    flex-direction: row;
+  }
+}
+
+.main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding-left: $site-padding--sm;
+
+  @include mq($bp--mobile) {
+    padding-left: $site-padding;
+  }
+
+  @include mq($bp--tablet) {
+    @include padding($site-padding 0 0 x);
+  }
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: $spacing--md;
+}
+
+.title {
+  margin-right: $spacing--base;
+}
+
+.entry {
+  color: $color--text-light;
+}
+
+.types {
+  display: flex;
+  margin-bottom: $spacing--xl;
+}
+
+.types-item {
+  margin-right: $spacing--sm;
+}
+
+.physique {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: $spacing--lg;
+
+  @include mq($bp--mobile) {
+    flex-direction: row;
+  }
+}
+
+.physique-section {
+  &:not(:last-child) {
+    margin-bottom: $spacing--lg;
+
+    @include mq($bp--mobile) {
+      margin-bottom: 0;
+      margin-right: $spacing--xxl;
+    }
+  }
+}
+
+.physique-list {
+  display: flex;
+}
+
+.physique-item {
+  &:not(:last-child) {
+    margin-right: $spacing--md;
+  }
+}
+
+.abilities,
+.stats {
+  margin-bottom: $spacing--xxl;
+}
+
+.list {
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+}
+
+.list-item {
+  @include padding($spacing--xs x);
+  @include list-item-hover('.list', 0.3);
+  align-items: center;
+  display: flex;
+
+  &:first-child {
+    margin-top: -$spacing--xs;
+  }
+
+  &:last-child {
+    margin-bottom: -$spacing--xs;
+  }
+}
+
+.hidden-label {
+  @include label--small;
+  color: $color--text-light;
+  margin-left: $spacing--md;
+}
+
+.stats-section,
+.move-section {
+  &:not(:last-child) {
+    margin-bottom: $spacing--lg;
+  }
+}
+
+.moves {
+  margin-bottom: $site-padding;
+}
+
+.table {
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+}
+
+.table-row {
+  display: flex;
+
+  &:not(:first-child) {
+    @include list-item-hover('.table', 0.3);
+  }
+}
+
+.table-column {
+  display: flex;
+  flex-direction: column;
+
+  &--levels {
+    min-width: 100px;
+  }
+}
+
+.recirculation {
+  @include sticky(x x 0);
+  background-color: $color--bg;
+  padding-bottom: $spacing--base;
+  z-index: $z-index--recirc;
+
+  @include mq($bp--mobile) {
+    padding-bottom: $spacing--md;
+  }
+}
