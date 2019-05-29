@@ -8,7 +8,7 @@ import React, {
   useRef,
 } from 'react';
 import { __RouterContext as RouterContext } from 'react-router';
-import { matchPath, Route, Redirect } from 'react-router-dom';
+import { matchPath, Redirect, Route } from 'react-router-dom';
 import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
 import { usePrevious, useStateWhenMounted } from './hooks';
 import {
@@ -23,13 +23,14 @@ import {
   PageComponent,
 } from './types';
 
+type PageProps = NextPropsPayload;
 type RouteError = string | Record<string, any> | null;
 type RouteRedirect = NextRedirectPayload | null;
 
 const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta, render }) => {
   const routeProps = useContext(RouterContext);
   const routePrevProps = usePrevious(routeProps);
-  const hasPathChanged = useMemo(() => routeProps.match.path === routePrevProps.match.path, [
+  const hasPathChanged = useMemo(() => routeProps.match.path !== routePrevProps.match.path, [
     routePrevProps,
     routeProps,
   ]);
@@ -49,7 +50,7 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
   const [routeValidated, setRouteValidated] = useStateWhenMounted<boolean>(hasNoGuards);
   const [routeError, setRouteError] = useStateWhenMounted<RouteError>(null);
   const [routeRedirect, setRouteRedirect] = useStateWhenMounted<RouteRedirect>(null);
-  const [pageProps, setPageProps] = useStateWhenMounted<NextPropsPayload>({});
+  const [pageProps, setPageProps] = useStateWhenMounted<PageProps>({});
 
   /**
    * Memoized callback to get the current number of validations requested.
@@ -97,12 +98,17 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
       },
     );
 
+  interface GuardsResolve {
+    props: PageProps;
+    redirect: RouteRedirect;
+  }
+
   /**
    * Loops through all guards in context. If the guard adds new props
    * to the page or causes a redirect, these are tracked in the state
    * constants defined above.
    */
-  const resolveAllGuards = async (): Promise<Record<string, any>> => {
+  const resolveAllGuards = async (): Promise<GuardsResolve> => {
     let index = 0;
     let props = {};
     let redirect = null;
@@ -132,7 +138,7 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
   const validateRoute = async (): Promise<void> => {
     const currentRequests = validationsRequested.current;
 
-    let pageProps: Record<string, any> = {};
+    let pageProps: PageProps = {};
     let routeError: RouteError = null;
     let routeRedirect: RouteRedirect = null;
 
@@ -165,10 +171,7 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
    * @param props the props to pass to the page
    * @returns the page component
    */
-  const renderPage = (
-    page: PageComponent,
-    props: Record<string, any>,
-  ): React.ReactElement | null => {
+  const renderPage = (page: PageComponent, props: PageProps): React.ReactElement | null => {
     if (!page) {
       return null;
     } else if (typeof page !== 'string' && typeof page !== 'boolean' && typeof page !== 'number') {
@@ -203,7 +206,7 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
     if (pathToMatch && !matchPath(pathToMatch, { path, exact })) {
       return <Redirect to={routeRedirect} />;
     }
-  } else if (!hasPathChanged && hasMatchParams && haveMatchParamsChanged) {
+  } else if (hasPathChanged && hasMatchParams && haveMatchParamsChanged) {
     return null;
   }
   return (

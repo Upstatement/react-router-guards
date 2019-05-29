@@ -10,11 +10,15 @@ const useFetchPokemon = (identifier: string | number): UseFetchPokemonReturn => 
 
   const fetchPokemon = useCallback(async () => {
     setIsFetching(true);
-    try {
-      const pokemon = await api.get(identifier);
-      setPokemon(pokemon);
-    } catch {
+    if (typeof identifier === 'number' && identifier < 1) {
       setPokemon(null);
+    } else {
+      try {
+        const pokemon = await api.get(identifier);
+        setPokemon(pokemon);
+      } catch {
+        setPokemon(null);
+      }
     }
     setIsFetching(false);
   }, [identifier]);
