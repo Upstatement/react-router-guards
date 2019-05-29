@@ -1,4 +1,12 @@
-import React, { createElement, Fragment, useCallback, useContext, useEffect, useMemo } from 'react';
+import React, {
+  createElement,
+  Fragment,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
 import { __RouterContext as RouterContext } from 'react-router';
 import { matchPath, Route, Redirect } from 'react-router-dom';
 import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
@@ -37,10 +45,20 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
   const ErrorPage = useContext(ErrorPageContext);
 
   const hasNoGuards = useMemo(() => !!(guards && guards.length === 0), [guards]);
+  const validationsRequested = useRef(0);
   const [routeValidated, setRouteValidated] = useStateWhenMounted<boolean>(hasNoGuards);
   const [routeError, setRouteError] = useStateWhenMounted<RouteError>(null);
   const [routeRedirect, setRouteRedirect] = useStateWhenMounted<RouteRedirect>(null);
   const [pageProps, setPageProps] = useStateWhenMounted<NextPropsPayload>({});
+
+  /**
+   * Memoized callback to get the current number of validations requested.
+   * This is used in order to see if new validations were requested in the
+   * middle of a validation execution.
+   */
+  const getCurrentValidationsRequested = useCallback(() => validationsRequested.current, [
+    validationsRequested,
+  ]);
 
   /**
    * Memoized callback to get the next callback function used in guards.
@@ -84,7 +102,7 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
    * to the page or causes a redirect, these are tracked in the state
    * constants defined above.
    */
-  const resolveAllGuards = async (): Promise<void> => {
+  const resolveAllGuards = async (): Promise<Record<string, any>> => {
     let index = 0;
     let props = {};
     let redirect = null;
@@ -100,9 +118,11 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
         }
         index += 1;
       }
-      setRouteRedirect(redirect);
-      setPageProps(props);
     }
+    return {
+      props,
+      redirect,
+    };
   };
 
   /**
@@ -110,8 +130,16 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
    * will toggle the route error state.
    */
   const validateRoute = async (): Promise<void> => {
+    const currentRequests = validationsRequested.current;
+
+    let pageProps: Record<string, any> = {};
+    let routeError: RouteError = null;
+    let routeRedirect: RouteRedirect = null;
+
     try {
-      await resolveAllGuards();
+      const { props, redirect } = await resolveAllGuards();
+      pageProps = props;
+      routeRedirect = redirect;
     } catch (error) {
       let { message } = error;
       try {
@@ -119,9 +147,15 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
       } catch {
         // message not JSON parsable, continue
       }
-      setRouteError(message || 'Not found.');
+      routeError = message || 'Not found.';
     }
-    setRouteValidated(true);
+
+    if (currentRequests === getCurrentValidationsRequested()) {
+      setPageProps(pageProps);
+      setRouteError(routeError);
+      setRouteRedirect(routeRedirect);
+      setRouteValidated(true);
+    }
   };
 
   /**
@@ -145,6 +179,7 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
 
   useEffect(() => {
     if (hasPathChanged || haveMatchParamsChanged) {
+      validationsRequested.current += 1;
       setRouteError(null);
       setRouteRedirect(null);
       setRouteValidated(hasNoGuards);
@@ -152,7 +187,7 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
         validateRoute();
       }
     }
-  }, [hasPathChanged, haveMatchParamsChanged, hasNoGuards]);
+  }, [hasPathChanged, haveMatchParamsChanged]);
 
   if (!routeValidated) {
     return renderPage(LoadingPage, routeProps);
