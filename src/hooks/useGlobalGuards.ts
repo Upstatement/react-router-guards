@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react';
+import { useContext, useMemo, useDebugValue } from 'react';
 import { GuardContext } from '../contexts';
 import { GuardFunction } from '../types';
 
@@ -19,6 +19,8 @@ const useGlobalGuards = (guards: GuardFunction[] = [], ignoreGlobal: boolean = f
     }
     return [...(globalGuards || []), ...guards];
   }, [guards, ignoreGlobal]);
+
+  useDebugValue(componentGuards.map(({ name }) => name).join(' | '));
 
   return componentGuards;
 };

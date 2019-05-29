@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useDebugValue } from 'react';
 
 type SetState<T> = (newState: React.SetStateAction<T>) => void;
 
@@ -29,6 +29,8 @@ function useStateWhenMounted<T>(initialState: T): [T, SetState<T>] {
     },
     [],
   );
+
+  useDebugValue(state);
 
   return [state, setStateWhenMounted];
 }
