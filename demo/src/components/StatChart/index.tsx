@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { StatType } from 'types';
 import { className } from 'utils';
 import { NAMED_STATS } from 'utils/constants';
@@ -20,18 +20,23 @@ const ORDERED_STATS = [
 ];
 
 const StatChart: React.FunctionComponent<Props> = ({ stats }) => {
-  const statData = ORDERED_STATS.map(type => {
-    const value = stats[type] / MAX_VALUE;
-    return {
-      name: NAMED_STATS[type],
-      value: stats[type],
-      // eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
-      barStyle: {
-        '--width': `${value * 100}%`,
-        '--grad-width': `${(1 / value) * 100}%`,
-      } as React.CSSProperties,
-    };
-  });
+  const statData = useMemo(
+    () =>
+      ORDERED_STATS.map(type => {
+        const value = stats[type] / MAX_VALUE;
+        const reverseValue = value === 0 ? 1 : 1 / value;
+        return {
+          name: NAMED_STATS[type],
+          value: stats[type],
+          // eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
+          barStyle: {
+            '--width': `${value * 100}%`,
+            '--grad-width': `${reverseValue * 100}%`,
+          } as React.CSSProperties,
+        };
+      }),
+    [stats],
+  );
 
   return (
     <div className={styles.container}>

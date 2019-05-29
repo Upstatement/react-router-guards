@@ -1,20 +1,29 @@
 import React, { useCallback } from 'react';
 import { GuardFunction } from 'react-router-guards';
 import { LabeledSection, Recirculation, SpriteList, StatChart, Type } from 'components';
-import { useSerializePokemon } from 'hooks';
-import { Pokemon, MoveLearnType } from 'types';
-import { api, className } from 'utils';
+import { MoveLearnType, SerializedPokemon } from 'types';
+import { api, className, serializePokemon } from 'utils';
 import styles from './detail.module.scss';
 
 interface Props {
-  pokemon: Pokemon;
+  pokemon: SerializedPokemon;
 }
 
-const Detail: React.FunctionComponent<Props> = ({ pokemon }) => {
-  const { abilities, entryNumber, height, moves, name, stats, types, weight } = useSerializePokemon(
-    pokemon,
-  );
-
+const Detail: React.FunctionComponent<Props> = ({
+  pokemon: {
+    abilities,
+    baseExperience,
+    entryNumber,
+    height,
+    id,
+    moves,
+    name,
+    stats,
+    sprites,
+    types,
+    weight,
+  },
+}) => {
   const renderMoveList = useCallback(
     (type: MoveLearnType, renderLevel: boolean = false) => (
       <ul className={styles.list}>
@@ -30,7 +39,7 @@ const Detail: React.FunctionComponent<Props> = ({ pokemon }) => {
 
   return (
     <div className={styles.container}>
-      <SpriteList sprites={pokemon.sprites} />
+      <SpriteList sprites={sprites} />
       <div className={styles.main}>
         <header className={styles.header}>
           <h1 className={styles.title}>{name}</h1>
@@ -70,7 +79,7 @@ const Detail: React.FunctionComponent<Props> = ({ pokemon }) => {
         <section className={styles.stats}>
           <h2 className={styles.sectionHeader}>Statistics</h2>
           <LabeledSection className={styles.statsSection} label="Base Experience Yield">
-            <p>{pokemon.base_experience} XP</p>
+            <p>{baseExperience} XP</p>
           </LabeledSection>
           <LabeledSection className={styles.statsSection} label="Base Stats">
             <StatChart stats={stats} />
@@ -95,22 +104,6 @@ const Detail: React.FunctionComponent<Props> = ({ pokemon }) => {
                   </li>
                 ))}
               </ul>
-              {/* <table>
-                <thead>
-                  <tr>
-                    <td>Level</td>
-                    <td>Move</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  {moves[MoveLearnType.LevelUp].map(({ level, name }) => (
-                    <tr key={name}>
-                      <td className={styles.tableColumn}>{level}</td>
-                      <td className={styles.tableColumn}>{name}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table> */}
             </LabeledSection>
           )}
           {moves[MoveLearnType.Egg].length > 0 && (
@@ -130,7 +123,7 @@ const Detail: React.FunctionComponent<Props> = ({ pokemon }) => {
           )}
         </section>
         <section className={styles.recirculation}>
-          <Recirculation id={pokemon.id} />
+          <Recirculation id={id} />
         </section>
       </div>
     </div>
@@ -143,7 +136,9 @@ export const beforeRouteEnter: GuardFunction = async (to, from, next) => {
   const { name } = to.match.params;
   try {
     const pokemon = await api.get(name);
-    next.props({ pokemon });
+    next.props({
+      pokemon: serializePokemon(pokemon),
+    });
   } catch {
     throw new Error('Pokemon does not exist.');
   }

@@ -21,7 +21,7 @@ li {
 
 a {
   @include link;
-  transition: color $transition--fast;
+  transition: color $transition--basic;
 
   &:hover {
     color: $color--red;

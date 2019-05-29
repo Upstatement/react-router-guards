@@ -74,3 +74,52 @@ export interface Pokemon {
   stats: PokemonStat[];
   types: PokemonType[];
 }
+
+export type FetchedPokemon = Pokemon | null;
+
+export interface Measurement {
+  metric: string;
+  imperial: string;
+}
+
+export interface Height extends Measurement {
+  meters: number;
+  feet: number;
+  inches: number;
+}
+
+export interface Weight extends Measurement {
+  kilograms: number;
+  pounds: number;
+}
+
+export interface SerializedAbility {
+  isHidden: boolean;
+  name: string;
+}
+
+export interface SerializedMove {
+  name: string;
+  level: number;
+}
+
+export interface SerializedMoves {
+  [MoveLearnType.Egg]: SerializedMove[];
+  [MoveLearnType.LevelUp]: SerializedMove[];
+  [MoveLearnType.Machine]: SerializedMove[];
+  [MoveLearnType.Tutor]: SerializedMove[];
+}
+
+export interface SerializedPokemon {
+  id: number;
+  name: string;
+  entryNumber: string;
+  baseExperience: number;
+  sprites: PokemonSprites;
+  height: Height;
+  weight: Weight;
+  types: string[];
+  abilities: SerializedAbility[];
+  stats: Record<StatType, number>;
+  moves: SerializedMoves;
+}

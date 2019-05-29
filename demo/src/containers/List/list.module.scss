@@ -14,10 +14,10 @@
 }
 
 .list {
-  @include padding($site-padding--sm x);
+  @include margin($site-padding--sm x);
 
   @include mq($bp--mobile) {
-    @include padding($site-padding x);
+    @include margin($site-padding x);
   }
 }
 

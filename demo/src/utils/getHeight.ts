@@ -1,10 +1,14 @@
+import { Height } from 'types';
+
 const METERS_TO_FEET = 3.28084;
 
 /**
+ * Serializes the given height into a few different measurements
+ * and formats.
  *
  * @param height the height in decimeters
  */
-const getHeight = (height: number) => {
+const getHeight = (height: number): Height => {
   const meters = height / 10;
 
   const feetFloat = meters * METERS_TO_FEET;

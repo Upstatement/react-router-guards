@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Pokemon } from 'types';
+import { FetchedPokemon } from 'types';
 import { api } from 'utils';
 
-type UsePokemonHook = [Pokemon | null, boolean];
+type UseFetchPokemonReturn = [FetchedPokemon, boolean];
 
-const useFetchPokemon = (identifier: string | number): UsePokemonHook => {
-  const [pokemon, setPokemon] = useState<Pokemon | null>(null);
+const useFetchPokemon = (identifier: string | number): UseFetchPokemonReturn => {
+  const [pokemon, setPokemon] = useState<FetchedPokemon>(null);
   const [isFetching, setIsFetching] = useState(true);
 
   const fetchPokemon = useCallback(async () => {

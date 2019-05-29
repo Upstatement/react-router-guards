@@ -1,15 +1,10 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
-import { PokemonMove, MoveLearnType } from 'types';
+import { PokemonMove, MoveLearnType, SerializedMove, SerializedMoves } from 'types';
 import { getName } from 'utils';
 
-interface Move {
-  name: string;
-  level: number;
-}
-
-const getMoves = (moves: PokemonMove[]) => {
-  const movesMap: Record<MoveLearnType, Move[]> = Object.values(MoveLearnType).reduce(
+const getMoves = (moves: PokemonMove[]): SerializedMoves => {
+  const movesMap: Record<MoveLearnType, SerializedMove[]> = Object.values(MoveLearnType).reduce(
     (acc, key) => ({ ...acc, [key]: [] }),
     {},
   );
@@ -25,7 +20,7 @@ const getMoves = (moves: PokemonMove[]) => {
     }
   });
 
-  const sortByMove = (a: Move, b: Move) => a.name.localeCompare(b.name);
+  const sortByMove = (a: SerializedMove, b: SerializedMove) => a.name.localeCompare(b.name);
 
   return {
     [MoveLearnType.Egg]: movesMap[MoveLearnType.Egg].sort(sortByMove),

@@ -15,15 +15,28 @@ $color--white: #ffffff;
 $color--black: #000000;
 $color--gray: #898989;
 $color--gray-light: #d8d8d8;
+$color--gray-xlight: #f1f1f1;
 $color--red: #ff3232;
 $color--red-light: mix($color--white, $color--red, 50%);
+$color--yellow: #ffee9d;
 
 /* Colors Applied */
 $color--bg: $color--white;
+$color--bg-light: $color--gray-xlight;
 $color--border: $color--gray-light;
 $color--text: $color--black;
 $color--text-light: $color--gray;
 $color--text-white: $color--white;
+
+/* Colors - Stats */
+$color--base-stat: $color--yellow;
+$color--hp: #ff653b;
+$color--atk: #ffa53b;
+$color--def: #e8d128;
+$color--sp-atk: #10aac6;
+$color--sp-def: #10c647;
+$color--speed: #fa30e2;
+$stat-colors: ($color--hp, $color--atk, $color--def, $color--sp-atk, $color--sp-def, $color--speed);
 
 /* Colors - Types */
 $color--bug: #748553;
@@ -97,8 +110,13 @@ $nav-top-padding: $spacing--base;
 $nav-height: ($nav-top-padding * 2) + $nav-icon-size;
 
 /* Transitions */
-$transition--fast: 100ms ease-out;
+$duration--xfast: 100ms;
+$duration--fast: 200ms;
+$duration--reg: 500ms;
+$duration--slow: 1500ms;
+$ease-out: ease-out;
 $ease-out-cubic: cubic-bezier(0.79, 0.16, 0.43, 0.99);
+$transition--basic: $duration--xfast $ease-out;
 
 /* Z indices */
 $z-index--recirc: 1000;

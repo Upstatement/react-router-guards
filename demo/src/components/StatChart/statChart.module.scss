@@ -45,20 +45,17 @@ $table-row-border: $table-padding solid $color--bg;
   color: $color--text-light;
 }
 
-$bar-height: 14px;
-$color--bar-bg: #f1f1f1;
-$color--bar-value-base: #ffee9d;
-$bar-colors: (#ff653b, #ffa53b, #e8d128, #10aac6, #10c647, #fa30e2);
+$bar-height: $spacing--base;
 
 .bar {
-  background-color: $color--bar-bg;
+  background-color: $color--bg-light;
   border-radius: $bar-height / 2;
   flex: 1;
   height: $bar-height;
 }
 
 .bar-value {
-  animation: grow 500ms $ease-out-cubic;
+  animation: grow $duration--reg $ease-out-cubic;
   border-radius: $bar-height / 2;
   height: 100%;
   overflow: hidden;
@@ -71,11 +68,11 @@ $bar-colors: (#ff653b, #ffa53b, #e8d128, #10aac6, #10c647, #fa30e2);
     height: 100%;
     width: 100%;
 
-    @each $color in $bar-colors {
-      $i: index($bar-colors, $color) - 1;
+    @each $color in $stat-colors {
+      $i: index($stat-colors, $color) - 1;
 
       .row-#{$i} & {
-        background: linear-gradient(to right, $color, $color--bar-value-base var(--grad-width));
+        background: linear-gradient(to right, $color, $color--base-stat var(--grad-width));
       }
     }
   }

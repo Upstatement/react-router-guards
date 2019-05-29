@@ -44,11 +44,11 @@ const SpriteList: React.FunctionComponent<Props> = ({ sprites }) => {
           .replace(/(rgb\(|\))+/g, '')
           .split(',')
           .map((v: string) => parseInt(v) || 0);
-        index += 1;
         if (!(r === 0 && g === 0 && b === 0) && !(r === 255 && g === 255 && b === 255)) {
           rgb = [r, g, b];
           break;
         }
+        index += 1;
       }
       const rgba = tinycolor(`rgba(${rgb.join(',')}, 0.1)`);
       const luminance = Math.round(rgba.getLuminance() * 100);

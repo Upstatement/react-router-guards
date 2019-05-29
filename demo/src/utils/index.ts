@@ -8,4 +8,5 @@ export { default as getMoves } from './getMoves';
 export { default as getName } from './getName';
 export { default as getStats } from './getStats';
 export { default as getWeight } from './getWeight';
+export { default as serializePokemon } from './serializePokemon';
 export { default as sortSlots } from './sortSlots';

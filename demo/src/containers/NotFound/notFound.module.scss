@@ -8,7 +8,7 @@
   text-align: center;
 
   @include mq($bp--mobile) {
-    @include padding(x $site-padding--sm);
+    @include padding(x $site-padding);
   }
 }
 

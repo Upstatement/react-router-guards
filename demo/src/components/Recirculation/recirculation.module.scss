@@ -38,7 +38,7 @@
 }
 
 .name {
-  transition: color $transition--fast;
+  transition: color $transition--basic;
 
   &--loading {
     color: $color--text-light;

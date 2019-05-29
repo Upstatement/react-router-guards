@@ -6,7 +6,9 @@ import styles from './nav.module.scss';
 const Nav = () => (
   <nav className={styles.container}>
     <Link className={styles.link} to="/">
-      <Pokeball />
+      <div className={styles.icon}>
+        <Pokeball />
+      </div>
     </Link>
   </nav>
 );

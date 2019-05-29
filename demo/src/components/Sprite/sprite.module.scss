@@ -5,7 +5,7 @@
   display: inline-flex;
   flex-direction: column;
   justify-self: flex-start;
-  transition: background-color $transition--fast;
+  transition: background-color $transition--basic;
 }
 
 .sprite {
@@ -14,7 +14,7 @@
   background-size: cover;
   image-rendering: pixelated;
   padding-top: 100%;
-  transition: transform $transition--fast;
+  transition: transform $transition--basic;
   width: 125px;
   z-index: 1;
 

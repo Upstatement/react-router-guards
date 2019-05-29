@@ -10,11 +10,15 @@
 
 .link {
   @include margin(0 auto);
+}
+
+.icon {
   @include size($nav-icon-size);
-  transition: transform 200ms ease-out;
+  border-radius: 50%;
+  transition: transform $duration--fast $ease-out;
 
   @media (hover: hover) {
-    &:hover {
+    .link:hover & {
       transform: rotate(-30deg);
     }
   }

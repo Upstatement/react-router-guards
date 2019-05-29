@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'components';
 import { useFetchPokemon } from 'hooks';
-import { Pokemon } from 'types';
+import { FetchedPokemon } from 'types';
 import { className, getIsMissingNo, getName } from 'utils';
 import { MISSINGNO } from 'utils/constants';
 import styles from './recirculation.module.scss';
@@ -14,22 +14,23 @@ const Recirculation: React.FunctionComponent<Props> = ({ id }) => {
   const [next, nextFetching] = useFetchPokemon(id + 1);
   const [previous, prevFetching] = useFetchPokemon(id - 1);
 
-  const renderSection = (isNext: boolean, pokemon: Pokemon | null, isFetching: boolean) => {
+  const renderSection = (isNext: boolean, pokemon: FetchedPokemon, isFetching: boolean) => {
     const name = pokemon ? pokemon.name : '';
     const label = isNext ? 'Next' : 'Previous';
-    const showMissingno = getIsMissingNo(id + (isNext ? 1 : -1));
+    const showMissingNo = getIsMissingNo(id + (isNext ? 1 : -1));
+
     const section = (
       <div {...className(styles.section, styles[`section${label}`])}>
         <p className={styles.label}>{label}</p>
         <p {...className(styles.name, isFetching && styles.nameLoading)}>
-          {isFetching ? 'Loading...' : showMissingno ? MISSINGNO.FULL_NAME : getName(name)}
+          {isFetching ? 'Loading...' : showMissingNo ? MISSINGNO.FULL_NAME : getName(name)}
         </p>
       </div>
     );
 
     if (name) {
       return (
-        <Link className={styles.link} to={`/${showMissingno ? MISSINGNO.NAME : name}`}>
+        <Link className={styles.link} to={`/${showMissingNo ? MISSINGNO.NAME : name}`}>
           {section}
         </Link>
       );
