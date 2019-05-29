@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
-
 import { PokemonStat, StatType } from 'types';
 
 const getStats = (stats: PokemonStat[]) => {

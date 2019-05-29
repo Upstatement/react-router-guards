@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "sourceMap": true,
+    "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -12,10 +13,10 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
     "jsx": "preserve",
-    "baseUrl": "./src/"
+    "baseUrl": "./src/",
+    "noImplicitAny": false
   },
   "include": ["src"],
-  "exclude": ["node_modules", "**/node_modules/*"]
+  "exclude": ["node_modules", "**/node_modules/*", "webpack.config.js"]
 }

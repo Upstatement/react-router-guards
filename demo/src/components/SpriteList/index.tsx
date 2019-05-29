@@ -61,7 +61,6 @@ const SpriteList: React.FunctionComponent<Props> = ({ sprites }) => {
 
   useEffect(() => {
     getColor();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sprites]);
 
   if (!hasSprites) {

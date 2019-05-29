@@ -22,7 +22,9 @@
     "promise/prefer-await-to-then": "error",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "off",
+    "@typescript-eslint/camelcase": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/explicit-function-return-type": "off"
+    "@typescript-eslint/no-var-requires": "off"
   }
 }

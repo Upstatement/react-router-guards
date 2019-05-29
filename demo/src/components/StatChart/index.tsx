@@ -28,7 +28,6 @@ const StatChart: React.FunctionComponent<Props> = ({ stats }) => {
         return {
           name: NAMED_STATS[type],
           value: stats[type],
-          // eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
           barStyle: {
             '--width': `${value * 100}%`,
             '--grad-width': `${reverseValue * 100}%`,

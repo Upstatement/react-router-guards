@@ -3,24 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@types/jest": "24.0.13",
-    "@types/node": "12.0.2",
-    "@types/react": "16.8.18",
-    "@types/react-dom": "16.8.4",
-    "joshpensky-react-scripts": "^3.0.6",
-    "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-router-dom": "^5.0.0",
     "react-waypoint": "^9.0.2",
     "rgbaster": "^2.1.1",
-    "tinycolor2": "^1.4.1",
-    "typescript": "3.4.5"
+    "tinycolor2": "^1.4.1"
   },
   "scripts": {
-    "build": "react-scripts build",
-    "link": "cd ..; npm link; cd demo; npm link react-router-guards",
-    "start": "react-scripts start",
-    "test": "react-scripts test"
+    "build": "webpack --mode=production",
+    "link": "npm link react-router-guards",
+    "link:fresh": "cd .. && npm link && cd demo && npm run link",
+    "serve": "npm run build && serve dist",
+    "start": "webpack-dev-server --mode=development --hot --inline"
   },
   "browserslist": {
     "production": [
@@ -35,6 +28,26 @@
     ]
   },
   "devDependencies": {
-    "node-sass": "^4.12.0"
+    "@babel/core": "^7.4.5",
+    "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
+    "@types/babel__core": "^7.1.2",
+    "babel-loader": "^8.0.6",
+    "chalk": "^2.4.2",
+    "copy-webpack-plugin": "^5.0.3",
+    "css-loader": "^2.1.1",
+    "friendly-errors-webpack-plugin": "^1.7.0",
+    "html-webpack-plugin": "^3.2.0",
+    "sass": "^1.20.1",
+    "sass-loader": "^7.1.0",
+    "serve": "^11.0.1",
+    "style-loader": "^0.23.1",
+    "ts-loader": "^6.0.1",
+    "tsconfig-paths-webpack-plugin": "^3.2.0",
+    "typescript": "^3.4.5",
+    "webpack": "^4.32.2",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.4.1"
   }
 }

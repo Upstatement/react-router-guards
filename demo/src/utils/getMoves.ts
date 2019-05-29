@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
-
 import { PokemonMove, MoveLearnType, SerializedMove, SerializedMoves } from 'types';
 import { getName } from 'utils';
 

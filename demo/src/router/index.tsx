@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Router as BrowserRouter, Switch } from 'react-router-dom';
 import { GuardProvider, GuardedRoute } from 'react-router-guards';
 import { Detail, List, Loading, NotFound } from 'containers';
@@ -29,9 +28,5 @@ const Router: React.FunctionComponent<Props> = ({ children }) => (
     </GuardProvider>
   </BrowserRouter>
 );
-
-Router.propTypes = {
-  children: PropTypes.func.isRequired,
-};
 
 export default Router;

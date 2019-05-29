@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
-
 import { PokemonAbility, SerializedAbility } from 'types';
 import { getName, sortSlots } from 'utils';
 

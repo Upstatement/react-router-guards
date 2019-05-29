@@ -32,7 +32,6 @@ const List = () => {
 
   useEffect(() => {
     getPokemon();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
