@@ -7,6 +7,8 @@ type SetStateFuncAction<T> = (prevState: NotFunc<T>) => NotFunc<T>;
 type SetStateAction<T> = NotFunc<T> | SetStateFuncAction<T>;
 type SetState<T> = (newState: SetStateAction<T>) => void;
 
+type State<T> = React.MutableRefObject<NotFunc<T>>;
+
 /**
  * React hook that provides a similar API to the `useState`
  * hook, but performs updates using refs instead of asynchronous
@@ -16,9 +18,7 @@ type SetState<T> = (newState: SetStateAction<T>) => void;
  * @returns an array containing a ref of the state variable and a setter
  * function for the state
  */
-function useStateRef<T>(
-  initialState: NotFunc<T>,
-): [React.MutableRefObject<NotFunc<T>>, SetState<T>] {
+function useStateRef<T>(initialState: NotFunc<T>): [State<T>, SetState<T>] {
   const state = useRef(initialState);
   const [, setTick] = useStateWhenMounted(0);
 
