@@ -12,6 +12,8 @@ const SRC_DIR = path.join(__dirname, 'src');
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const DIST_DIR = path.join(__dirname, 'dist');
 
+const PORT = 3001;
+
 module.exports = () => ({
   entry: ['@babel/polyfill', path.join(SRC_DIR, 'index.tsx')],
   output: {
@@ -64,8 +66,8 @@ module.exports = () => ({
     contentBase: SRC_DIR,
     historyApiFallback: true,
     host: '0.0.0.0',
-    port: 3000,
-    public: 'localhost:3000',
+    port: PORT,
+    public: `localhost:${PORT}`,
     publicPath: '/',
     quiet: true,
   },
@@ -79,7 +81,7 @@ module.exports = () => ({
     ]),
     new FriendlyErrorsWebpackPlugin({
       compilationSuccessInfo: {
-        messages: [`The demo is accessible at ${chalk.blue('http://localhost:3000')}`],
+        messages: [`The demo is accessible at ${chalk.blue(`http://localhost:${PORT}`)}`],
         notes: [
           `Note that the development build is not optimized`,
           `To create a production build, use ${chalk.blue('npm run build')}.`,

@@ -1,5 +1,5 @@
 {
-  "name": "react-router-guards-demo",
+  "name": "react-router-guards-demo-intermediate",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -11,7 +11,7 @@
   "scripts": {
     "build": "webpack --mode=production",
     "link": "npm link react-router-guards",
-    "link:fresh": "cd .. && npm link && cd demo && npm run link",
+    "link:fresh": "cd ../.. && npm link && cd demos/intermediate && npm run link",
     "serve": "npm run build && serve dist",
     "start": "webpack-dev-server --mode=development --hot --inline"
   },

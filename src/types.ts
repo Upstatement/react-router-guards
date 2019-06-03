@@ -78,4 +78,6 @@ export type PropsWithMeta<T> = T & {
 
 export type GuardProviderProps = BaseGuardProps;
 export type GuardedRouteProps = PropsWithMeta<BaseGuardProps & RouteProps>;
-export type GuardProps = PropsWithMeta<RouteProps>;
+export type GuardProps = PropsWithMeta<RouteProps> & {
+  name?: string | string[];
+};

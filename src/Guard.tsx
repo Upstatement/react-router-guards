@@ -1,16 +1,8 @@
-import React, {
-  createElement,
-  Fragment,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-} from 'react';
+import React, { createElement, Fragment, useCallback, useContext, useEffect, useMemo } from 'react';
 import { __RouterContext as RouterContext } from 'react-router';
 import { matchPath, Redirect, Route } from 'react-router-dom';
 import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
-import { usePrevious, useStateWhenMounted } from './hooks';
+import { usePrevious, useStateRef, useStateWhenMounted } from './hooks';
 import {
   GuardFunction,
   GuardProps,
@@ -30,14 +22,9 @@ type RouteRedirect = NextRedirectPayload | null;
 const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta, render }) => {
   const routeProps = useContext(RouterContext);
   const routePrevProps = usePrevious(routeProps);
-  const hasPathChanged = useMemo(() => routeProps.match.path !== routePrevProps.match.path, [
-    routePrevProps,
-    routeProps,
-  ]);
-  const hasMatchParams = useMemo(() => routeProps.match.path.includes(':'), [routeProps]);
-  const haveMatchParamsChanged = useMemo(
-    () => JSON.stringify(routePrevProps.match.params) !== JSON.stringify(routeProps.match.params),
-    [routeProps, routePrevProps],
+  const hasPathChanged = useMemo(
+    () => routeProps.location.pathname !== routePrevProps.location.pathname,
+    [routePrevProps, routeProps],
   );
   const fromRouteProps = useContext(FromRouteContext);
 
@@ -46,8 +33,8 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
   const ErrorPage = useContext(ErrorPageContext);
 
   const hasNoGuards = useMemo(() => !!(guards && guards.length === 0), [guards]);
-  const validationsRequested = useRef(0);
-  const [routeValidated, setRouteValidated] = useStateWhenMounted<boolean>(hasNoGuards);
+  const [validationsRequested, setValidationsRequested] = useStateRef<number>(0);
+  const [routeValidated, setRouteValidated] = useStateRef<boolean>(hasNoGuards);
   const [routeError, setRouteError] = useStateWhenMounted<RouteError>(null);
   const [routeRedirect, setRouteRedirect] = useStateWhenMounted<RouteRedirect>(null);
   const [pageProps, setPageProps] = useStateWhenMounted<PageProps>({});
@@ -185,8 +172,8 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
   }, []);
 
   useEffect(() => {
-    if (hasPathChanged || haveMatchParamsChanged) {
-      validationsRequested.current += 1;
+    if (hasPathChanged) {
+      setValidationsRequested(current => current + 1);
       setRouteError(null);
       setRouteRedirect(null);
       setRouteValidated(hasNoGuards);
@@ -194,9 +181,11 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
         validateRoute();
       }
     }
-  }, [hasPathChanged, haveMatchParamsChanged]);
+  }, [hasPathChanged]);
 
-  if (!routeValidated) {
+  if (hasPathChanged && hasNoGuards) {
+    return null;
+  } else if (hasPathChanged || !routeValidated.current) {
     return renderPage(LoadingPage, routeProps);
   } else if (routeError) {
     return renderPage(ErrorPage, { ...routeProps, error: routeError });
@@ -206,8 +195,6 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
     if (pathToMatch && !matchPath(pathToMatch, { path, exact })) {
       return <Redirect to={routeRedirect} />;
     }
-  } else if (hasPathChanged && hasMatchParams && haveMatchParamsChanged) {
-    return null;
   }
   return (
     <RouterContext.Provider value={{ ...routeProps, ...pageProps }}>
