@@ -61,7 +61,9 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
     const getResolveFn = (type: GuardType) => (payload: NextPropsPayload | NextRedirectPayload) =>
       resolve({ type, payload });
 
-    return Object.assign(() => resolve({ type: GuardTypes.CONTINUE }), {
+    const next = () => resolve({ type: GuardTypes.CONTINUE });
+
+    return Object.assign(next, {
       props: getResolveFn(GuardTypes.PROPS),
       redirect: getResolveFn(GuardTypes.REDIRECT),
     });
@@ -76,19 +78,17 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
    * @returns a Promise returning the guard payload
    */
   const runGuard = (guard: GuardFunction): Promise<NextAction> =>
-    new Promise(
-      async (resolve, reject): Promise<void> => {
-        try {
-          const to = {
-            ...routeProps,
-            meta: meta || {},
-          };
-          await guard(to, fromRouteProps, getNextFn(resolve));
-        } catch (error) {
-          reject(error);
-        }
-      },
-    );
+    new Promise(async (resolve, reject) => {
+      try {
+        const to = {
+          ...routeProps,
+          meta: meta || {},
+        };
+        await guard(to, fromRouteProps, getNextFn(resolve));
+      } catch (error) {
+        reject(error);
+      }
+    });
 
   /**
    * Loops through all guards in context. If the guard adds new props
@@ -134,13 +134,7 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
       pageProps = props;
       routeRedirect = redirect;
     } catch (error) {
-      let { message } = error;
-      try {
-        message = JSON.parse(message);
-      } catch {
-        // message not JSON parsable, continue
-      }
-      routeError = message || 'Not found.';
+      routeError = error.message || 'Not found.';
     }
 
     if (currentRequests === getValidationsRequested()) {
