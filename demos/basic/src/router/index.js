@@ -11,7 +11,6 @@ const GLOBAL_GUARDS = [requireLogin, waitOneSecond];
 
 const Router = ({ children }) => {
   const routes = useMemo(() => getRoutes(), []);
-  console.log(routes);
   return (
     <BrowserRouter history={history}>
       <GuardProvider guards={GLOBAL_GUARDS} loading="Loading..." error={NotFound}>
