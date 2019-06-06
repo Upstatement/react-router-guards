@@ -131,6 +131,8 @@ All guard functions accept the same three arguments:
 
 Guard functions don't advance until the `next` function is called. This allows the logic inside of them to be asynchronous, hence the `async` keyword.
 
+---
+
 ```js
 const { name } = to.match.params;
 ```
@@ -144,6 +146,8 @@ The `to` and `from` arguments allow us to use the same props that the `Router` p
 - [`location`](https://reacttraining.com/react-router/core/api/location)
 
 - [`match`](https://reacttraining.com/react-router/core/api/match)
+
+---
 
 ```js
   try {
@@ -172,6 +176,8 @@ As seen, `next` has a few different functionalities. They are as follows:
   The location can be anything that would be used as the `to` prop of React Router's [`Redirect` component](https://reacttraining.com/react-router/core/api/Redirect).
 
   _**Note:** Redirecting to a different location will still run the guards of the new location before rendering it._
+
+---
 
 ```js
   } catch {
