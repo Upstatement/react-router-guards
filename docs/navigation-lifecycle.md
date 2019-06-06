@@ -2,7 +2,9 @@
 
 With the addition of guard middleware, the navigation lifecycle has changed. It will now be as follows:
 
-![Lifeycle flowchart](/docs/img/lifecycle.png)
+<p align="center">
+  <img src="img/lifecycle.png" alt="Lifecycle flowchart" width="600" style="display: block; margin: 0 auto;" />
+</p>
 
 1. Start on _Page A_.
 
