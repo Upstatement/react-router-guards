@@ -16,7 +16,7 @@ React Router Guards provides an API for performing complicated logic between the
     - [Error page](#error-page)
   - [Guard Provider](#guard-provider)
   - [Guarded Route](#guarded-route)
-- [Examples](#example)
+- [Demos](#demos)
   - [Basic](#basic)
   - [Intermediate](#intermediate)
 - [Contributing](#contributing)
@@ -91,7 +91,7 @@ const App = () => (
 );
 ```
 
-Check out our [demos](#examples) for more examples!
+Check out our [demos](#demos) for more examples!
 
 ## Concepts
 
@@ -115,6 +115,8 @@ const getPokemon = async (to, from, next) => {
 
 Let's break it down line-by-line:
 
+---
+
 ```js
 const getPokemon = async (to, from, next) => {
 ```
@@ -137,11 +139,11 @@ In this line, we are destructuring the `to` route's match params to get the name
 
 The `to` and `from` arguments allow us to use the same props that the `Router` passes to the page component. These include the following:
 
-- `history`
+- [`history`](https://reacttraining.com/react-router/core/api/history)
 
-- `match`
+- [`location`](https://reacttraining.com/react-router/core/api/location)
 
-- `location`
+- [`match`](https://reacttraining.com/react-router/core/api/match)
 
 ```js
   try {
@@ -153,11 +155,21 @@ In these lines, we are calling an API function in order to get a pokemon with th
 
 As seen, `next` has a few different functionalities. They are as follows:
 
-- `next()`: advance to the next guard function
+- `next()`
 
-- `next.props(object)`: pass the given props to the route's component on final render, and advance to the next guard function
+  **Action:** advances to the next guard function
 
-- `next.redirect(location)`: cancel future guard functions, and redirect to the given location
+- `next.props(object)`
+
+  **Action:** passes the given props to the route's component on final render, and advances to the next guard function
+
+  As with any React component, the passed props _must_ be an object.
+
+- `next.redirect(location)`
+
+  **Action:** cancels current and future guard functions, and redirects to the given location
+
+  The location can be anything that would be used as the `to` prop of React Router's [`Redirect` component](https://reacttraining.com/react-router/core/api/Redirect).
 
   _**Note:** Redirecting to a different location will still run the guards of the new location before rendering it._
 
@@ -169,7 +181,7 @@ As seen, `next` has a few different functionalities. They are as follows:
 
 In these final lines, we are catching any errors that come from the API call and throwing our own error.
 
-We can throw errors at any point within our guard function. When an error is thrown, the current guard function will stop executing and all future ones will be cancelled. Then, the `error` page (as set by a `GuardProvider` or `GuardedRoute`) will display.
+We can throw errors at any point within our guard function. When an error is thrown, the current guard function will stop executing and all future ones will be cancelled. Then, the [error page](#error-page) (as set by a `GuardProvider` or `GuardedRoute`) will display.
 
 ### Page components
 
@@ -201,13 +213,26 @@ They can be set either:
 
 Typically, error pages will be the same component as a Not Found or 404 page.
 
-##### Props
-
-If using a React component for your error page, it can receive the error message thrown by a guard function via an `error` prop.
+_**Note:** If using a React component for your error page, it can receive the error message thrown by a guard function via an `error` prop._
 
 ### Guard Provider
 
 The `GuardProvider` component is a high-level wrapper for your entire routing solution.
+
+#### Purpose
+
+The `GuardProvider` provides an API for declaring global guards and loading and error pages that can be used by any `GuardedRoute`s within the component:
+
+```ts
+interface GuardProviderProps {
+  guards?: GuardFunction[];
+  ignoreGlobal?: boolean;
+  loading?: PageComponent;
+  error?: PageComponent;
+}
+```
+
+#### Set-up
 
 All `GuardProvider`s _must_:
 
@@ -225,32 +250,39 @@ const App = () => (
 );
 ```
 
-The `GuardProvider` provides an API for declaring global guards and loading and error pages that can be used by any `GuardedRoute`s within the component:
-
-```ts
-interface GuardProviderProps {
-  guards?: GuardFunction[];
-  ignoreGlobal?: boolean;
-  loading?: PageComponent;
-  error?: PageComponent;
-}
-```
-
 #### Nesting guard providers
 
 Nesting guard providers is useful in case where you may only want a certain subset of routes to have the same guards, loading page, and/or error page.
 
 By nesting guard providers, you can either chain functionality or override that of its parent(s):
 
-| Prop      | Result                                                                                      |
-| --------- | ------------------------------------------------------------------------------------------- |
-| `guards`  | Overridden if `ignoreGlobal` is `true`; otherwise, guards are appended to middleware chain. |
-| `loading` | Overridden, if value provided.                                                              |
-| `error`   | Overridden, if value provided.                                                              |
+| Prop      | Result                                                                                                       |
+| --------- | ------------------------------------------------------------------------------------------------------------ |
+| `guards`  | Overridden if `ignoreGlobal` is `true`; otherwise, guards are appended to the _end_ of the middleware chain. |
+| `loading` | Overridden, if value provided.                                                                               |
+| `error`   | Overridden, if value provided.                                                                               |
 
 ### Guarded Route
 
 The `GuardedRoute` component acts as a replacement for the default [`Route`](https://reacttraining.com/react-router/core/api/Route) component provided by React Router.
+
+#### Purpose
+
+The `GuardedRoute`, on top of accepting the same props as a regular [`Route`](https://reacttraining.com/react-router/core/api/Route/route-props), provides an API for declaring guards and loading and error pages on an individual route basis:
+
+```ts
+interface GuardedRouteProps extends RouteProps {
+  guards?: GuardFunction[];
+  ignoreGlobal?: boolean;
+  loading?: PageComponent;
+  error?: PageComponent;
+  meta?: Record<string, any>;
+}
+```
+
+It's important to note that guards set by the `GuardedRoute` will be added to the _end_ of the middleware chain set by its parent `GuardedProvider`.
+
+#### Set-up
 
 All `GuardedRoute`s must be wrapped by a `GuardedProvider` component.
 
@@ -266,18 +298,6 @@ const App = () => (
 );
 ```
 
-The `GuardedRoute`, on top of accepting the same props as a regular [`Route`](https://reacttraining.com/react-router/core/api/Route/route-props), provides an API for declaring guards and loading and error pages on an individual route basis:
-
-```ts
-interface GuardedRouteProps extends RouteProps {
-  guards?: GuardFunction[];
-  ignoreGlobal?: boolean;
-  loading?: PageComponent;
-  error?: PageComponent;
-  meta?: Record<string, any>;
-}
-```
-
 #### Metadata
 
 In order to provide more information about a route, we've added a `meta` prop to the `GuardedRoute`.
@@ -286,9 +306,9 @@ The `meta` object can include anything! In our [basic demo](#basic), we used the
 
 You can access a route's metadata using `to.meta` in a guard function.
 
-## Examples
+## Demos
 
-We've included some examples below to help provide more context on how to use this package!
+We've included some demos below to help provide more context on how to use this package!
 
 ### Basic
 
