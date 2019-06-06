@@ -16,11 +16,11 @@ interface GuardedRouteProps extends RouteProps {
 }
 ```
 
-It's important to note that guards set by the `GuardedRoute` will be added to the _end_ of the middleware chain set by its parent [`GuardedProvider`](/docs/guard-provider).
+It's important to note that guards set by the `GuardedRoute` will be added to the _end_ of the middleware chain set by its parent [`GuardedProvider`](/docs/guard-provider.md).
 
 ## App set-up
 
-All `GuardedRoute`s must be wrapped by a [`GuardedProvider`](/docs/guard-provider) component.
+All `GuardedRoute`s must be wrapped by a [`GuardedProvider`](/docs/guard-provider.md) component.
 
 ```jsx
 const App = () => (

@@ -98,4 +98,4 @@ As seen, `next` has a few different functionalities. They are as follows:
 
 In these final lines, we are catching any errors that come from the API call and throwing our own error.
 
-We can throw errors at any point within our guard function. When an error is thrown, the current guard function will stop executing and all future ones will be cancelled. Then, the [error page](docs/page-components) (as set by a [`GuardProvider`](/docs/guard-provider) or [`GuardedRoute`](/docs/guarded-route)) will display.
+We can throw errors at any point within our guard function. When an error is thrown, the current guard function will stop executing and all future ones will be cancelled. Then, the [error page](docs/page-components.md) (as set by a [`GuardProvider`](/docs/guard-provider.md) or [`GuardedRoute`](/docs/guarded-route.md)) will display.

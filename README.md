@@ -89,23 +89,23 @@ Check out our [demos](#demos) for more examples!
 
 ## Concepts
 
-### [Guard functions](/docs/guard-functions)
+### [Guard functions](/docs/guard-functions.md)
 
 > Guard functions are the middleware between navigation and rendering.
 
-### [Page components](/docs/page-components)
+### [Page components](/docs/page-components.md)
 
 > Page components are used for setting loading and error pages.
 
-### [Guard Provider](/docs/guard-provider)
+### [Guard Provider](/docs/guard-provider.md)
 
 > The `GuardProvider` component is a high-level wrapper for your entire routing solution.
 
-### [Guarded Route](/docs/guarded-route)
+### [Guarded Route](/docs/guarded-route.md)
 
 > The `GuardedRoute` component acts as a replacement for the default [`Route`](https://reacttraining.com/react-router/core/api/Route) component provided by React Router, allowing for routes to use guard middleware.
 
-### [Navigation Lifecycle](/docs/navigation-lifecycle)
+### [Navigation Lifecycle](/docs/navigation-lifecycle.md)
 
 > With the addition of guard middleware, the navigation lifecycle has changed.
 

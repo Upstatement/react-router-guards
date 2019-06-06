@@ -14,9 +14,9 @@ Loading pages are React components that are displayed while guard middleware is 
 
 They can be set either:
 
-- _globally_ as the `loading` prop of a [`GuardProvider`](/docs/guard-provider)
+- _globally_ as the `loading` prop of a [`GuardProvider`](/docs/guard-provider.md)
 
-- _individually_ as the `loading` prop of a [`GuardedRoute`](/docs/guarded-route)
+- _individually_ as the `loading` prop of a [`GuardedRoute`](/docs/guarded-route.md)
 
 ## Error page
 
@@ -24,9 +24,9 @@ Error pages are React components that are displayed when guard logic fails.
 
 They can be set either:
 
-- _globally_ as the `error` prop of a [`GuardProvider`](/docs/guard-provider)
+- _globally_ as the `error` prop of a [`GuardProvider`](/docs/guard-provider.md)
 
-- _individually_ as the `error` prop of a [`GuardedRoute`](/docs/guarded-route)
+- _individually_ as the `error` prop of a [`GuardedRoute`](/docs/guarded-route.md)
 
 Typically, error pages will be the same component as a Not Found or 404 page.
 

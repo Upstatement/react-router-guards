@@ -4,7 +4,7 @@ The `GuardProvider` component is a high-level wrapper for your entire routing so
 
 ## API
 
-The `GuardProvider` provides an API for declaring global guards and loading and error pages that can be used by any [`GuardedRoute`](/docs/guarded-route) within its scope:
+The `GuardProvider` provides an API for declaring global guards and loading and error pages that can be used by any [`GuardedRoute`](/docs/guarded-route.md) within its scope:
 
 ```ts
 interface GuardProviderProps {
