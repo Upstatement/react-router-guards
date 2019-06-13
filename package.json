@@ -23,7 +23,6 @@
     "start": "rollup -c -w"
   },
   "peerDependencies": {
-    "prop-types": "^15.6.0",
     "react": "^16.8.0",
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0"
