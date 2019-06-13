@@ -2,6 +2,10 @@
 
 The `GuardProvider` component is a high-level wrapper for your entire routing solution.
 
+- [API](#api)
+- [App set-up](#app-set-up)
+- [Nesting guard providers](#nesting-guard-providers)
+
 ## API
 
 The `GuardProvider` provides an API for declaring global guards and loading and error pages that can be used by any [`GuardedRoute`](/docs/guarded-route.md) within its scope:
@@ -14,6 +18,15 @@ interface GuardProviderProps {
   error?: PageComponent;
 }
 ```
+
+| Prop           | Optional | Description                                                          |
+| -------------- | :------: | -------------------------------------------------------------------- |
+| `guards`       |    ✅    | global guards for all children `GuardProvider`s and `GuardedRoute`s  |
+| `ignoreGlobal` |    ✅    | whether to ignore guards set by parent `GuardedProvider`s            |
+| `loading`      |    ✅    | the global [loading page](/docs/page-components.md) for all children |
+| `error`        |    ✅    | the global [error page](/docs/page-components.md) for all children   |
+
+See [here](#nesting-guard-providers) for more information on how nesting guard providers affects global guards and loading and error pages.
 
 ## App set-up
 
@@ -37,6 +50,6 @@ By nesting guard providers, you can either chain functionality or override that 
 
 | Prop      | Result                                                                                                       |
 | --------- | ------------------------------------------------------------------------------------------------------------ |
-| `guards`  | Overridden if `ignoreGlobal` is `true`; otherwise, guards are appended to the _end_ of the middleware chain. |
+| `guards`  | Overridden if `ignoreGlobal` is `true`; otherwise, guards are appended to the _end_ of the middleware queue. |
 | `loading` | Overridden, if value provided.                                                                               |
 | `error`   | Overridden, if value provided.                                                                               |
