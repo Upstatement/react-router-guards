@@ -1,4 +1,4 @@
-# Navigation Lifecycle
+# Navigation lifecycle
 
 With the addition of guard middleware, the navigation lifecycle has changed. It will now be as follows:
 
@@ -10,13 +10,13 @@ With the addition of guard middleware, the navigation lifecycle has changed. It 
 
 2. Navigation initiated. _The loading page is shown._
 
-3. Check if any guards are left in the chain.
+3. Check if there are guards are left in the queue.
 
-   - If no guards are left, skip to step 5.
+   - If there are guards, continue to step 4.
 
-   - If there are guards left, continue to step 4.
+   - If no guards remain, skip to step 5.
 
-4. Run the first guard in the queue:
+4. Run the top guard in the queue:
 
    - `next()`: Return to step 3.
 

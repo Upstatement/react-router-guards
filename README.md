@@ -2,7 +2,7 @@
 
 > Guard middleware for React Router navigation
 
-React Router Guards provides an API for performing complicated logic between the call for navigation and the final render of a route.
+React Router Guards provides a middleware API for [React Router](https://reacttraining.com/react-router/), allowing you to perform complex logic between the call for navigation and the final render of a route.
 
 ## Table of Contents
 
@@ -89,6 +89,10 @@ Check out our [demos](#demos) for more examples!
 
 ## Concepts
 
+### [Navigation lifecycle](/docs/navigation-lifecycle.md)
+
+> With the addition of guard middleware, the navigation lifecycle has changed.
+
 ### [Guard functions](/docs/guard-functions.md)
 
 > Guard functions are the middleware between navigation and rendering.
@@ -104,10 +108,6 @@ Check out our [demos](#demos) for more examples!
 ### [Guarded Route](/docs/guarded-route.md)
 
 > The `GuardedRoute` component acts as a replacement for the default [`Route`](https://reacttraining.com/react-router/core/api/Route) component provided by React Router, allowing for routes to use guard middleware.
-
-### [Navigation Lifecycle](/docs/navigation-lifecycle.md)
-
-> With the addition of guard middleware, the navigation lifecycle has changed.
 
 ## Demos
 
