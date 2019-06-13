@@ -1,28 +1,30 @@
-# react-router-guards Demo
+# react-router-guards | Intermediate Demo
 
-This demo was created in order to demonstrate some example use cases for `react-router-guards`. It was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The intermediate demo uses the [PokéAPI](https://pokeapi.co/) to showcase how to use route guards for fetching data from an API.
 
 ## Installation
 
-In order to get started on developing, you're going to need to link your local `react-router-guards` package to the project. This can be done as follows:
+To install the project locally on your machine, do the following:
 
-1. In the root directory of this repository, run the following command to create the link:
-
-   ```shell
-   $ npm link
-   ```
-
-2. In the `/demo` directory (this one), run the following command to link the files:
-
-   ```shell
-   $ npm link react-router-guards
-   ```
-
-3. Finally, in the same directory, make sure to install all other dependencies:
+1. In the root directory of the repository, install the package dependencies:
 
    ```shell
    $ npm i
    ```
+
+2. In this directory (`/demos/intermediate`), install the package dependencies:
+
+   ```shell
+   $ npm i
+   ```
+
+3. Finallly, in the same directory, link the package to the demo using the script:
+
+   ```shell
+   $ npm run link:fresh
+   ```
+
+   This will allow you to make code changes to the package and have them update live for usage in the demo.
 
 ## Getting started
 
@@ -34,12 +36,18 @@ When actively working on both the demo and `react-router-guards` package, you'll
    $ npm start
    ```
 
-2. In a different terminal window or tab, run the following command in the `/demo` directory to run the demo's development server:
+2. In a different terminal window or tab, run the following command in this directory (`/demos/intermdiate`) to re-link the packages:
+
+   ```shell
+   $ npm run link
+   ```
+
+3. Finally, in the same window, run the following command to run the demo's development server:
 
    ```shell
    $ npm start
    ```
 
-You should now be able to visit [localhost](http://localhost:3000) in your browser and begin development!
+You should now be able to visit [localhost](http://localhost:3001) in your browser and begin development!
 
-_**Note:** if at any time you would like to cancel the running server instance, press `CTRL + C` in the open terminal window._
+_**Note:** if at any time you would like to cancel the running server instances, press `CTRL + C` in the respective terminal window._
