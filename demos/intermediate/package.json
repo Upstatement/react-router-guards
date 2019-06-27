@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "react-dom": "^16.8.6",
+    "react-router-guards": "^0.1.0",
     "react-waypoint": "^9.0.2",
     "rgbaster": "^2.1.1",
     "tinycolor2": "^1.4.1"
