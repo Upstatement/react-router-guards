@@ -12,10 +12,12 @@ const outputs = [
   {
     name: 'main',
     format: 'cjs',
+    esModule: false,
   },
   {
     name: 'module',
-    format: 'es',
+    format: 'esm',
+    esModule: true,
   },
 ];
 
@@ -24,7 +26,8 @@ const prodPlugins = [cleanup(), terser()];
 
 export default {
   input: 'src/index.ts',
-  output: outputs.map(({ name, format }) => ({
+  output: outputs.map(({ esModule, name, format }) => ({
+    esModule,
     file: pkg[name],
     format,
     name,

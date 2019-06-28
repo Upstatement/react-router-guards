@@ -12,20 +12,21 @@
     "url": "https://github.com/joshpensky/react-starter/issues"
   },
   "homepage": "https://github.com/joshpensky/react-starter#readme",
+  "files": [
+    "dist/"
+  ],
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "build": "rollup -c --environment PRODUCTION",
-    "start": "rollup -c -w"
+    "start": "rollup -c -w",
+    "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
-    "react": "^16.8.0",
-    "react-router": "^5.0.0",
-    "react-router-dom": "^5.0.0"
+    "react": ">=16.8.0",
+    "react-router": ">=5.0.0",
+    "react-router-dom": ">=5.0.0"
   },
   "dependencies": {
     "tiny-invariant": "^1.0.4"
