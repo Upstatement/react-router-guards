@@ -9,8 +9,6 @@
   },
   "scripts": {
     "build": "react-scripts build",
-    "link": "npm link react-router-guards",
-    "link:fresh": "cd ../.. && npm link && cd demos/basic && npm run link",
     "start": "react-scripts start"
   },
   "browserslist": {

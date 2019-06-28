@@ -95,6 +95,7 @@ module.exports = () => ({
   ],
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
+    modules: [path.join(__dirname, 'node_modules')],
     plugins: [
       new TsconfigPathsPlugin({
         configFile: './tsconfig.json',

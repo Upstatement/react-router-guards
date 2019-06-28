@@ -1,4 +1,4 @@
 {
-  "packages": [".", "demos/*"],
+  "packages": ["package", "demos/intermediate"],
   "version": "0.1.0"
 }

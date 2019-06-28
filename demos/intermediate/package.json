@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-router-dom": "^5.0.1",
     "react-router-guards": "^0.1.0",
     "react-waypoint": "^9.0.2",
     "rgbaster": "^2.1.1",
@@ -11,22 +13,8 @@
   },
   "scripts": {
     "build": "webpack --mode=production",
-    "link": "npm link react-router-guards",
-    "link:fresh": "cd ../.. && npm link && cd demos/intermediate && npm run link",
     "serve": "npm run build && serve dist",
     "start": "webpack-dev-server --mode=development --hot --inline"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",

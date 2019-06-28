@@ -2,10 +2,12 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "allowJs": true,
+    "target": "es6",
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "baseUrl": "./src/",
+    "jsx": "preserve",
     "noImplicitAny": false
   },
   "include": ["src"],
