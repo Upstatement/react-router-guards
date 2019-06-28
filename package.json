@@ -20,7 +20,8 @@
   ],
   "scripts": {
     "build": "rollup -c --environment PRODUCTION",
-    "start": "rollup -c -w"
+    "start": "rollup -c -w",
+    "start:all": "lerna run start --parallel"
   },
   "peerDependencies": {
     "react": "^16.8.0",
