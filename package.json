@@ -17,6 +17,7 @@
     "build": "lerna link && lerna run build --verbose",
     "build:demo": "lerna link && lerna run build --scope=react-router-guards-demo-intermediate",
     "bootstrap": "lerna clean -y && lerna link && lerna bootstrap",
+    "prepublishOnly": "npm run bootstrap",
     "start": "lerna link && lerna run start --parallel",
     "test": "lerna run test"
   },

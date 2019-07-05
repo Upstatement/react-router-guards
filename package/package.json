@@ -18,6 +18,9 @@
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
+  "publishConfig": {
+    "directory": "dist"
+  },
   "scripts": {
     "build": "rollup -c --environment PRODUCTION",
     "prepublishOnly": "npm run build",
