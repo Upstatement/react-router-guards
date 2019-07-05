@@ -20,8 +20,9 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rollup -c --environment PRODUCTION",
+    "prepublishOnly": "npm run build",
     "start": "rollup -c -w",
-    "prepublishOnly": "npm run build"
+    "test": "echo \"Testing to be added\""
   },
   "peerDependencies": {
     "react": ">=16.8.0",
