@@ -1,6 +1,7 @@
 {
-  "name": "react-router-guards",
+  "name": "react-router-guards-main",
   "version": "0.1.0",
+  "private": true,
   "description": "Guard middleware for React Router navigation",
   "author": "Josh Pensky <joshuapensky@gmail.com>",
   "license": "MIT",
@@ -12,38 +13,21 @@
     "url": "https://github.com/joshpensky/react-starter/issues"
   },
   "homepage": "https://github.com/joshpensky/react-starter#readme",
-  "main": "dist/index.js",
-  "module": "dist/index.es.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
   "scripts": {
-    "build": "rollup -c --environment PRODUCTION",
-    "start": "rollup -c -w"
-  },
-  "peerDependencies": {
-    "react": "^16.8.0",
-    "react-router": "^5.0.0",
-    "react-router-dom": "^5.0.0"
-  },
-  "dependencies": {
-    "tiny-invariant": "^1.0.4"
+    "build": "lerna link && lerna run build --stream",
+    "build:pkg": "lerna run build --scope=react-router-guards",
+    "build:demo": "lerna link && lerna run build --scope=react-router-guards-demo-intermediate",
+    "bootstrap": "lerna clean -y && lerna link && lerna bootstrap",
+    "prepublishOnly": "npm run bootstrap",
+    "start": "npm run build:pkg && lerna link && lerna run start --parallel",
+    "test": "lerna run test"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.3",
-    "@babel/plugin-proposal-class-properties": "^7.4.0",
-    "@babel/polyfill": "^7.4.4",
-    "@babel/preset-env": "^7.4.3",
-    "@babel/preset-react": "^7.0.0",
-    "@types/react": "^16.8.17",
-    "@types/react-router-dom": "^4.3.3",
     "@typescript-eslint/eslint-plugin": "^1.9.0",
     "@typescript-eslint/parser": "^1.9.0",
     "@upstatement/eslint-config": "^0.4.2",
     "@upstatement/prettier-config": "^0.3.0",
     "babel-eslint": "^10.0.1",
-    "babel-plugin-dev-expression": "^0.2.1",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
@@ -51,21 +35,10 @@
     "eslint-plugin-react": "^7.12.4",
     "eslint-plugin-react-hooks": "^1.6.0",
     "husky": "^1.3.1",
+    "lerna": "^3.15.0",
     "lint-staged": "^8.1.5",
     "prettier": "^1.17.0",
     "pretty-quick": "^1.10.0",
-    "react": "^16.8.6",
-    "react-router-dom": "^5.0.0",
-    "rollup": "^1.11.3",
-    "rollup-plugin-babel": "^4.3.2",
-    "rollup-plugin-cleanup": "^3.1.1",
-    "rollup-plugin-filesize": "^6.0.1",
-    "rollup-plugin-node-resolve": "^4.2.3",
-    "rollup-plugin-peer-deps-external": "^2.2.0",
-    "rollup-plugin-terser": "^4.0.4",
-    "rollup-plugin-typescript2": "^0.21.1",
-    "stylelint": "^10.0.1",
-    "stylelint-config-sass-guidelines": "^6.0.0",
     "tslib": "^1.9.3",
     "typescript": "^3.4.5"
   },
