@@ -14,7 +14,7 @@
   },
   "homepage": "https://github.com/joshpensky/react-starter#readme",
   "scripts": {
-    "build": "lerna link && lerna run build --verbose",
+    "build": "lerna link && lerna run build --stream",
     "build:demo": "lerna link && lerna run build --scope=react-router-guards-demo-intermediate",
     "bootstrap": "lerna clean -y && lerna link && lerna bootstrap",
     "prepublishOnly": "npm run bootstrap",
