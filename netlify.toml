@@ -1,0 +1,4 @@
+[build]
+  base = "."
+  publish = "demos/intermediate/public"
+  command = "npm run bootstrap && npm run build:demo"
