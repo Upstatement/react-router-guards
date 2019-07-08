@@ -4,7 +4,7 @@
     "project": "./tsconfig.json",
     "tsconfigRootDir": "./"
   },
-  "plugins": ["promise", "react-hooks", "@typescript-eslint"],
+  "plugins": ["jest", "promise", "react-hooks", "@typescript-eslint"],
   "extends": [
     "plugin:@typescript-eslint/recommended",
     "prettier/@typescript-eslint",
@@ -14,7 +14,8 @@
   "env": {
     "browser": true,
     "node": true,
-    "es6": true
+    "es6": true,
+    "jest/globals": "true"
   },
   "rules": {
     "no-console": "off",

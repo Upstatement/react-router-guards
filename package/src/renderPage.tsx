@@ -12,12 +12,12 @@ type BaseProps = Record<string, any>;
  */
 function renderPage<Props extends BaseProps>(
   page: PageComponent,
-  props: Props,
+  props?: Props,
 ): React.ReactElement | null {
   if (!page) {
     return null;
   } else if (typeof page !== 'string' && typeof page !== 'boolean' && typeof page !== 'number') {
-    return createElement(page, props);
+    return createElement(page, props || {});
   }
   return <Fragment>{page}</Fragment>;
 }
