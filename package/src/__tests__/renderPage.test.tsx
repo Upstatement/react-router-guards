@@ -1,6 +1,5 @@
 import React, { Fragment, createElement } from 'react';
 import { shallow } from 'enzyme';
-
 import renderPage from '../renderPage';
 
 const testNullRender = (data: any) => {
@@ -20,27 +19,35 @@ Component.defaultProps = {
 };
 
 describe('renderPage', () => {
-  it('renders null', () => {
+  it('renders null as null', () => {
     testNullRender(null);
   });
 
-  it('renders string as fragment', () => {
-    testFragmentRender('sample text');
+  it('renders undefined as null', () => {
+    testNullRender(undefined);
   });
 
   it('renders empty string as null', () => {
     testNullRender('');
   });
 
-  it('renders boolean as null', () => {
-    testFragmentRender(true);
+  it('renders string as fragment', () => {
+    testFragmentRender('sample text');
   });
 
   it('renders false boolean as null', () => {
     testNullRender(false);
   });
 
-  it('renders number as fragment', () => {
+  it('renders true boolean as fragment', () => {
+    testFragmentRender(true);
+  });
+
+  it('renders 0 number as null', () => {
+    testNullRender(0);
+  });
+
+  it('renders positive number as fragment', () => {
     testFragmentRender(42);
   });
 
@@ -48,15 +55,11 @@ describe('renderPage', () => {
     testFragmentRender(-42);
   });
 
-  it('renders 0 number as fragment', () => {
-    testNullRender(0);
-  });
-
   it('renders component without props', () => {
     const page = renderPage(Component) as React.ReactElement;
     const testPage = createElement(Component);
     expect(shallow(page).text()).toEqual(Component.defaultProps.text);
-    expect(testPage).toEqual(page);
+    expect(page).toEqual(testPage);
   });
 
   it('renders component with props', () => {
@@ -64,6 +67,6 @@ describe('renderPage', () => {
     const page = renderPage(Component, { text }) as React.ReactElement;
     const testPage = createElement(Component, { text });
     expect(shallow(page).text()).toEqual(text);
-    expect(testPage).toEqual(page);
+    expect(page).toEqual(testPage);
   });
 });
