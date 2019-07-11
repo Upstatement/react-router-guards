@@ -12,8 +12,7 @@ const UseStateRefHook: React.FC<UseStateRefHookProps> = ({ value }) => {
 };
 
 function getState<T>(wrapper: ReactWrapper): [State<T>, SetState<T>] {
-  const div = wrapper.find('div');
-  return div.prop('data-state-ref');
+  return wrapper.find('div').prop('data-state-ref');
 }
 
 describe('usePrevious', () => {

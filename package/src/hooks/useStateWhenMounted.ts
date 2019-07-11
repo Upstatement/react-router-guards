@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useDebugValue } from 'react';
 
-type SetState<T> = (newState: React.SetStateAction<T>) => void;
+export type SetState<T> = (newState: React.SetStateAction<T>) => void;
 
 /**
  * React hook for only updating a component's state when the component is still mounted.
