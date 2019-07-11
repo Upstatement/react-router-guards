@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 import usePrevious from '../usePrevious';
 
 interface UsePreviousHookProps {
@@ -11,17 +11,24 @@ const UsePreviousHook: React.FC<UsePreviousHookProps> = ({ value }) => {
 };
 
 describe('usePrevious', () => {
+  let wrapper: ReactWrapper | null = null;
+
+  afterEach(() => {
+    if (wrapper) {
+      wrapper.unmount();
+    }
+    wrapper = null;
+  });
+
   it('should render', () => {
-    const wrapper = mount(<UsePreviousHook />);
+    wrapper = mount(<UsePreviousHook />);
     expect(wrapper.exists()).toBeTruthy();
-    wrapper.unmount();
   });
 
   it('should set init value', () => {
     const VALUE = 'value';
-    const wrapper = mount(<UsePreviousHook value={VALUE} />);
+    wrapper = mount(<UsePreviousHook value={VALUE} />);
     expect(wrapper.text()).toEqual(VALUE);
-    wrapper.unmount();
   });
 
   it('stores the previous value of given variable', () => {
@@ -30,7 +37,7 @@ describe('usePrevious', () => {
     const VALUE_3 = 'okay';
 
     let value = VALUE_1;
-    const wrapper = mount(<UsePreviousHook value={value} />);
+    wrapper = mount(<UsePreviousHook value={value} />);
 
     let hookValue = wrapper.text();
     expect(hookValue).toEqual(value);
@@ -45,7 +52,5 @@ describe('usePrevious', () => {
     wrapper.setProps({ value });
     hookValue = wrapper.text();
     expect(hookValue).toEqual(VALUE_2);
-
-    wrapper.unmount();
   });
 });
