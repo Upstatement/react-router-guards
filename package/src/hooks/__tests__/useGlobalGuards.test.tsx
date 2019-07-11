@@ -4,6 +4,10 @@ import { GuardFunction } from '../../types';
 import { GuardContext } from '../../contexts';
 import useGlobalGuards from '../useGlobalGuards';
 
+const guardOne: GuardFunction = (to, from, next) => next();
+const guardTwo: GuardFunction = (to, from, next) => next.props({});
+const guardThree: GuardFunction = (to, from, next) => next.redirect('');
+
 interface UseGlobalGuardsHookProps {
   guards?: GuardFunction[];
   ignoreGlobal?: boolean;
@@ -13,9 +17,7 @@ const UseGlobalGuardsHook: React.FC<UseGlobalGuardsHookProps> = ({ guards, ignor
   return <div data-guards={hookGuards} />;
 };
 
-const testGuardOne: GuardFunction = (to, from, next) => next();
-const testGuardTwo: GuardFunction = (to, from, next) => next.props({});
-const testGuardThree: GuardFunction = (to, from, next) => next.redirect('');
+const getGuardNames = (guards: GuardFunction[]) => guards.map(func => func.name).join(' ');
 
 describe('usePrevious', () => {
   it('should render', () => {
@@ -31,57 +33,66 @@ describe('usePrevious', () => {
     wrapper.unmount();
   });
 
-  it('should use only passed guards prop when no outer context provided', () => {
-    const GUARDS = [testGuardOne];
+  it('should use only prop guards when no outer context provided', () => {
+    const GUARDS = [guardOne];
     const wrapper = mount(<UseGlobalGuardsHook guards={GUARDS} />);
     const guards: GuardFunction[] = wrapper.find('div').prop('data-guards');
-    expect(guards.length).toEqual(1);
-    const guardNames = guards.map(func => func.name).join(' ');
-    expect(guardNames).toEqual('testGuardOne');
+    expect(guards.length).toEqual(GUARDS.length);
+    expect(getGuardNames(guards)).toEqual('guardOne');
+    wrapper.unmount();
+  });
+
+  it('should use only prop guards when empty guard context provided', () => {
+    const GUARDS = [guardOne];
+    const wrapper = mount(
+      <GuardContext.Provider value={[]}>
+        <UseGlobalGuardsHook guards={GUARDS} />
+      </GuardContext.Provider>,
+    );
+    const guards: GuardFunction[] = wrapper.find('div').prop('data-guards');
+    expect(guards.length).toEqual(GUARDS.length);
+    expect(getGuardNames(guards)).toEqual('guardOne');
     wrapper.unmount();
   });
 
   it('should use only context guards when no guard props provided', () => {
-    const GUARDS = [testGuardOne];
+    const GUARDS = [guardOne];
     const wrapper = mount(
       <GuardContext.Provider value={GUARDS}>
         <UseGlobalGuardsHook />
       </GuardContext.Provider>,
     );
     const guards: GuardFunction[] = wrapper.find('div').prop('data-guards');
-    expect(guards.length).toEqual(1);
-    const guardNames = guards.map(func => func.name).join(' ');
-    expect(guardNames).toEqual('testGuardOne');
+    expect(guards.length).toEqual(GUARDS.length);
+    expect(getGuardNames(guards)).toEqual('guardOne');
     wrapper.unmount();
   });
 
   it('should add prop guards to a queue behind given context guards', () => {
-    const CONTEXT_GUARDS = [testGuardTwo];
-    const PROP_GUARDS = [testGuardOne, testGuardThree];
+    const CONTEXT_GUARDS = [guardTwo];
+    const PROP_GUARDS = [guardOne, guardThree];
     const wrapper = mount(
       <GuardContext.Provider value={CONTEXT_GUARDS}>
         <UseGlobalGuardsHook guards={PROP_GUARDS} />
       </GuardContext.Provider>,
     );
     const guards: GuardFunction[] = wrapper.find('div').prop('data-guards');
-    expect(guards.length).toEqual(3);
-    const guardNames = guards.map(func => func.name).join(' ');
-    expect(guardNames).toEqual('testGuardTwo testGuardOne testGuardThree');
+    expect(guards.length).toEqual(CONTEXT_GUARDS.length + PROP_GUARDS.length);
+    expect(getGuardNames(guards)).toEqual('guardTwo guardOne guardThree');
     wrapper.unmount();
   });
 
   it('should not use context guards if ignoreGlobal arg is set to true', () => {
-    const CONTEXT_GUARDS = [testGuardTwo];
-    const PROP_GUARDS = [testGuardOne, testGuardThree];
+    const CONTEXT_GUARDS = [guardTwo];
+    const PROP_GUARDS = [guardOne, guardThree];
     const wrapper = mount(
       <GuardContext.Provider value={CONTEXT_GUARDS}>
         <UseGlobalGuardsHook guards={PROP_GUARDS} ignoreGlobal />
       </GuardContext.Provider>,
     );
     const guards: GuardFunction[] = wrapper.find('div').prop('data-guards');
-    expect(guards.length).toEqual(2);
-    const guardNames = guards.map(func => func.name).join(' ');
-    expect(guardNames).toEqual('testGuardOne testGuardThree');
+    expect(guards.length).toEqual(PROP_GUARDS.length);
+    expect(getGuardNames(guards)).toEqual('guardOne guardThree');
     wrapper.unmount();
   });
 });
