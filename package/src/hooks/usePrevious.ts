@@ -1,4 +1,4 @@
-import { useEffect, useRef, useDebugValue } from 'react';
+import { useDebugValue, useEffect, useRef } from 'react';
 
 /**
  * React hook for storing the previous value of the
