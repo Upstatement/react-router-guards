@@ -62,6 +62,10 @@ export type GuardFunction = (
  */
 export type PageComponent = ComponentType | null | undefined | string | boolean | number;
 
+export type PageProps = NextPropsPayload;
+export type RouteError = string | Record<string, any> | null;
+export type RouteRedirect = NextRedirectPayload | null;
+
 /**
  * Props
  */
