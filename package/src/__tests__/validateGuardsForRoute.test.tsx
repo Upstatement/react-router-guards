@@ -1,6 +1,12 @@
 import { createBrowserHistory } from 'history';
-import { getNextFn, runGuard } from '../validateGuardsForRoute';
+import { getNextFn, runGuard, resolveAllGuards } from '../validateGuardsForRoute';
 import { GuardTypes } from '../types';
+
+const doesFuncReturnPromise = (response: any) => {
+  expect(response).toHaveProperty('then');
+  // eslint-disable-next-line promise/prefer-await-to-then
+  expect(typeof response.then).toEqual('function');
+};
 
 describe('validateGuardsForRoute', () => {
   const FROM_ROUTE_PROPS = {
@@ -18,6 +24,7 @@ describe('validateGuardsForRoute', () => {
       state: {},
     },
   };
+
   const TO_ROUTE_PROPS = {
     ...FROM_ROUTE_PROPS,
     meta: {},
@@ -83,9 +90,7 @@ describe('validateGuardsForRoute', () => {
 
     it('should return a promise', () => {
       const promise = runGuard(guard, TO_ROUTE_PROPS, FROM_ROUTE_PROPS);
-      expect(promise).toHaveProperty('then');
-      // eslint-disable-next-line promise/prefer-await-to-then
-      expect(typeof promise.then).toEqual('function');
+      doesFuncReturnPromise(promise);
     });
 
     it('should call the passed guard', async () => {
@@ -112,6 +117,38 @@ describe('validateGuardsForRoute', () => {
       const value = await runGuard(guard, TO_ROUTE_PROPS, FROM_ROUTE_PROPS);
       expect(typeof value).toEqual('object');
       expect(value).toEqual({ type: GuardTypes.CONTINUE });
+    });
+  });
+
+  describe('resolveAllGuards', () => {
+    jest.useFakeTimers();
+
+    let times: number[];
+    let guardOne: jest.Mock;
+    let guardTwo: jest.Mock;
+
+    beforeEach(() => {
+      times = [];
+      guardOne = jest.fn((to, from, next) => {
+        times.push(Date.now());
+        setTimeout(next, 1000);
+      });
+      guardTwo = jest.fn((to, from, next) => {
+        times.push(Date.now());
+        next();
+      });
+    });
+
+    it('should return a promise', () => {
+      const guards = [guardOne, guardTwo];
+      const promise = resolveAllGuards(guards, TO_ROUTE_PROPS, FROM_ROUTE_PROPS);
+      doesFuncReturnPromise(promise);
+    });
+
+    it('should return default values with an empty guard array arg', async () => {
+      const { props, redirect } = await resolveAllGuards([], TO_ROUTE_PROPS, FROM_ROUTE_PROPS);
+      expect(props).toEqual({});
+      expect(redirect).toEqual(null);
     });
   });
 });
