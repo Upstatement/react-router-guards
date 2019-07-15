@@ -38,7 +38,7 @@ describe('usePrevious', () => {
 
   it('should have 0 guards with no props or outer context', () => {
     wrapper = mount(<UseGlobalGuardsHook />);
-    const guards: GuardFunction[] = wrapper.find('div').prop('data-guards');
+    const guards: GuardFunction[] = getGuards(wrapper);
     expect(guards.length).toEqual(0);
   });
 
