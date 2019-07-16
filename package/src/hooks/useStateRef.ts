@@ -5,9 +5,9 @@ type NotFunc<T> = Exclude<T, Function>;
 
 type SetStateFuncAction<T> = (prevState: NotFunc<T>) => NotFunc<T>;
 type SetStateAction<T> = NotFunc<T> | SetStateFuncAction<T>;
-type SetState<T> = (newState: SetStateAction<T>) => void;
+export type SetState<T> = (newState: SetStateAction<T>) => void;
 
-type State<T> = React.MutableRefObject<NotFunc<T>>;
+export type State<T> = React.MutableRefObject<NotFunc<T>>;
 
 /**
  * React hook that provides a similar API to the `useState`
