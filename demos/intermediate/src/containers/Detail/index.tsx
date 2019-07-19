@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { GuardFunction } from 'react-router-guards';
+import { GuardFunction } from '@upstatement/react-router-guards';
 import { LabeledSection, Recirculation, SpriteList, StatChart, Type } from 'components';
 import { MoveLearnType, SerializedPokemon } from 'types';
 import { api, className, serializePokemon } from 'utils';
