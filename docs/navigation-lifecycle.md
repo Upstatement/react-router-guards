@@ -8,15 +8,15 @@ With the addition of guard middleware, the navigation lifecycle has changed. It 
 
 1. Start on _Page A_.
 
-2. Navigation initiated. _The loading page is shown._
+1. Navigation initiated. _The loading page is shown._
 
-3. Check if there are guards are left in the queue.
+1. Check if there are guards left in the queue.
 
    - If there are guards, continue to step 4.
 
    - If no guards remain, skip to step 5.
 
-4. Run the top guard in the queue:
+1. Run the top guard in the queue:
 
    - `next()`: Return to step 3.
 
@@ -26,4 +26,4 @@ With the addition of guard middleware, the navigation lifecycle has changed. It 
 
    - `Error`: Navigation has been prevented. _The error page is shown._
 
-5. Navigation was successful! _Page B is shown._
+1. Navigation was successful! _Page B is shown._

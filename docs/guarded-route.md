@@ -52,6 +52,6 @@ const App = () => (
 
 In order to provide more information about a route, we've added a `meta` prop to the `GuardedRoute`.
 
-The `meta` object can include anything! In our [basic demo](/demos/basic/src/router/routes.js), we used the `meta` object to determine which pages required auth.
+The `meta` object can include anything! In our [basic demo](/demos/basic/src/router/routes.js) we used the `meta` object to determine which pages required auth.
 
 You can access a route's metadata using `to.meta` in a guard function.

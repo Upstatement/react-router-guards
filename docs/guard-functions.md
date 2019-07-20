@@ -1,6 +1,7 @@
 # Guard functions
 
-Guard functions are the middleware between navigation and rendering. They can contain complex, asynchronous logic in order to fetch data for a route.
+Guard functions are the middleware between navigation and rendering.
+They can contain complex, asynchronous logic in order to fetch data for a route.
 
 - [API](#api)
 - [`next` functions](#next-functions)
@@ -52,7 +53,8 @@ While we use `to` and `from` to get context of our navigation history, we use `n
 
   _**Note:** Redirecting to a different location will still run the guards of the new location before rendering it._
 
-You can call any of the `next` functions at any time in your guard function. This will immediately stop execution of the current guard and move onto the next one.
+You can call any of the `next` functions at any time in your guard function.
+This will immediately stop execution of the current guard and move onto the next one.
 
 ## Error handling
 
@@ -62,7 +64,8 @@ This can be accomplished by throwing an `Error`.
 
 Much like the `next` function, you can throw an `Error` at any time in your guard function, and it will immediately stop execution of the current guard.
 
-However, instead of moving to the next guard, it will cancel all guards in the queue. Then, the [error page](docs/page-components.md) (as set by a [`GuardProvider`](/docs/guard-provider.md) or [`GuardedRoute`](/docs/guarded-route.md)) will display.
+However, instead of moving to the next guard, it will cancel all guards in the queue.
+Then, the [error page](docs/page-components.md) (as set by a [`GuardProvider`](/docs/guard-provider.md) or [`GuardedRoute`](/docs/guarded-route.md)) will display.
 
 ## Example
 
@@ -96,7 +99,8 @@ All guard functions accept the same three arguments:
 
 - `next`: a multi-use function for advancing to the next guard function
 
-Guard functions don't advance until the `next` function is called. This allows the logic inside of them to be asynchronous, hence the `async` keyword.
+Guard functions don't advance until the `next` function is called.
+This allows the logic inside of them to be asynchronous, hence the `async` keyword.
 
 ---
 
@@ -106,7 +110,8 @@ const { name } = to.match.params;
 
 In this line, we are destructuring the `to` route's match params to get the name of the pokemon.
 
-The `to` and `from` arguments allow us to use the same props that the `Router` passes to the page component. These include the following:
+The `to` and `from` arguments allow us to use the same props that the `Router` passes to the page component.
+These include the following:
 
 - [`history`](https://reacttraining.com/react-router/core/api/history)
 
@@ -122,7 +127,8 @@ The `to` and `from` arguments allow us to use the same props that the `Router` p
     next.props({ pokemon });
 ```
 
-In these lines, we are calling an API function in order to get a pokemon with the route's name. Then, we are using one of `next`'s three functionalities to pass the pokemon as a prop to the route.
+In these lines, we are calling an API function in order to get a pokemon with the route's name.
+Then, we are using one of `next`'s three functionalities to pass the pokemon as a prop to the route.
 
 For more information on the next function, check out the [`next` functions section](#next-functions).
 
