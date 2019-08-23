@@ -3,6 +3,15 @@
   "version": "1.0.0",
   "description": "Guard middleware for React Router navigation",
   "author": "Josh Pensky <joshuapensky@gmail.com>",
+  "keywords": [
+    "react",
+    "router",
+    "guards",
+    "guard",
+    "loading",
+    "error",
+    "middleware"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
