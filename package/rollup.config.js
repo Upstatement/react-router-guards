@@ -42,10 +42,6 @@ export default {
     resolve(),
     typescript(),
   ],
-  onwarn({ code, message }) {
-    if (code === 'THIS_IS_UNDEFINED') {
-      return;
-    }
-    console.warn(message);
-  },
+  context: 'null',
+  moduleContext: 'null',
 };
