@@ -7,12 +7,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joshpensky/react-starter.git"
+    "url": "git+https://github.com/upstatement/react-router-guards.git"
   },
   "bugs": {
-    "url": "https://github.com/joshpensky/react-starter/issues"
+    "url": "https://github.com/upstatement/react-router-guards/issues"
   },
-  "homepage": "https://github.com/joshpensky/react-starter#readme",
+  "homepage": "https://github.com/upstatement/react-router-guards#readme",
   "scripts": {
     "build": "lerna link && lerna run build --stream",
     "build:pkg": "lerna run build --scope=@upstatement/react-router-guards",
