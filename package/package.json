@@ -1,6 +1,6 @@
 {
   "name": "react-router-guards",
-  "version": "0.1.4",
+  "version": "1.0.0",
   "description": "Guard middleware for React Router navigation",
   "author": "Josh Pensky <joshuapensky@gmail.com>",
   "license": "MIT",
