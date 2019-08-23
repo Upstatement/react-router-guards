@@ -115,13 +115,13 @@ We've included some demos below to help provide more context on how to use this 
 
 ### Basic
 
-[Demo](#basic) | [Source](demos/basic)
+[Source](demos/basic)
 
 The basic demo showcases some basic functionality of route guard API with an auth example.
 
 ### Intermediate
 
-[Demo](#intermediate) | [Source](demos/intermediate)
+[Demo](https://react-router-guards-demo.netlify.com) | [Source](demos/intermediate)
 
 The intermediate demo uses the [PokéAPI](https://pokeapi.co/) to showcase how to use route guards for fetching data from an API.
 
