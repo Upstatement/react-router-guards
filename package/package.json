@@ -1,5 +1,5 @@
 {
-  "name": "@upstatement/react-router-guards",
+  "name": "react-router-guards",
   "version": "0.1.4",
   "description": "Guard middleware for React Router navigation",
   "author": "Josh Pensky <joshuapensky@gmail.com>",
