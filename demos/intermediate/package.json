@@ -1,12 +1,12 @@
 {
   "name": "react-router-guards-demo-intermediate",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "dependencies": {
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1",
-    "react-router-guards": "^1.0.0",
+    "react-router-guards": "^1.0.1",
     "react-waypoint": "^9.0.2",
     "rgbaster": "^2.1.1",
     "tinycolor2": "^1.4.1"
