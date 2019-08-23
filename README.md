@@ -115,7 +115,7 @@ We've included some demos below to help provide more context on how to use this 
 
 ### Basic
 
-[Source](demos/basic)
+[Demo + Source](https://codesandbox.io/s/react-router-guards-basic-demo-0m48v)
 
 The basic demo showcases some basic functionality of route guard API with an auth example.
 
