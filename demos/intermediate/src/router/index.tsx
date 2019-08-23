@@ -1,6 +1,6 @@
 import React from 'react';
 import { Router as BrowserRouter, Switch } from 'react-router-dom';
-import { GuardProvider, GuardedRoute } from '@upstatement/react-router-guards';
+import { GuardProvider, GuardedRoute } from 'react-router-guards';
 import { Detail, List, Loading, NotFound } from 'containers';
 import { beforeRouteEnter as detailBeforeEnter } from 'containers/Detail';
 import history from './history';

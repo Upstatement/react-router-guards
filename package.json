@@ -15,7 +15,7 @@
   "homepage": "https://github.com/upstatement/react-router-guards#readme",
   "scripts": {
     "build": "lerna link && lerna run build --stream",
-    "build:pkg": "lerna run build --scope=@upstatement/react-router-guards",
+    "build:pkg": "lerna run build --scope=react-router-guards",
     "build:demo": "npm run build:pkg && lerna link && lerna run build --scope=react-router-guards-demo-intermediate",
     "bootstrap": "lerna clean -y && lerna link && lerna bootstrap",
     "prepublishOnly": "npm run bootstrap",
