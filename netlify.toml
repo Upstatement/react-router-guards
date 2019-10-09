@@ -2,3 +2,8 @@
   base = "."
   publish = "demos/intermediate/dist"
   command = "npm run bootstrap && npm run build:demo"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
