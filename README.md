@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="/static/img/rrg-icon.svg" width="128" title="React Router Guards Logo" alt="Logo" />
+</p>
+
 # react-router-guards
 
 > Guard middleware for React Router navigation
