@@ -60,32 +60,33 @@ Here is a very basic example of how to use React Router Guards.
 
 ```jsx
 import React from 'react';
-import { createBrowserHistory } from 'history';
-import { Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { GuardProvider, GuardedRoute } from 'react-router-guards';
 import { About, Home, Loading, Login, NotFound } from 'pages';
 import { getIsLoggedIn } from 'utils';
 
-const history = createBrowserHistory();
-
 const requireLogin = (to, from, next) => {
-  if (getIsLoggedIn()) {
+  if (to.meta.auth) {
+    if (getIsLoggedIn()) {
+      next();
+    }
+    next.redirect('/login');
+  } else {
     next();
   }
-  next.redirect('/login');
 };
 
 const App = () => (
-  <Router history={history}>
-    <GuardProvider loading={Loading} error={NotFound}>
-      <GuardedRoute path="/login" exact component={Login} />
-      <GuardProvider guards={[requireLogin]}>
-        <GuardedRoute path="/" exact component={Home} />
-        <GuardedRoute path="/about" exact component={About} />
-      </GuardProvider>
-      <GuardedRoute path="*" component={NotFound} />
+  <BrowserRouter>
+    <GuardProvider guards={[requireLogin]} loading={Loading} error={NotFound}>
+      <Switch>
+        <GuardedRoute path="/login" exact component={Login} />
+        <GuardedRoute path="/" exact component={Home} meta={{ auth: true }} />
+        <GuardedRoute path="/about" exact component={About} meta={{ auth: true }} />
+        <GuardedRoute path="*" component={NotFound} />
+      </Switch>
     </GuardProvider>
-  </Router>
+  </BrowserRouter>
 );
 ```
 
