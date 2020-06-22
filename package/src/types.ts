@@ -74,6 +74,11 @@ export interface BaseGuardProps {
 
 export type PropsWithMeta<T> = T & {
   meta?: Meta;
+  pathChanged?: (
+    routePrevProps: RouteComponentProps,
+    routeProps: RouteComponentProps,
+    path?: string | string[],
+  ) => boolean;
 };
 
 export type GuardProviderProps = BaseGuardProps;
