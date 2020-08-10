@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 import invariant from 'tiny-invariant';
 import ContextWrapper from './ContextWrapper';
 import Guard from './Guard';
-import { ErrorPageContext, GuardContext, LoadingPageContext } from './contexts';
+import { ErrorPageContext, GuardContext, LoadingPageContext, RawErrorContext } from './contexts';
 import { useGlobalGuards } from './hooks';
 import { GuardedRouteProps, PageComponent } from './types';
 
@@ -11,6 +11,7 @@ const GuardedRoute: React.FunctionComponent<GuardedRouteProps> = ({
   children,
   component,
   error,
+  rawError,
   guards,
   ignoreGlobal,
   loading,
@@ -32,9 +33,13 @@ const GuardedRoute: React.FunctionComponent<GuardedRouteProps> = ({
         <GuardContext.Provider value={routeGuards}>
           <ContextWrapper<PageComponent> context={LoadingPageContext} value={loading}>
             <ContextWrapper<PageComponent> context={ErrorPageContext} value={error}>
-              <Guard name={path} component={component} meta={meta} render={render}>
-                {children}
-              </Guard>
+              <ContextWrapper<boolean | null | undefined>
+                context={RawErrorContext}
+                value={rawError}>
+                <Guard name={path} component={component} meta={meta} render={render}>
+                  {children}
+                </Guard>
+              </ContextWrapper>
             </ContextWrapper>
           </ContextWrapper>
         </GuardContext.Provider>
