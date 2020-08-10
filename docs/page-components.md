@@ -41,6 +41,18 @@ Typically, error pages will be the same component as a Not Found or 404 page.
 
 _**Note:** If using a React component for your error page, it can receive the error message thrown by a guard function via an `error` prop._
 
+## Raw errors
+
+By default, only the `message` property of the error thrown by a guard is sent to the Error page (or if no `message` property is available, the string `"Not found."`).
+
+If you want the exact value thrown by your guards available on the `error` prop for your Error page you can set the `rawError` prop to `true`.
+
+It can be set either:
+
+- _globally_ as the `rawError` prop of a [`GuardProvider`](/docs/guard-provider.md)
+
+- _individually_ as the `rawError` prop of a [`GuardedRoute`](/docs/guarded-route.md)
+
 ## Examples
 
 With strings:
