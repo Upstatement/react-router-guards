@@ -24,13 +24,22 @@ interface GuardsResolve {
   redirect: RouteRedirect;
 }
 
-const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta, render }) => {
+const Guard: React.FunctionComponent<GuardProps> = ({
+  children,
+  component,
+  meta,
+  render,
+  pathChanged,
+  name,
+}) => {
   const routeProps = useContext(RouterContext);
   const routePrevProps = usePrevious(routeProps);
-  const hasPathChanged = useMemo(
-    () => routeProps.location.pathname !== routePrevProps.location.pathname,
-    [routePrevProps, routeProps],
-  );
+  const hasPathChanged = useMemo(() => {
+    if (pathChanged && typeof pathChanged === 'function') {
+      return pathChanged(routePrevProps, routeProps, name);
+    }
+    return routeProps.location.pathname !== routePrevProps.location.pathname;
+  }, [routePrevProps, routeProps]);
   const fromRouteProps = useContext(FromRouteContext);
 
   const guards = useContext(GuardContext);
