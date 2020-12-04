@@ -1,7 +1,13 @@
 import React, { useCallback, useContext, useEffect, useMemo } from 'react';
 import { __RouterContext as RouterContext } from 'react-router';
 import { matchPath, Redirect, Route } from 'react-router-dom';
-import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
+import {
+  ErrorPageContext,
+  FromRouteContext,
+  GuardContext,
+  LoadingPageContext,
+  RawErrorContext,
+} from './contexts';
 import { usePrevious, useStateRef, useStateWhenMounted } from './hooks';
 import renderPage from './renderPage';
 import {
@@ -36,6 +42,7 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
   const guards = useContext(GuardContext);
   const LoadingPage = useContext(LoadingPageContext);
   const ErrorPage = useContext(ErrorPageContext);
+  const useRawErrors = useContext(RawErrorContext);
 
   const hasGuards = useMemo(() => !!(guards && guards.length > 0), [guards]);
   const [validationsRequested, setValidationsRequested] = useStateRef<number>(0);
@@ -122,7 +129,7 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
    * Validates the route using the guards. If an error occurs, it
    * will toggle the route error state.
    */
-  const validateRoute = async (): Promise<void> => {
+  const validateRoute = async (useRawErrors: boolean | null | undefined): Promise<void> => {
     const currentRequests = validationsRequested.current;
 
     let pageProps: PageProps = {};
@@ -134,7 +141,7 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
       pageProps = props;
       routeRedirect = redirect;
     } catch (error) {
-      routeError = error.message || 'Not found.';
+      routeError = useRawErrors ? error : error.message || 'Not found.';
     }
 
     if (currentRequests === getValidationsRequested()) {
@@ -146,8 +153,8 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
   };
 
   useEffect(() => {
-    validateRoute();
-  }, []);
+    validateRoute(useRawErrors);
+  }, [useRawErrors]);
 
   useEffect(() => {
     if (hasPathChanged) {
@@ -156,10 +163,10 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
       setRouteRedirect(null);
       setRouteValidated(!hasGuards);
       if (hasGuards) {
-        validateRoute();
+        validateRoute(useRawErrors);
       }
     }
-  }, [hasPathChanged]);
+  }, [hasPathChanged, useRawErrors]);
 
   if (hasPathChanged) {
     if (hasGuards) {

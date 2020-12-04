@@ -70,6 +70,7 @@ export interface BaseGuardProps {
   ignoreGlobal?: boolean;
   loading?: PageComponent;
   error?: PageComponent;
+  rawError?: boolean;
 }
 
 export type PropsWithMeta<T> = T & {
