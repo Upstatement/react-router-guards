@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 
 interface Props<T> {
   context: React.Context<T>;
-  value: T;
+  value?: T;
 }
 
 function ContextWrapper<T>({ children, context, value }: React.PropsWithChildren<Props<T>>) {
