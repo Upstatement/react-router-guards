@@ -1,8 +1,8 @@
 import { createContext } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { PageComponent, GuardFunction } from './types';
+import { PageComponent, GuardFunction, RouteError } from './types';
 
-export const ErrorPageContext = createContext<PageComponent>(null);
+export const ErrorPageContext = createContext<PageComponent<{ error: RouteError }>>(null);
 
 export const FromRouteContext = createContext<RouteComponentProps | null>(null);
 

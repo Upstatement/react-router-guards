@@ -22,8 +22,10 @@
   margin-bottom: $spacing--base;
 }
 
-.body {
+.error {
   margin-bottom: $spacing--lg;
+  margin-top: $spacing--base;
+  opacity: 0.5;
 
   @include mq($bp--mobile) {
     margin-bottom: $spacing--xl;

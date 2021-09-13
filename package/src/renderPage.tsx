@@ -11,7 +11,7 @@ type BaseProps = Record<string, any>;
  * @returns the page component
  */
 function renderPage<Props extends BaseProps>(
-  page: PageComponent,
+  page: PageComponent<any>,
   props?: Props,
 ): React.ReactElement | null {
   if (!page) {

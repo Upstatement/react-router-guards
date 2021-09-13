@@ -7,4 +7,5 @@ export {
   GuardProviderProps,
   Next,
   PageComponent,
+  RouteError,
 } from './types';
