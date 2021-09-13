@@ -139,11 +139,11 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
         const redirectPath =
           typeof routeRedirect === 'string' ? routeRedirect : routeRedirect.pathname;
         if (redirectPath === routeProps.location.pathname) {
-          throw new Error('Infinite redirect.');
+          throw new Error('rrg/infinite-redirect');
         }
       }
     } catch (error) {
-      routeError = error.message || 'Not found.';
+      routeError = error.message || 'rrg/error';
     }
 
     if (currentRequests === getValidationsRequested()) {
