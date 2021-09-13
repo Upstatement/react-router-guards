@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useMemo } from 'react';
 import { __RouterContext as RouterContext } from 'react-router';
-import { matchPath, Redirect, Route } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
 import { usePrevious, useStateRef, useStateWhenMounted } from './hooks';
 import renderPage from './renderPage';
@@ -171,11 +171,11 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
   } else if (routeError) {
     return renderPage(ErrorPage, { ...routeProps, error: routeError });
   } else if (routeRedirect) {
-    const pathToMatch = typeof routeRedirect === 'string' ? routeRedirect : routeRedirect.pathname;
-    const { path, isExact: exact } = routeProps.match;
-    if (pathToMatch && !matchPath(pathToMatch, { path, exact })) {
-      return <Redirect to={routeRedirect} />;
+    const redirectPath = typeof routeRedirect === 'string' ? routeRedirect : routeRedirect.pathname;
+    if (redirectPath === routeProps.location.pathname) {
+      return renderPage(ErrorPage, { ...routeProps, error: 'Infinite redirect.' });
     }
+    return <Redirect to={routeRedirect} />;
   }
   return (
     <RouterContext.Provider value={{ ...routeProps, ...pageProps }}>

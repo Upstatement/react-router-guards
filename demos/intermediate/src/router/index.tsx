@@ -1,6 +1,6 @@
 import React from 'react';
 import { Router as BrowserRouter, Switch } from 'react-router-dom';
-import { GuardProvider, GuardedRoute } from 'react-router-guards';
+import { GuardProvider, GuardedRoute, GuardFunction } from 'react-router-guards';
 import { Detail, List, Loading, NotFound } from 'containers';
 import { beforeRouteEnter as detailBeforeEnter } from 'containers/Detail';
 import history from './history';
@@ -9,6 +9,15 @@ import { waitOneSecond } from './guards';
 interface Props {
   children(content: React.ReactElement): React.ReactElement;
 }
+
+const invalidName: GuardFunction = (to, from, next) => {
+  const { name } = to.match.params;
+  if (name === 'test') {
+    next.redirect('/test');
+  } else {
+    next();
+  }
+};
 
 const Router: React.FunctionComponent<Props> = ({ children }) => (
   <BrowserRouter history={history}>
@@ -20,7 +29,7 @@ const Router: React.FunctionComponent<Props> = ({ children }) => (
             path="/:name"
             exact
             component={Detail}
-            guards={[waitOneSecond, detailBeforeEnter]}
+            guards={[invalidName, waitOneSecond, detailBeforeEnter]}
           />
           <GuardedRoute path="*" component={NotFound} />
         </Switch>,
