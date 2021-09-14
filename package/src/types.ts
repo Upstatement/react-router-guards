@@ -57,8 +57,6 @@ export type GuardFunction = (
   next: Next,
 ) => void;
 
-export type RouteError = string | null;
-
 /**
  * Page Component Types
  */
@@ -72,10 +70,10 @@ export type PageComponent<P = {}> =
   | number;
 
 export type LoadingPageComponent = PageComponent;
-export type ErrorPageComponent = PageComponent<{ error: RouteError }>;
+export type ErrorPageComponent = PageComponent<{ error: unknown }>;
 
 export type LoadingPageComponentType = PageComponentType;
-export type ErrorPageComponentType = PageComponentType<{ error: RouteError }>;
+export type ErrorPageComponentType = PageComponentType<{ error: unknown }>;
 
 /**
  * Props
