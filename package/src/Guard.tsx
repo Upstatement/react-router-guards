@@ -13,7 +13,6 @@ import {
   NextAction,
   NextPropsPayload,
   NextRedirectPayload,
-  RouteError,
 } from './types';
 
 type PageProps = NextPropsPayload;
@@ -40,7 +39,7 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
   const hasGuards = useMemo(() => !!(guards && guards.length > 0), [guards]);
   const [validationsRequested, setValidationsRequested] = useStateRef<number>(0);
   const [routeValidated, setRouteValidated] = useStateRef<boolean>(!hasGuards);
-  const [routeError, setRouteError] = useStateWhenMounted<RouteError>(null);
+  const [routeError, setRouteError] = useStateWhenMounted<unknown>(undefined);
   const [routeRedirect, setRouteRedirect] = useStateWhenMounted<RouteRedirect>(null);
   const [pageProps, setPageProps] = useStateWhenMounted<PageProps>({});
 
@@ -126,7 +125,7 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
     const currentRequests = validationsRequested.current;
 
     let pageProps: PageProps = {};
-    let routeError: RouteError = null;
+    let routeError: unknown = undefined;
     let routeRedirect: RouteRedirect = null;
 
     try {
@@ -134,7 +133,7 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
       pageProps = props;
       routeRedirect = redirect;
     } catch (error) {
-      routeError = error.message || 'Not found.';
+      routeError = error || new Error('Not found.');
     }
 
     if (currentRequests === getValidationsRequested()) {
@@ -152,7 +151,7 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
   useEffect(() => {
     if (hasPathChanged) {
       setValidationsRequested(requests => requests + 1);
-      setRouteError(null);
+      setRouteError(undefined);
       setRouteRedirect(null);
       setRouteValidated(!hasGuards);
       if (hasGuards) {

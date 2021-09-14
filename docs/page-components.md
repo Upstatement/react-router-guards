@@ -59,7 +59,7 @@ import {
 const NotFound: ErrorPageComponentType = ({ error }) => (
   <div>
     <h1>Not found.</h1>
-    {error && <p>{error}</p>}
+    {error instanceof Error && <p>{error.message}</p>}
   </div>
 );
 
