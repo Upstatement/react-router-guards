@@ -31,7 +31,8 @@
     "build": "rollup -c --environment PRODUCTION",
     "prepublishOnly": "npm run build",
     "start": "rollup -c -w",
-    "test": "jest"
+    "test": "jest --watch",
+    "test:ci": "jest --ci"
   },
   "peerDependencies": {
     "react": ">=16.8.0",
