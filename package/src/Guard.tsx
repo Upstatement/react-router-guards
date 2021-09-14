@@ -13,10 +13,10 @@ import {
   NextAction,
   NextPropsPayload,
   NextRedirectPayload,
+  RouteError,
 } from './types';
 
 type PageProps = NextPropsPayload;
-type RouteError = string | Record<string, any> | null;
 type RouteRedirect = NextRedirectPayload | null;
 
 interface GuardsResolve {

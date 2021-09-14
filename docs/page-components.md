@@ -9,10 +9,6 @@ Page components are used for setting loading and error pages.
 
 ## API
 
-```ts
-type PageComponent = React.Component | string | boolean | number | null | undefined;
-```
-
 ## Loading page
 
 Loading pages are React components that are displayed while guard middleware is resolving.
@@ -45,25 +41,35 @@ _**Note:** If using a React component for your error page, it can receive the er
 
 With strings:
 
-```jsx
-<GuardProvider loading="Loading..." error="Not found." />
+```tsx
+import { GuardProvider } from 'react-router-guards';
+
+<GuardProvider loading="Loading..." error="Not found." />;
 ```
 
 With React components:
 
-```jsx
-const NotFound = ({ error }) => (
+```tsx
+import {
+  ErrorPageComponentType,
+  GuardProvider,
+  LoadingPageComponentType,
+} from 'react-router-guards';
+
+const NotFound: ErrorPageComponentType = ({ error }) => (
   <div>
     <h1>Not found.</h1>
-    <p>{error}</p>
+    {error && <p>{error}</p>}
   </div>
 );
 
-const Loading = () => (
+const Loading: LoadingPageComponentType = () => (
   <div>
     <div id="loader" />
   </div>
 );
+
+// ...
 
 <GuardProvider loading={Loading} error={NotFound} />;
 ```

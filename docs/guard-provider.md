@@ -14,8 +14,8 @@ The `GuardProvider` provides an API for declaring global guards and loading and 
 interface GuardProviderProps {
   guards?: GuardFunction[];
   ignoreGlobal?: boolean;
-  loading?: PageComponent;
-  error?: PageComponent;
+  loading?: LoadingPageComponent;
+  error?: ErrorPageComponent;
 }
 ```
 

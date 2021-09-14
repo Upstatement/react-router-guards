@@ -14,8 +14,8 @@ The `GuardedRoute`, on top of accepting the same props as a regular [`Route`](ht
 interface GuardedRouteProps extends RouteProps {
   guards?: GuardFunction[];
   ignoreGlobal?: boolean;
-  loading?: PageComponent;
-  error?: PageComponent;
+  loading?: LoadingPageComponent;
+  error?: ErrorPageComponent;
   meta?: Record<string, any>;
 }
 ```
