@@ -17,7 +17,7 @@
   - [Clean Up Issues and PRs](#clean-up-issues-and-prs)
   - [Review Pull Requests](#review-pull-requests)
   - [Merge Pull Requests](#merge-pull-requests)
-  - [Tag a Release](#tag-a-release)
+  - [Release Workflow](#release-workflow)
 - Add a Guide Like This One [To My Project](#attribution)?
 
 ## Introduction
@@ -211,9 +211,21 @@ Some notes:
 
 TBD - need to hash out a bit more of this process.
 
-## Tag A Release
+## Release Workflow
 
-TBD - need to hash out a bit more of this process. The most important bit here is probably that all tests must pass, and tags must use [semver](https://semver.org).
+With GitHub actions, our workflow for publishing new version to NPM are automatic! Here are the steps you need to take to ensure a release occurs:
+
+1. In a new branch, use the [Lerna `version` command](https://github.com/lerna/lerna/tree/main/commands/version) to update the package to the next version. This will automatically update the `package.json` and create a commit with an associated tag:
+
+   ```sh
+   lerna version patch
+   # lerna version minor
+   # lerna version major
+   ```
+
+2. Create a new pull request with your branch. Be sure to follow the steps in the [Contribute Code](#contribute-code) section.
+
+3. If the pull request is merged successfully, the [`Release` action](./workflows/release.yml) should publish the latest version to NPM and create a new release.
 
 ## Attribution
 

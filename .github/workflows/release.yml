@@ -1,0 +1,59 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the branch
+        uses: actions/checkout@v2
+
+      - name: Check if version was updated
+        id: version_check
+        uses: EndBug/version-check@master
+        with:
+          diff-search: true # searches all commit diffs if SemVer not included in commit message
+
+      - name: No update detected
+        if: steps.version_check.outputs.changed != 'true'
+        run: 'echo "No update detected! Shutting down..."' # Shut down if no version update
+
+      - name: Version update detected
+        if: steps.version_check.outputs.changed == 'true'
+        run: 'echo "Version change found! New ${{ steps.version_check.outputs.type }} version: ${{ steps.version_check.outputs.version }}"'
+
+      - name: Read .nvmrc
+        if: steps.version_check.outputs.changed == 'true'
+        id: node_version
+        run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
+
+      - name: Setup node
+        if: steps.version_check.outputs.changed == 'true'
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ steps.node_version.outputs.NODE_VERSION }}
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        if: steps.version_check.outputs.changed == 'true'
+        run: npm ci
+
+      - name: Publish package to NPM
+        if: steps.version_check.outputs.changed == 'true'
+        run: lerna publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create release
+        if: steps.version_check.outputs.changed == 'true'
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.version_check.outputs.version }}
+          release_name: Release v${{ steps.version_check.outputs.version }}
