@@ -1,13 +1,9 @@
 import React from 'react';
-import { RouteError } from 'react-router-guards';
 import { Link } from 'components';
 import styles from './notFound.module.scss';
+import { ErrorPageComponentType } from 'react-router-guards';
 
-interface NotFoundProps {
-  error: RouteError;
-}
-
-const NotFound = ({ error }: NotFoundProps) => (
+const NotFound: ErrorPageComponentType = ({ error }) => (
   <div className={styles.container}>
     <img className={styles.image} src={`/img/missingno.png`} alt="Not found" />
     <h1 className={styles.title}>Uh-oh!</h1>

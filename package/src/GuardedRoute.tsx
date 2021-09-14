@@ -5,7 +5,7 @@ import ContextWrapper from './ContextWrapper';
 import Guard from './Guard';
 import { ErrorPageContext, GuardContext, LoadingPageContext } from './contexts';
 import { useGlobalGuards } from './hooks';
-import { GuardedRouteProps, PageComponent, RouteError } from './types';
+import { GuardedRouteProps, LoadingPageComponent, ErrorPageComponent } from './types';
 
 const GuardedRoute: React.FunctionComponent<GuardedRouteProps> = ({
   children,
@@ -30,10 +30,8 @@ const GuardedRoute: React.FunctionComponent<GuardedRouteProps> = ({
       {...routeProps}
       render={() => (
         <GuardContext.Provider value={routeGuards}>
-          <ContextWrapper<PageComponent> context={LoadingPageContext} value={loading}>
-            <ContextWrapper<PageComponent<{ error: RouteError }>>
-              context={ErrorPageContext}
-              value={error}>
+          <ContextWrapper<LoadingPageComponent> context={LoadingPageContext} value={loading}>
+            <ContextWrapper<ErrorPageComponent> context={ErrorPageContext} value={error}>
               <Guard name={path} component={component} meta={meta} render={render}>
                 {children}
               </Guard>

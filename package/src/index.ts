@@ -6,6 +6,8 @@ export {
   GuardFunction,
   GuardProviderProps,
   Next,
-  PageComponent,
   RouteError,
+  PageComponent,
+  LoadingPageComponentType,
+  ErrorPageComponentType,
 } from './types';

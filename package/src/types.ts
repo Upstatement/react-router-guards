@@ -56,12 +56,26 @@ export type GuardFunction = (
   from: GuardFunctionRouteProps | null,
   next: Next,
 ) => void;
+
 export type RouteError = string | null;
 
 /**
  * Page Component Types
  */
-export type PageComponent<P = {}> = ComponentType<P> | null | undefined | string | boolean | number;
+export type PageComponentType<P = {}> = ComponentType<RouteComponentProps & P>;
+export type PageComponent<P = {}> =
+  | PageComponentType<P>
+  | null
+  | undefined
+  | string
+  | boolean
+  | number;
+
+export type LoadingPageComponent = PageComponent;
+export type ErrorPageComponent = PageComponent<{ error: RouteError }>;
+
+export type LoadingPageComponentType = PageComponentType;
+export type ErrorPageComponentType = PageComponentType<{ error: RouteError }>;
 
 /**
  * Props
@@ -69,8 +83,8 @@ export type PageComponent<P = {}> = ComponentType<P> | null | undefined | string
 export interface BaseGuardProps {
   guards?: GuardFunction[];
   ignoreGlobal?: boolean;
-  loading?: PageComponent;
-  error?: PageComponent<{ error: RouteError }>;
+  loading?: LoadingPageComponent;
+  error?: ErrorPageComponent;
 }
 
 export type PropsWithMeta<T> = T & {
