@@ -1,7 +1,7 @@
 import React from 'react';
+import { ErrorPageComponentType } from 'react-router-guards';
 import { Link } from 'components';
 import styles from './notFound.module.scss';
-import { ErrorPageComponentType } from 'react-router-guards';
 
 const NotFound: ErrorPageComponentType = ({ error }) => (
   <div className={styles.container}>
