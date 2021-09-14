@@ -1,4 +1,5 @@
 [build]
+  ignore = "git log -1 --pretty=%B | grep dependabot"
   base = "."
   publish = "demos/intermediate/dist"
   command = "npm run bootstrap && npm run build:demo"
