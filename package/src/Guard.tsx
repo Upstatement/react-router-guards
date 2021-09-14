@@ -133,7 +133,7 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
       pageProps = props;
       routeRedirect = redirect;
     } catch (error) {
-      routeError = error || new Error('Not found.');
+      routeError = error;
     }
 
     if (currentRequests === getValidationsRequested()) {
