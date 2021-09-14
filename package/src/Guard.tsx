@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useMemo } from 'react';
 import { __RouterContext as RouterContext } from 'react-router';
-import { matchPath, Redirect, Route } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
 import { usePrevious, useStateRef, useStateWhenMounted } from './hooks';
 import renderPage from './renderPage';
@@ -133,8 +133,17 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
       const { props, redirect } = await resolveAllGuards();
       pageProps = props;
       routeRedirect = redirect;
+
+      // If there's a redirect, determine if it'll be infinite and throw error if so
+      if (routeRedirect) {
+        const redirectPath =
+          typeof routeRedirect === 'string' ? routeRedirect : routeRedirect.pathname;
+        if (redirectPath === routeProps.location.pathname) {
+          throw new Error('rrg/infinite-redirect');
+        }
+      }
     } catch (error) {
-      routeError = error.message || 'Not found.';
+      routeError = error.message || 'rrg/error';
     }
 
     if (currentRequests === getValidationsRequested()) {
@@ -171,11 +180,7 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
   } else if (routeError) {
     return renderPage(ErrorPage, { ...routeProps, error: routeError });
   } else if (routeRedirect) {
-    const pathToMatch = typeof routeRedirect === 'string' ? routeRedirect : routeRedirect.pathname;
-    const { path, isExact: exact } = routeProps.match;
-    if (pathToMatch && !matchPath(pathToMatch, { path, exact })) {
-      return <Redirect to={routeRedirect} />;
-    }
+    return <Redirect to={routeRedirect} />;
   }
   return (
     <RouterContext.Provider value={{ ...routeProps, ...pageProps }}>
