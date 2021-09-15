@@ -1,33 +1,11 @@
-import React, { useContext, useRef, useState, useEffect } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { __RouterContext as RouterContext, RouteComponentProps, withRouter } from 'react-router';
 import { Redirect, Route } from 'react-router-dom';
 import { ErrorPageContext, GuardContext, LoadingPageContext, FromRouteContext } from './contexts';
 import renderPage from './renderPage';
 import { GuardProps } from './types';
 import { GuardStatus, resolveGuards } from './resolveGuards';
-
-function usePreviousV2<T>(value: T, hasChanged: (from: T, to: T) => boolean) {
-  const ref = useRef<{ target: T; previous: T | null }>({ target: value, previous: null });
-
-  if (hasChanged(ref.current.target, value)) {
-    // The value changed.
-    ref.current.previous = ref.current.target;
-    ref.current.target = value;
-  }
-
-  return ref.current.previous;
-}
-
-function hasRouteChanged(
-  from: RouteComponentProps<Record<string, any>> | null,
-  to: RouteComponentProps<Record<string, any>>,
-) {
-  return (
-    !from ||
-    to.match.path !== from.match.path ||
-    Object.keys(to.match.params).some(key => to.match.params[key] !== from.match.params[key])
-  );
-}
+import { useRouteChangeEffect } from './hooks/useRouteChangeEffect';
 
 const Guard: React.FunctionComponent<GuardProps & RouteComponentProps<Record<string, any>>> = ({
   children,
@@ -58,51 +36,41 @@ const Guard: React.FunctionComponent<GuardProps & RouteComponentProps<Record<str
   let status = immutableStatus;
 
   const routeProps = { history, location, match };
-  const routePrevProps = usePreviousV2(routeProps, (from, to) => {
-    const hasChanged = hasRouteChanged(from, to);
-    if (hasChanged) {
-      // Determine the next guard status
-      const nextStatus = getInitialStatus();
-      // Update status for the *next* render
-      setStatus(nextStatus);
-      // Update status for the *current* render (based on the intention for the *next* render)
-      status = nextStatus;
-    }
-    return hasChanged;
-  });
-
   const fromRouteProps = useContext(FromRouteContext);
-  async function onRouteChangeAsync(signal: AbortSignal): Promise<void> {
+
+  const abortControllerRef = useRef<AbortController | null>(null);
+  useRouteChangeEffect(routeProps, async () => {
+    // Abort the previous validation when the route changes
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    // Determine the initial guard status for the new route
+    const nextStatus = getInitialStatus();
+    // Update status for the *next* render
+    setStatus(nextStatus); // TODO: prevent setState on unmount
+    // Update status for the *current* render (based on the intention for the *next* render)
+    status = nextStatus;
+
+    // Then start route's guard validation anew!
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
     try {
       // Resolve the guards to get the render status
       const status = await resolveGuards({
         guards: guards || [],
         toRoute: { ...routeProps, meta: meta || {} },
         fromRoute: fromRouteProps,
-        signal,
+        signal: abortController.signal,
       });
       // If the signal hasn't been aborted, set the new status!
-      if (!signal.aborted) {
-        setStatus(status);
+      if (!abortController.signal.aborted) {
+        setStatus(status); // TODO: prevent setState on unmount
       }
     } catch (error) {
       // Route has changed, wait until next function call..
     }
-  }
-
-  const abortControllerRef = useRef<AbortController | null>(null);
-  useEffect(() => {
-    if (hasRouteChanged(routePrevProps, routeProps)) {
-      // Abort the previous validation when the route changes
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
-      // Then start route's guard validation anew!
-      const abortController = new AbortController();
-      abortControllerRef.current = abortController;
-      onRouteChangeAsync(abortController.signal);
-    }
-  }, [routeProps.match.path, routeProps.match.params]);
+  });
 
   switch (status.type) {
     case 'redirect': {

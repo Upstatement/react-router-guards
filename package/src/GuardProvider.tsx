@@ -1,14 +1,15 @@
 import React, { useContext } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
-import { useGlobalGuards, usePrevious } from './hooks';
+import { useGlobalGuards } from './hooks';
 import { GuardProviderProps } from './types';
+import { useRouteChangeEffect } from './hooks/useRouteChangeEffect';
 
 const GuardProvider: React.FunctionComponent<
   GuardProviderProps & RouteComponentProps<Record<string, any>>
 > = ({ children, guards, ignoreGlobal, loading, error, history, location, match }) => {
-  const routeProps: RouteComponentProps = { history, location, match };
-  const fromRouteProps = usePrevious(routeProps);
+  const routeProps = { history, location, match };
+  const fromRouteProps = useRouteChangeEffect(routeProps, () => {});
 
   const providerGuards = useGlobalGuards(guards, ignoreGlobal);
 
