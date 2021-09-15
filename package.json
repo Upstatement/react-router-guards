@@ -48,10 +48,6 @@
     "*.{js,ts,tsx}": [
       "eslint --fix",
       "git add"
-    ],
-    "*.scss": [
-      "stylelint",
-      "git add"
     ]
   },
   "husky": {
