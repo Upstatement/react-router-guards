@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useMemo } from 'react';
-import { __RouterContext as RouterContext } from 'react-router';
+import { __RouterContext as RouterContext, RouteComponentProps } from 'react-router';
 import { matchPath, Redirect, Route } from 'react-router-dom';
 import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
 import { usePrevious, useStateRef, useStateWhenMounted } from './hooks';
@@ -25,12 +25,19 @@ interface GuardsResolve {
 }
 
 const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta, render }) => {
-  const routeProps = useContext(RouterContext);
+  const routeProps: RouteComponentProps<Record<string, any>> = useContext(RouterContext);
   const routePrevProps = usePrevious(routeProps);
-  const hasPathChanged = useMemo(
-    () => routeProps.location.pathname !== routePrevProps.location.pathname,
-    [routePrevProps, routeProps],
-  );
+  const hasRouteChanged = useMemo(() => {
+    // Check if the route path has changed
+    if (routeProps.match.path !== routePrevProps.match.path) {
+      return true;
+    }
+    // Check if the parameters have changed
+    return Object.keys(routeProps.match.params).some(
+      key => routeProps.match.params[key] !== routePrevProps.match.params[key],
+    );
+  }, [routePrevProps, routeProps]);
+
   const fromRouteProps = useContext(FromRouteContext);
 
   const guards = useContext(GuardContext);
@@ -150,7 +157,7 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
   }, []);
 
   useEffect(() => {
-    if (hasPathChanged) {
+    if (hasRouteChanged) {
       setValidationsRequested(requests => requests + 1);
       setRouteError(null);
       setRouteRedirect(null);
@@ -159,13 +166,13 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
         validateRoute();
       }
     }
-  }, [hasPathChanged]);
+  }, [hasRouteChanged]);
 
-  if (hasPathChanged) {
+  if (hasRouteChanged) {
     if (hasGuards) {
       return renderPage(LoadingPage, routeProps);
     }
-    return null;
+    // return null;
   } else if (!routeValidated.current) {
     return renderPage(LoadingPage, routeProps);
   } else if (routeError) {
