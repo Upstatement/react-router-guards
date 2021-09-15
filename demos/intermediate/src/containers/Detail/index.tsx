@@ -166,14 +166,16 @@ const Detail: React.FunctionComponent<Props> = ({
 
 export default Detail;
 
-export const beforeRouteEnter: GuardFunction = async (to, from, next) => {
+export const beforeRouteEnter: GuardFunction = async (to, from, next, signal) => {
   const { name } = to.match.params;
   try {
-    const pokemon = await api.get(name);
+    const pokemon = await api.get(name, { signal });
     next.props({
       pokemon: serializePokemon(pokemon),
     });
-  } catch {
-    throw new Error('Pokemon does not exist.');
+  } catch (error) {
+    if (error && error.name !== 'AbortError') {
+      throw new Error('Pokemon does not exist.');
+    }
   }
 };

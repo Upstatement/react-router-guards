@@ -3,24 +3,21 @@ import { LIST_FETCH_LIMIT } from 'utils/constants';
 
 const API_BASE_URL = 'https://pokeapi.co/api/v2';
 
-interface BasicResponse {
-  [key: string]: any;
-}
-
-const fetchFromAPI = async (
+async function fetchFromAPI<T>(
   endpoint: string,
   options?: Record<string, any>,
-): Promise<BasicResponse> => {
+  init?: RequestInit,
+): Promise<T> {
   let queryString = '';
   if (options) {
     queryString = Object.keys(options)
       .map(key => `${key}=${encodeURIComponent(options[key])}`)
       .join('&');
   }
-  const response = await fetch(`${API_BASE_URL}${endpoint}?${queryString}`);
+  const response = await fetch(`${API_BASE_URL}${endpoint}?${queryString}`, init);
   const data = response.json();
   return data;
-};
+}
 
 interface List {
   count: number;
@@ -30,13 +27,17 @@ interface List {
 }
 
 export default {
-  async list(offset: number) {
-    return fetchFromAPI('/pokemon', {
-      offset,
-      limit: LIST_FETCH_LIMIT,
-    }) as Promise<List>;
+  list(offset: number, init?: RequestInit) {
+    return fetchFromAPI<List>(
+      '/pokemon',
+      {
+        offset,
+        limit: LIST_FETCH_LIMIT,
+      },
+      init,
+    );
   },
-  get(identifier: string | number) {
-    return fetchFromAPI(`/pokemon/${identifier}`) as Promise<Pokemon>;
+  get(identifier: string | number, init?: RequestInit) {
+    return fetchFromAPI<Pokemon>(`/pokemon/${identifier}`, undefined, init);
   },
 };

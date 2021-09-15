@@ -27,21 +27,17 @@ const GuardedRoute: React.FunctionComponent<GuardedRouteProps> = ({
   const errorPage = useContext(ErrorPageContext);
 
   return (
-    <Route
-      path={path}
-      {...routeProps}
-      render={() => (
-        <GuardContext.Provider value={routeGuards}>
-          <LoadingPageContext.Provider value={loading || loadingPage}>
-            <ErrorPageContext.Provider value={error || errorPage}>
-              <Guard name={path} component={component} meta={meta} render={render}>
-                {children}
-              </Guard>
-            </ErrorPageContext.Provider>
-          </LoadingPageContext.Provider>
-        </GuardContext.Provider>
-      )}
-    />
+    <Route path={path} {...routeProps}>
+      <GuardContext.Provider value={routeGuards}>
+        <LoadingPageContext.Provider value={loading || loadingPage}>
+          <ErrorPageContext.Provider value={error || errorPage}>
+            <Guard name={path} component={component} meta={meta} render={render}>
+              {children}
+            </Guard>
+          </ErrorPageContext.Provider>
+        </LoadingPageContext.Provider>
+      </GuardContext.Provider>
+    </Route>
   );
 };
 

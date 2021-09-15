@@ -19,7 +19,7 @@ const Router: React.FunctionComponent<Props> = ({ children }) => (
           <GuardedRoute
             path="/:name"
             component={Detail}
-            guards={[waitOneSecond, detailBeforeEnter]}
+            guards={[detailBeforeEnter, waitOneSecond]}
           />
           <GuardedRoute path="*" component={NotFound} />
         </Switch>,

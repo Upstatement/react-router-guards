@@ -6,18 +6,8 @@ import { GuardProviderProps } from './types';
 
 const GuardProvider: React.FunctionComponent<
   GuardProviderProps & RouteComponentProps<Record<string, any>>
-> = ({
-  children,
-  guards,
-  ignoreGlobal,
-  loading,
-  error,
-  history,
-  location,
-  match,
-  staticContext,
-}) => {
-  const routeProps: RouteComponentProps = { history, location, match, staticContext };
+> = ({ children, guards, ignoreGlobal, loading, error, history, location, match }) => {
+  const routeProps: RouteComponentProps = { history, location, match };
   const fromRouteProps = usePrevious(routeProps);
 
   const providerGuards = useGlobalGuards(guards, ignoreGlobal);

@@ -7,39 +7,25 @@ import { RouteComponentProps, RouteProps } from 'react-router-dom';
  */
 export type Meta = Record<string, any>;
 export type RouteMatchParams = Record<string, string>;
-
-/**
- * Guard Function Types
- */
-export const GuardTypes = Object.freeze({
-  CONTINUE: 'CONTINUE',
-  PROPS: 'PROPS',
-  REDIRECT: 'REDIRECT',
-});
-
-export type GUARD_TYPES_CONTINUE = typeof GuardTypes.CONTINUE;
-export type GUARD_TYPES_PROPS = typeof GuardTypes.PROPS;
-export type GUARD_TYPES_REDIRECT = typeof GuardTypes.REDIRECT;
-export type GuardType = GUARD_TYPES_CONTINUE | GUARD_TYPES_PROPS | GUARD_TYPES_REDIRECT;
-
 export interface NextContinueAction {
-  type: GUARD_TYPES_CONTINUE;
+  type: 'continue';
   payload?: any;
 }
 
 export type NextPropsPayload = Record<string, any>;
 export interface NextPropsAction {
-  type: GUARD_TYPES_PROPS;
+  type: 'props';
   payload: NextPropsPayload;
 }
 
 export type NextRedirectPayload = LocationDescriptor;
 export interface NextRedirectAction {
-  type: GUARD_TYPES_REDIRECT;
+  type: 'redirect';
   payload: NextRedirectPayload;
 }
 
 export type NextAction = NextContinueAction | NextPropsAction | NextRedirectAction;
+export type GuardType = NextAction['type'];
 
 export interface Next {
   (): void;
@@ -55,6 +41,7 @@ export type GuardFunction = (
   to: GuardToRoute,
   from: GuardFunctionRouteProps | null,
   next: Next,
+  signal: AbortSignal,
 ) => void;
 
 /**
