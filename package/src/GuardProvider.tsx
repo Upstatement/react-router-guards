@@ -1,21 +1,25 @@
 import React, { useContext } from 'react';
-import { __RouterContext as RouterContext } from 'react-router';
-import invariant from 'tiny-invariant';
+import { withRouter, RouteComponentProps } from 'react-router';
 import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
 import { useGlobalGuards, usePrevious } from './hooks';
 import { GuardProviderProps } from './types';
 
-const GuardProvider: React.FunctionComponent<GuardProviderProps> = ({
+const GuardProvider: React.FunctionComponent<
+  GuardProviderProps & RouteComponentProps<Record<string, any>>
+> = ({
   children,
   guards,
   ignoreGlobal,
   loading,
   error,
+  history,
+  location,
+  match,
+  staticContext,
 }) => {
-  const routerContext = useContext(RouterContext);
-  invariant(!!routerContext, 'You should not use <GuardProvider> outside a <Router>');
+  const routeProps: RouteComponentProps = { history, location, match, staticContext };
+  const fromRouteProps = usePrevious(routeProps);
 
-  const from = usePrevious(routerContext);
   const providerGuards = useGlobalGuards(guards, ignoreGlobal);
 
   const loadingPage = useContext(LoadingPageContext);
@@ -25,16 +29,11 @@ const GuardProvider: React.FunctionComponent<GuardProviderProps> = ({
     <GuardContext.Provider value={providerGuards}>
       <LoadingPageContext.Provider value={loading || loadingPage}>
         <ErrorPageContext.Provider value={error || errorPage}>
-          <FromRouteContext.Provider value={from}>{children}</FromRouteContext.Provider>
+          <FromRouteContext.Provider value={fromRouteProps}>{children}</FromRouteContext.Provider>
         </ErrorPageContext.Provider>
       </LoadingPageContext.Provider>
     </GuardContext.Provider>
   );
 };
 
-GuardProvider.defaultProps = {
-  guards: [],
-  ignoreGlobal: false,
-};
-
-export default GuardProvider;
+export default withRouter(GuardProvider);

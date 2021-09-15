@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useMemo } from 'react';
-import { __RouterContext as RouterContext, RouteComponentProps } from 'react-router';
+import { __RouterContext as RouterContext, RouteComponentProps, withRouter } from 'react-router';
 import { matchPath, Redirect, Route } from 'react-router-dom';
 import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
 import { usePrevious, useStateRef, useStateWhenMounted } from './hooks';
@@ -14,6 +14,7 @@ import {
   NextPropsPayload,
   NextRedirectPayload,
 } from './types';
+import GuardProvider from './GuardProvider';
 
 type PageProps = NextPropsPayload;
 type RouteError = string | Record<string, any> | null;
@@ -24,8 +25,17 @@ interface GuardsResolve {
   redirect: RouteRedirect;
 }
 
-const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta, render }) => {
-  const routeProps: RouteComponentProps<Record<string, any>> = useContext(RouterContext);
+const Guard: React.FunctionComponent<GuardProps & RouteComponentProps<Record<string, any>>> = ({
+  children,
+  component,
+  meta,
+  render,
+  history,
+  location,
+  match,
+  staticContext,
+}) => {
+  const routeProps = { history, location, match, staticContext };
   const routePrevProps = usePrevious(routeProps);
   const hasRouteChanged = useMemo(() => {
     // Check if the route path has changed
@@ -186,11 +196,13 @@ const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta,
   }
   return (
     <RouterContext.Provider value={{ ...routeProps, ...pageProps }}>
-      <Route component={component} render={render}>
-        {children}
-      </Route>
+      <GuardProvider ignoreGlobal>
+        <Route component={component} render={render}>
+          {children}
+        </Route>
+      </GuardProvider>
     </RouterContext.Provider>
   );
 };
 
-export default Guard;
+export default withRouter(Guard);
