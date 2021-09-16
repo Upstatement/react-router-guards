@@ -1,19 +1,22 @@
 import React, { useContext } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, RouteProps } from 'react-router-dom';
 import invariant from 'tiny-invariant';
-import ContextWrapper from './ContextWrapper';
-import Guard from './Guard';
+import { Guard } from './Guard';
 import { ErrorPageContext, GuardContext, LoadingPageContext } from './contexts';
-import { useGlobalGuards } from './hooks';
-import { GuardedRouteProps, PageComponent } from './types';
+import { useGlobalGuards } from './useGlobalGuards';
+import { BaseGuardProps, Meta } from './types';
 
-const GuardedRoute: React.FunctionComponent<GuardedRouteProps> = ({
+export interface GuardedRouteProps extends BaseGuardProps, RouteProps {
+  meta?: Meta;
+}
+
+export const GuardedRoute: React.FunctionComponent<GuardedRouteProps> = ({
   children,
   component,
-  error,
+  error: errorPageOverride,
   guards,
   ignoreGlobal,
-  loading,
+  loading: loadingPageOverride,
   meta,
   render,
   path,
@@ -24,28 +27,22 @@ const GuardedRoute: React.FunctionComponent<GuardedRouteProps> = ({
 
   const routeGuards = useGlobalGuards(guards, ignoreGlobal);
 
+  const loadingPage = useContext(LoadingPageContext);
+  const errorPage = useContext(ErrorPageContext);
+
   return (
-    <Route
-      path={path}
-      {...routeProps}
-      render={() => (
-        <GuardContext.Provider value={routeGuards}>
-          <ContextWrapper<PageComponent> context={LoadingPageContext} value={loading}>
-            <ContextWrapper<PageComponent> context={ErrorPageContext} value={error}>
-              <Guard name={path} component={component} meta={meta} render={render}>
-                {children}
-              </Guard>
-            </ContextWrapper>
-          </ContextWrapper>
-        </GuardContext.Provider>
-      )}
-    />
+    <Route path={path} {...routeProps}>
+      <GuardContext.Provider value={routeGuards}>
+        <LoadingPageContext.Provider
+          value={typeof loadingPageOverride !== 'undefined' ? loadingPageOverride : loadingPage}>
+          <ErrorPageContext.Provider
+            value={typeof errorPageOverride !== 'undefined' ? errorPageOverride : errorPage}>
+            <Guard path={path} meta={meta} component={component} render={render}>
+              {children}
+            </Guard>
+          </ErrorPageContext.Provider>
+        </LoadingPageContext.Provider>
+      </GuardContext.Provider>
+    </Route>
   );
 };
-
-GuardedRoute.defaultProps = {
-  guards: [],
-  ignoreGlobal: false,
-};
-
-export default GuardedRoute;

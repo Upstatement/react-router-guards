@@ -1,189 +1,139 @@
-import React, { useCallback, useContext, useEffect, useMemo } from 'react';
-import { __RouterContext as RouterContext } from 'react-router';
-import { matchPath, Redirect, Route } from 'react-router-dom';
-import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
-import { usePrevious, useStateRef, useStateWhenMounted } from './hooks';
-import renderPage from './renderPage';
+import React, { useContext, useRef, useState, useEffect, Fragment, createElement } from 'react';
+import { RouteComponentProps, withRouter, RouteProps } from 'react-router';
+import { Redirect, Route } from 'react-router-dom';
 import {
-  GuardFunction,
-  GuardProps,
-  GuardType,
-  GuardTypes,
-  Next,
-  NextAction,
-  NextPropsPayload,
-  NextRedirectPayload,
-} from './types';
+  ErrorPageContext,
+  GuardContext,
+  LoadingPageContext,
+  FromRouteContext,
+  GuardDataContext,
+} from './contexts';
+import { resolveGuards, ResolvedGuardStatus } from './resolveGuards';
+import { useRouteChangeEffect } from './useRouteChangeEffect';
+import { Meta, Page, PageComponentType } from './types';
 
-type PageProps = NextPropsPayload;
-type RouteError = string | Record<string, any> | null;
-type RouteRedirect = NextRedirectPayload | null;
-
-interface GuardsResolve {
-  props: PageProps;
-  redirect: RouteRedirect;
+/**
+ * Type checks whether the given page is a React component type.
+ *
+ * @param page the page to type check
+ */
+export function isPageComponentType<P>(page: Page<P>): page is PageComponentType<P> {
+  return (
+    !!page && typeof page !== 'string' && typeof page !== 'boolean' && typeof page !== 'number'
+  );
 }
 
-const Guard: React.FunctionComponent<GuardProps> = ({ children, component, meta, render }) => {
-  const routeProps = useContext(RouterContext);
-  const routePrevProps = usePrevious(routeProps);
-  const hasPathChanged = useMemo(
-    () => routeProps.location.pathname !== routePrevProps.location.pathname,
-    [routePrevProps, routeProps],
-  );
-  const fromRouteProps = useContext(FromRouteContext);
+export interface GuardProps extends RouteProps {
+  meta?: Meta;
+}
+
+export const Guard = withRouter<GuardProps & RouteComponentProps>(function GuardWithRouter({
+  // Guard props
+  children,
+  component,
+  meta,
+  render,
+  // Route component props
+  history,
+  location,
+  match,
+  staticContext,
+}) {
+  // Track whether the component is mounted to prevent setting state after unmount
+  const isMountedRef = useRef(true);
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   const guards = useContext(GuardContext);
-  const LoadingPage = useContext(LoadingPageContext);
-  const ErrorPage = useContext(ErrorPageContext);
 
-  const hasGuards = useMemo(() => !!(guards && guards.length > 0), [guards]);
-  const [validationsRequested, setValidationsRequested] = useStateRef<number>(0);
-  const [routeValidated, setRouteValidated] = useStateRef<boolean>(!hasGuards);
-  const [routeError, setRouteError] = useStateWhenMounted<RouteError>(null);
-  const [routeRedirect, setRouteRedirect] = useStateWhenMounted<RouteRedirect>(null);
-  const [pageProps, setPageProps] = useStateWhenMounted<PageProps>({});
+  type GuardStatus = { type: 'resolving' } | ResolvedGuardStatus;
+  function getInitialStatus(): GuardStatus {
+    // If there are no guards in context, the route should immediately render
+    if (!guards || guards.length === 0) {
+      return { type: 'render', data: {} };
+    }
+    // Otherwise, the component should start resolving
+    return { type: 'resolving' };
+  }
+  // Create an immutable status state that React will track
+  const [immutableStatus, setStatus] = useState<GuardStatus>(getInitialStatus);
+  // Create a mutable status variable that we can change for the *current* render
+  let status = immutableStatus;
 
-  /**
-   * Memoized callback to get the current number of validations requested.
-   * This is used in order to see if new validations were requested in the
-   * middle of a validation execution.
-   */
-  const getValidationsRequested = useCallback(() => validationsRequested.current, [
-    validationsRequested,
-  ]);
+  const routeProps = { history, location, match, staticContext };
+  const fromRouteProps = useContext(FromRouteContext);
+  const routeChangeAbortControllerRef = useRef<AbortController | null>(null);
+  useRouteChangeEffect(routeProps, async () => {
+    // Abort the guard resolution from the previous route
+    if (routeChangeAbortControllerRef.current) {
+      routeChangeAbortControllerRef.current.abort();
+      routeChangeAbortControllerRef.current = null;
+    }
 
-  /**
-   * Memoized callback to get the next callback function used in guards.
-   * Assigns the `props` and `redirect` functions to callback.
-   */
-  const getNextFn = useCallback((resolve: Function): Next => {
-    const getResolveFn = (type: GuardType) => (payload: NextPropsPayload | NextRedirectPayload) =>
-      resolve({ type, payload });
+    // Determine the initial guard status for the new route
+    const nextStatus = getInitialStatus();
+    // Update status for the *next* render
+    if (isMountedRef.current) {
+      setStatus(nextStatus);
+    }
+    // Update status for the *current* render (based on the intention for the *next* render)
+    status = nextStatus;
 
-    const next = () => resolve({ type: GuardTypes.CONTINUE });
-
-    return Object.assign(next, {
-      props: getResolveFn(GuardTypes.PROPS),
-      redirect: getResolveFn(GuardTypes.REDIRECT),
-    });
-  }, []);
-
-  /**
-   * Runs through a single guard, passing it the current route's props,
-   * the previous route's props, and the next callback function. If an
-   * error occurs, it will be thrown by the Promise.
-   *
-   * @param guard the guard function
-   * @returns a Promise returning the guard payload
-   */
-  const runGuard = (guard: GuardFunction): Promise<NextAction> =>
-    new Promise(async (resolve, reject) => {
-      try {
-        const to = {
-          ...routeProps,
-          meta: meta || {},
-        };
-        await guard(to, fromRouteProps, getNextFn(resolve));
-      } catch (error) {
-        reject(error);
-      }
-    });
-
-  /**
-   * Loops through all guards in context. If the guard adds new props
-   * to the page or causes a redirect, these are tracked in the state
-   * constants defined above.
-   */
-  const resolveAllGuards = async (): Promise<GuardsResolve> => {
-    let index = 0;
-    let props = {};
-    let redirect = null;
-    if (guards) {
-      while (!redirect && index < guards.length) {
-        const { type, payload } = await runGuard(guards[index]);
-        if (payload) {
-          if (type === GuardTypes.REDIRECT) {
-            redirect = payload;
-          } else if (type === GuardTypes.PROPS) {
-            props = Object.assign(props, payload);
-          }
-        }
-        index += 1;
+    // If the next status is to resolve guards, do so!
+    if (status.type === 'resolving') {
+      const abortController = new AbortController();
+      routeChangeAbortControllerRef.current = abortController;
+      // Resolve the guards to get the render status
+      const resolvedStatus = await resolveGuards(guards || [], {
+        to: routeProps,
+        from: fromRouteProps,
+        meta: meta || {},
+        signal: abortController.signal,
+      });
+      // If the route hasn't changed during async resolution, set the newly resolved status!
+      if (isMountedRef.current && !abortController.signal.aborted) {
+        setStatus(resolvedStatus);
       }
     }
-    return {
-      props,
-      redirect,
-    };
-  };
+  });
 
-  /**
-   * Validates the route using the guards. If an error occurs, it
-   * will toggle the route error state.
-   */
-  const validateRoute = async (): Promise<void> => {
-    const currentRequests = validationsRequested.current;
+  const loadingPage = useContext(LoadingPageContext);
+  const errorPage = useContext(ErrorPageContext);
 
-    let pageProps: PageProps = {};
-    let routeError: RouteError = null;
-    let routeRedirect: RouteRedirect = null;
-
-    try {
-      const { props, redirect } = await resolveAllGuards();
-      pageProps = props;
-      routeRedirect = redirect;
-    } catch (error) {
-      routeError = error.message || 'Not found.';
+  switch (status.type) {
+    case 'redirect': {
+      return <Redirect to={status.redirect} />;
     }
 
-    if (currentRequests === getValidationsRequested()) {
-      setPageProps(pageProps);
-      setRouteError(routeError);
-      setRouteRedirect(routeRedirect);
-      setRouteValidated(true);
+    case 'render': {
+      return (
+        <GuardContext.Provider value={[]}>
+          <GuardDataContext.Provider value={status.data}>
+            <Route component={component} render={render}>
+              {children}
+            </Route>
+          </GuardDataContext.Provider>
+        </GuardContext.Provider>
+      );
     }
-  };
 
-  useEffect(() => {
-    validateRoute();
-  }, []);
-
-  useEffect(() => {
-    if (hasPathChanged) {
-      setValidationsRequested(requests => requests + 1);
-      setRouteError(null);
-      setRouteRedirect(null);
-      setRouteValidated(!hasGuards);
-      if (hasGuards) {
-        validateRoute();
+    case 'error': {
+      if (isPageComponentType(errorPage)) {
+        return createElement(errorPage, { ...routeProps, error: status.error });
       }
+      return <Fragment>{errorPage}</Fragment>;
     }
-  }, [hasPathChanged]);
 
-  if (hasPathChanged) {
-    if (hasGuards) {
-      return renderPage(LoadingPage, routeProps);
-    }
-    return null;
-  } else if (!routeValidated.current) {
-    return renderPage(LoadingPage, routeProps);
-  } else if (routeError) {
-    return renderPage(ErrorPage, { ...routeProps, error: routeError });
-  } else if (routeRedirect) {
-    const pathToMatch = typeof routeRedirect === 'string' ? routeRedirect : routeRedirect.pathname;
-    const { path, isExact: exact } = routeProps.match;
-    if (pathToMatch && !matchPath(pathToMatch, { path, exact })) {
-      return <Redirect to={routeRedirect} />;
+    case 'resolving':
+    default: {
+      if (isPageComponentType(loadingPage)) {
+        return createElement(loadingPage, routeProps);
+      }
+      return <Fragment>{loadingPage}</Fragment>;
     }
   }
-  return (
-    <RouterContext.Provider value={{ ...routeProps, ...pageProps }}>
-      <Route component={component} render={render}>
-        {children}
-      </Route>
-    </RouterContext.Provider>
-  );
-};
-
-export default Guard;
+});

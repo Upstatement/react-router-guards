@@ -1,83 +1,89 @@
 import { ComponentType } from 'react';
 import { LocationDescriptor } from 'history';
-import { RouteComponentProps, RouteProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 
-/**
- * General
- */
+///////////////////////////////
+// General
+///////////////////////////////
 export type Meta = Record<string, any>;
-export type RouteMatchParams = Record<string, string>;
 
-/**
- * Guard Function Types
- */
-export const GuardTypes = Object.freeze({
-  CONTINUE: 'CONTINUE',
-  PROPS: 'PROPS',
-  REDIRECT: 'REDIRECT',
-});
-
-export type GUARD_TYPES_CONTINUE = typeof GuardTypes.CONTINUE;
-export type GUARD_TYPES_PROPS = typeof GuardTypes.PROPS;
-export type GUARD_TYPES_REDIRECT = typeof GuardTypes.REDIRECT;
-export type GuardType = GUARD_TYPES_CONTINUE | GUARD_TYPES_PROPS | GUARD_TYPES_REDIRECT;
-
+///////////////////////////////
+// Next Functions
+///////////////////////////////
 export interface NextContinueAction {
-  type: GUARD_TYPES_CONTINUE;
-  payload?: any;
+  type: 'continue';
 }
 
-export type NextPropsPayload = Record<string, any>;
-export interface NextPropsAction {
-  type: GUARD_TYPES_PROPS;
-  payload: NextPropsPayload;
+export type NextDataPayload = Record<string, any>;
+export interface NextDataAction {
+  type: 'data';
+  payload: NextDataPayload;
 }
 
 export type NextRedirectPayload = LocationDescriptor;
 export interface NextRedirectAction {
-  type: GUARD_TYPES_REDIRECT;
+  type: 'redirect';
   payload: NextRedirectPayload;
 }
 
-export type NextAction = NextContinueAction | NextPropsAction | NextRedirectAction;
+export type NextAction = NextContinueAction | NextDataAction | NextRedirectAction;
 
-export interface Next {
-  (): void;
-  props(props: NextPropsPayload): void;
-  redirect(to: LocationDescriptor): void;
+export interface NextFunction<Data extends {}> {
+  /** Resolve the guard and continue to the next, if any. */
+  (): NextContinueAction;
+  /** Pass the data to the resolved route and continue to the next, if any. */
+  data(data: Data): NextDataAction;
+  /** Redirect to the given route. */
+  redirect(to: LocationDescriptor): NextRedirectAction;
 }
 
-export type GuardFunctionRouteProps = RouteComponentProps<RouteMatchParams>;
-export type GuardToRoute = GuardFunctionRouteProps & {
+///////////////////////////////
+// Guards
+///////////////////////////////
+export interface GuardFunctionContext {
+  /** The route being navigated to. */
+  to: RouteComponentProps<Record<string, any>>;
+  /** The route being navigated from, if any. */
+  from: RouteComponentProps<Record<string, string>> | null;
+  /** Metadata attached on the `to` route. */
   meta: Meta;
-};
-export type GuardFunction = (
-  to: GuardToRoute,
-  from: GuardFunctionRouteProps | null,
-  next: Next,
-) => void;
-
-/**
- * Page Component Types
- */
-export type PageComponent = ComponentType | null | undefined | string | boolean | number;
-
-/**
- * Props
- */
-export interface BaseGuardProps {
-  guards?: GuardFunction[];
-  ignoreGlobal?: boolean;
-  loading?: PageComponent;
-  error?: PageComponent;
+  /**
+   * A signal that determines if the current guard resolution has been aborted.
+   *
+   * Attach to `fetch` calls to cancel outdated requests before they're resolved.
+   */
+  signal: AbortSignal;
 }
 
-export type PropsWithMeta<T> = T & {
-  meta?: Meta;
-};
+export type GuardFunction<Data extends {} = {}> = (
+  /** Context for this guard's execution */
+  context: GuardFunctionContext,
+  /** The guard's next function */
+  next: NextFunction<Data>,
+) => NextAction | Promise<NextAction>;
 
-export type GuardProviderProps = BaseGuardProps;
-export type GuardedRouteProps = PropsWithMeta<BaseGuardProps & RouteProps>;
-export type GuardProps = PropsWithMeta<RouteProps> & {
-  name?: string | string[];
-};
+///////////////////////////////
+// Page Types
+///////////////////////////////
+export type PageComponentType<P = {}> = ComponentType<RouteComponentProps & P>;
+export type Page<P = {}> = PageComponentType<P> | null | string | boolean | number;
+
+export type LoadingPage = Page;
+export type ErrorPage = Page<{ error: unknown }>;
+
+export type LoadingPageComponentType = PageComponentType;
+export type ErrorPageComponentType = PageComponentType<{ error: unknown }>;
+
+///////////////////////////////
+// Props
+///////////////////////////////
+export interface BaseGuardProps {
+  /** Guards to attach as middleware. */
+  guards?: GuardFunction[];
+  /** Whether to ignore guards attached to parent providers. */
+  ignoreGlobal?: boolean;
+  /** A custom loading page component. */
+  loading?: LoadingPage;
+  /** A custom error page component. */
+  error?: ErrorPage;
+}

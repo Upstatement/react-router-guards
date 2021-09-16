@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Waypoint } from 'react-waypoint';
 import { Link } from 'components';
 import { Pokeball } from 'svgs';
@@ -23,15 +23,23 @@ const List = () => {
       name,
     }));
 
-  const getPokemon = useCallback(async () => {
-    const { next, results: newResults } = await api.list(offset);
-    setResults([...results, ...serializeResults(newResults)]);
-    setHasMore(!!next);
-    setOffset(offset + LIST_FETCH_LIMIT);
-  }, [results, offset]);
+  const getPokemon = async (signal?: AbortSignal) => {
+    try {
+      const { next, results: newResults } = await api.list(offset, { signal });
+      setResults([...results, ...serializeResults(newResults)]);
+      setHasMore(!!next);
+      setOffset(offset + LIST_FETCH_LIMIT);
+    } catch {
+      // Do nothing on error...
+    }
+  };
 
   useEffect(() => {
-    getPokemon();
+    const abortController = new AbortController();
+    getPokemon(abortController.signal);
+    return () => {
+      abortController.abort();
+    };
   }, []);
 
   return (
@@ -51,7 +59,7 @@ const List = () => {
           </Fragment>
         ))}
       </ul>
-      <Waypoint onEnter={getPokemon} />
+      <Waypoint onEnter={() => getPokemon()} />
       {hasMore && (
         <div className={styles.loader}>
           <Pokeball isAnimated />

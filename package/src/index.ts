@@ -1,10 +1,11 @@
-export { default as GuardProvider } from './GuardProvider';
-export { default as GuardedRoute } from './GuardedRoute';
+export { GuardProvider, GuardProviderProps } from './GuardProvider';
+export { GuardedRoute, GuardedRouteProps } from './GuardedRoute';
+export { useGuardData } from './useGuardData';
 export {
   BaseGuardProps,
-  GuardedRouteProps,
   GuardFunction,
-  GuardProviderProps,
-  Next,
-  PageComponent,
+  NextFunction,
+  Page,
+  LoadingPageComponentType,
+  ErrorPageComponentType,
 } from './types';

@@ -39,11 +39,28 @@
 
 .types {
   display: flex;
-  margin-bottom: $spacing--xl;
+  margin-bottom: $spacing--md;
 }
 
 .types-item {
   margin-right: $spacing--sm;
+}
+
+.links {
+  display: flex;
+  margin-bottom: $spacing--lg;
+}
+
+.links-item {
+  &:not(:last-child) {
+    margin-right: $spacing--md;
+  }
+}
+
+.content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
 }
 
 .physique {

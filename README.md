@@ -34,13 +34,13 @@ This package has the following [peer dependencies](https://docs.npmjs.com/files/
 With [npm](https://www.npmjs.com):
 
 ```shell
-$ npm install react-router-guards
+npm install react-router-guards
 ```
 
 With [yarn](https://yarnpkg.com/):
 
 ```shell
-$ yarn add react-router-guards
+yarn add react-router-guards
 ```
 
 Then with a module bundler like [webpack](https://webpack.github.io/), use as you would anything else:
@@ -56,38 +56,55 @@ const GuardedRoute = require('react-router-guards').GuardedRoute;
 
 ## Basic usage
 
-Here is a very basic example of how to use React Router Guards.
+Here is a basic example of how to use React Router Guards.
 
 ```jsx
-import React from 'react';
+// src/pages/ProjectDetail.js
+import { useGuardData } from 'react-router-guards';
+
+export function ProjectDetail() {
+  const { project } = useGuardData();
+
+  return (
+    <div>
+      <h1>{project.title}</h1>
+    </div>
+  );
+}
+
+export async function getProjectDetailData(ctx, next) {
+  const { id } = ctx.to.match.params;
+  const project = await api.projects.get(id);
+  return next.data({ project });
+}
+```
+
+```jsx
+// src/app.js
 import { BrowserRouter } from 'react-router-dom';
 import { GuardProvider, GuardedRoute } from 'react-router-guards';
-import { About, Home, Loading, Login, NotFound } from 'pages';
-import { getIsLoggedIn } from 'utils';
+import { Home, Loading, NotFound } from './pages';
+import { ProjectDetail, getProjectDetailData } from './pages/ProjectDetail';
+import { api } from './utils';
 
-const requireLogin = (to, from, next) => {
-  if (to.meta.auth) {
-    if (getIsLoggedIn()) {
-      next();
-    }
-    next.redirect('/login');
-  } else {
-    next();
-  }
-};
-
-const App = () => (
-  <BrowserRouter>
-    <GuardProvider guards={[requireLogin]} loading={Loading} error={NotFound}>
-      <Switch>
-        <GuardedRoute path="/login" exact component={Login} />
-        <GuardedRoute path="/" exact component={Home} meta={{ auth: true }} />
-        <GuardedRoute path="/about" exact component={About} meta={{ auth: true }} />
-        <GuardedRoute path="*" component={NotFound} />
-      </Switch>
-    </GuardProvider>
-  </BrowserRouter>
-);
+function App() {
+  return (
+    <BrowserRouter>
+      <GuardProvider loading={Loading} error={NotFound}>
+        <Switch>
+          <GuardedRoute path="/" exact component={Home} />
+          <GuardedRoute
+            path="/project/:id"
+            exact
+            component={ProjectDetail}
+            guards={[getProjectDetailData]}
+          />
+          <GuardedRoute path="*" component={NotFound} />
+        </Switch>
+      </GuardProvider>
+    </BrowserRouter>
+  );
+}
 ```
 
 Check out our [demos](#demos) for more examples!

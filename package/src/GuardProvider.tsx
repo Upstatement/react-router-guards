@@ -1,40 +1,51 @@
 import React, { useContext } from 'react';
-import { __RouterContext as RouterContext } from 'react-router';
-import invariant from 'tiny-invariant';
+import { withRouter, RouteComponentProps } from 'react-router';
 import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
-import { useGlobalGuards, usePrevious } from './hooks';
-import { GuardProviderProps } from './types';
+import { useGlobalGuards } from './useGlobalGuards';
+import { BaseGuardProps } from './types';
+import { useRouteChangeEffect } from './useRouteChangeEffect';
 
-const GuardProvider: React.FunctionComponent<GuardProviderProps> = ({
-  children,
-  guards,
-  ignoreGlobal,
-  loading,
-  error,
-}) => {
-  const routerContext = useContext(RouterContext);
-  invariant(!!routerContext, 'You should not use <GuardProvider> outside a <Router>');
+export type GuardProviderProps = BaseGuardProps;
 
-  const from = usePrevious(routerContext);
-  const providerGuards = useGlobalGuards(guards, ignoreGlobal);
+export const GuardProvider = withRouter<GuardProviderProps & RouteComponentProps>(
+  function GuardProviderWithRouter({
+    // Guard provider props
+    children,
+    guards,
+    ignoreGlobal,
+    loading: loadingPageOverride,
+    error: errorPageOverride,
+    // Route component props
+    history,
+    location,
+    match,
+    staticContext,
+  }) {
+    const routeProps = { history, location, match, staticContext };
+    const fromRouteProps = useRouteChangeEffect(routeProps, () => {});
+    const parentFromRouteProps = useContext(FromRouteContext);
 
-  const loadingPage = useContext(LoadingPageContext);
-  const errorPage = useContext(ErrorPageContext);
+    const providerGuards = useGlobalGuards(guards, ignoreGlobal);
 
-  return (
-    <GuardContext.Provider value={providerGuards}>
-      <LoadingPageContext.Provider value={loading || loadingPage}>
-        <ErrorPageContext.Provider value={error || errorPage}>
-          <FromRouteContext.Provider value={from}>{children}</FromRouteContext.Provider>
-        </ErrorPageContext.Provider>
-      </LoadingPageContext.Provider>
-    </GuardContext.Provider>
-  );
-};
+    const loadingPage = useContext(LoadingPageContext);
+    const errorPage = useContext(ErrorPageContext);
 
-GuardProvider.defaultProps = {
-  guards: [],
-  ignoreGlobal: false,
-};
-
-export default GuardProvider;
+    return (
+      <GuardContext.Provider value={providerGuards}>
+        <LoadingPageContext.Provider
+          value={typeof loadingPageOverride !== 'undefined' ? loadingPageOverride : loadingPage}>
+          <ErrorPageContext.Provider
+            value={typeof errorPageOverride !== 'undefined' ? errorPageOverride : errorPage}>
+            {/**
+             * Prioritize the parent FromRoute props over the child (which uses the closest Route's match)
+             * https://reactrouter.com/web/api/withRouter
+             */}
+            <FromRouteContext.Provider value={parentFromRouteProps || fromRouteProps}>
+              {children}
+            </FromRouteContext.Provider>
+          </ErrorPageContext.Provider>
+        </LoadingPageContext.Provider>
+      </GuardContext.Provider>
+    );
+  },
+);
