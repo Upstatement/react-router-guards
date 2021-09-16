@@ -7,7 +7,7 @@ import {
 } from 'react-router';
 import { Redirect, Route } from 'react-router-dom';
 import { ErrorPageContext, GuardContext, LoadingPageContext, FromRouteContext } from './contexts';
-import { GuardStatus, resolveGuards } from './resolveGuards';
+import { resolveGuards, ResolvedGuardStatus } from './resolveGuards';
 import { useRouteChangeEffect } from './useRouteChangeEffect';
 import { Meta, Page, PageComponentType } from './types';
 
@@ -16,7 +16,7 @@ import { Meta, Page, PageComponentType } from './types';
  *
  * @param page the page to type check
  */
-function isPageComponentType<P>(page: Page<P>): page is PageComponentType<P> {
+export function isPageComponentType<P>(page: Page<P>): page is PageComponentType<P> {
   return (
     !!page && typeof page !== 'string' && typeof page !== 'boolean' && typeof page !== 'number'
   );
@@ -27,13 +27,16 @@ export interface GuardProps extends RouteProps {
 }
 
 export const Guard = withRouter<GuardProps & RouteComponentProps>(function GuardWithRouter({
+  // Guard props
   children,
   component,
   meta,
   render,
+  // Route component props
   history,
   location,
   match,
+  staticContext,
 }) {
   // Track whether the component is mounted to prevent setting state after unmount
   const isMountedRef = useRef(true);
@@ -45,6 +48,8 @@ export const Guard = withRouter<GuardProps & RouteComponentProps>(function Guard
   }, []);
 
   const guards = useContext(GuardContext);
+
+  type GuardStatus = { type: 'resolving' } | ResolvedGuardStatus;
   function getInitialStatus(): GuardStatus {
     // If there are no guards in context, the route should immediately render
     if (!guards || guards.length === 0) {
@@ -58,7 +63,7 @@ export const Guard = withRouter<GuardProps & RouteComponentProps>(function Guard
   // Create a mutable status variable that we can change for the *current* render
   let status = immutableStatus;
 
-  const routeProps = { history, location, match };
+  const routeProps = { history, location, match, staticContext };
   const fromRouteProps = useContext(FromRouteContext);
   const routeChangeAbortControllerRef = useRef<AbortController | null>(null);
   useRouteChangeEffect(routeProps, async () => {
@@ -84,9 +89,12 @@ export const Guard = withRouter<GuardProps & RouteComponentProps>(function Guard
       try {
         // Resolve the guards to get the render status
         const status = await resolveGuards(guards || [], {
-          to: { ...routeProps, meta: meta || {} },
+          to: routeProps,
           from: fromRouteProps,
-          signal: abortController.signal,
+          context: {
+            meta: meta || {},
+            signal: abortController.signal,
+          },
         });
         // If the signal hasn't been aborted, set the new status!
         if (isMountedRef.current && !abortController.signal.aborted) {

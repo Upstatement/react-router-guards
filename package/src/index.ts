@@ -3,7 +3,7 @@ export { GuardedRoute, GuardedRouteProps } from './GuardedRoute';
 export {
   BaseGuardProps,
   GuardFunction,
-  Next,
+  NextFunction,
   Page,
   LoadingPageComponentType,
   ErrorPageComponentType,

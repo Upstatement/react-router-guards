@@ -28,31 +28,44 @@ export interface NextRedirectAction {
 
 export type NextAction = NextContinueAction | NextPropsAction | NextRedirectAction;
 
-export interface Next<Props extends {}> {
+export interface NextFunction<Props extends {}> {
+  /** Resolve the guard and continue to the next, if any. */
   (): void;
+  /** Pass the props to the resolved route and continue to the next, if any. */
   props(props: Props): void;
+  /** Redirect to the given route. */
   redirect(to: LocationDescriptor): void;
 }
 
 ///////////////////////////////
 // Guards
 ///////////////////////////////
-export type GuardFunctionRouteProps = RouteComponentProps<Record<string, any>>;
-export type GuardToRoute = GuardFunctionRouteProps & {
+export interface GuardFunctionContext {
+  /** Metadata attached on the `to` route. */
   meta: Meta;
-};
+  /**
+   * A signal that determines if the current guard resolution has been aborted.
+   * Attach to fetch calls to cancel outdated requests before they're resolved.
+   */
+  signal: AbortSignal;
+}
+
 export type GuardFunction<Props extends {} = {}> = (
-  to: GuardToRoute,
-  from: GuardFunctionRouteProps | null,
-  next: Next<Props>,
-  signal: AbortSignal,
+  /** The route being navigated to. */
+  to: RouteComponentProps<Record<string, any>>,
+  /** The route being navigated from, if any */
+  from: RouteComponentProps<Record<string, any>> | null,
+  /** The guard's next function */
+  next: NextFunction<Props>,
+  /** Context for this guard's execution */
+  context: GuardFunctionContext,
 ) => void;
 
 ///////////////////////////////
 // Page Types
 ///////////////////////////////
 export type PageComponentType<P = {}> = ComponentType<RouteComponentProps & P>;
-export type Page<P = {}> = PageComponentType<P> | null | undefined | string | boolean | number;
+export type Page<P = {}> = PageComponentType<P> | null | string | boolean | number;
 
 export type LoadingPage = Page;
 export type ErrorPage = Page<{ error: unknown }>;
@@ -64,8 +77,12 @@ export type ErrorPageComponentType = PageComponentType<{ error: unknown }>;
 // Props
 ///////////////////////////////
 export interface BaseGuardProps {
+  /** Guards to attach as middleware. */
   guards?: GuardFunction[];
+  /** Whether to ignore guards attached to parent providers. */
   ignoreGlobal?: boolean;
+  /** A custom loading page component. */
   loading?: LoadingPage;
+  /** A custom error page component. */
   error?: ErrorPage;
 }

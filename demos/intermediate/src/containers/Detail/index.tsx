@@ -170,16 +170,16 @@ export const beforeRouteEnter: GuardFunction<{ pokemon: SerializedPokemon }> = a
   to,
   from,
   next,
-  signal,
+  ctx,
 ) => {
   const { name } = to.match.params;
   try {
-    const pokemon = await api.get(name, { signal });
+    const pokemon = await api.get(name, { signal: ctx.signal });
     next.props({
       pokemon: serializePokemon(pokemon),
     });
   } catch (error) {
-    if (!(error && error.name === 'AbortError')) {
+    if (error.name !== 'AbortError') {
       throw new Error('Pokemon does not exist.');
     }
   }

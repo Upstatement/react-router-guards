@@ -1,11 +1,11 @@
 import { RouteComponentProps } from 'react-router';
 import {
   GuardFunction,
-  Next,
+  NextFunction,
   NextAction,
   NextPropsPayload,
   NextRedirectPayload,
-  GuardToRoute,
+  GuardFunctionContext,
 } from './types';
 
 export type ResolvedGuardStatus =
@@ -13,19 +13,17 @@ export type ResolvedGuardStatus =
   | { type: 'redirect'; redirect: NextRedirectPayload }
   | { type: 'render'; props: NextPropsPayload };
 
-export type GuardStatus = { type: 'resolving' } | ResolvedGuardStatus;
-
 export interface ResolveGuardsContext {
-  to: GuardToRoute;
+  to: RouteComponentProps<Record<string, string>>;
   from: RouteComponentProps<Record<string, string>> | null;
-  signal: AbortSignal;
+  context: GuardFunctionContext;
 }
 
-const NextFunctionFactory = {
+export const NextFunctionFactory = {
   /**
    * Builds a new next function using the given `resolve` callback.
    */
-  build: (resolve: (action: NextAction) => void): Next<{}> => {
+  build: (resolve: (action: NextAction) => void): NextFunction<{}> => {
     function next() {
       resolve({ type: 'continue' });
     }
@@ -49,10 +47,10 @@ const NextFunctionFactory = {
  * @param context the context of this guard's resolution
  * @returns a Promise returning the resolved guard action
  */
-function runGuard(guard: GuardFunction, context: ResolveGuardsContext): Promise<NextAction> {
+export function runGuard(guard: GuardFunction, context: ResolveGuardsContext): Promise<NextAction> {
   return new Promise<NextAction>(async (resolve, reject) => {
     try {
-      await guard(context.to, context.from, NextFunctionFactory.build(resolve), context.signal);
+      await guard(context.to, context.from, NextFunctionFactory.build(resolve), context.context);
     } catch (error) {
       reject(error);
     }

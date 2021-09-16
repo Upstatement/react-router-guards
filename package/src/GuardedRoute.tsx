@@ -13,10 +13,10 @@ export interface GuardedRouteProps extends BaseGuardProps, RouteProps {
 export const GuardedRoute: React.FunctionComponent<GuardedRouteProps> = ({
   children,
   component,
-  error,
+  error: errorPageOverride,
   guards,
   ignoreGlobal,
-  loading,
+  loading: loadingPageOverride,
   meta,
   render,
   path,
@@ -33,8 +33,10 @@ export const GuardedRoute: React.FunctionComponent<GuardedRouteProps> = ({
   return (
     <Route path={path} {...routeProps}>
       <GuardContext.Provider value={routeGuards}>
-        <LoadingPageContext.Provider value={loading || loadingPage}>
-          <ErrorPageContext.Provider value={error || errorPage}>
+        <LoadingPageContext.Provider
+          value={typeof loadingPageOverride !== 'undefined' ? loadingPageOverride : loadingPage}>
+          <ErrorPageContext.Provider
+            value={typeof errorPageOverride !== 'undefined' ? errorPageOverride : errorPage}>
             <Guard path={path} meta={meta} component={component} render={render}>
               {children}
             </Guard>
