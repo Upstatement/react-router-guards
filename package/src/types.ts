@@ -30,36 +30,37 @@ export type NextAction = NextContinueAction | NextDataAction | NextRedirectActio
 
 export interface NextFunction<Data extends {}> {
   /** Resolve the guard and continue to the next, if any. */
-  (): void;
+  (): NextContinueAction;
   /** Pass the data to the resolved route and continue to the next, if any. */
-  data(data: Data): void;
+  data(data: Data): NextDataAction;
   /** Redirect to the given route. */
-  redirect(to: LocationDescriptor): void;
+  redirect(to: LocationDescriptor): NextRedirectAction;
 }
 
 ///////////////////////////////
 // Guards
 ///////////////////////////////
 export interface GuardFunctionContext {
+  /** The route being navigated to. */
+  to: RouteComponentProps<Record<string, any>>;
+  /** The route being navigated from, if any. */
+  from: RouteComponentProps<Record<string, string>> | null;
   /** Metadata attached on the `to` route. */
   meta: Meta;
   /**
    * A signal that determines if the current guard resolution has been aborted.
-   * Attach to fetch calls to cancel outdated requests before they're resolved.
+   *
+   * Attach to `fetch` calls to cancel outdated requests before they're resolved.
    */
   signal: AbortSignal;
 }
 
 export type GuardFunction<Data extends {} = {}> = (
-  /** The route being navigated to. */
-  to: RouteComponentProps<Record<string, any>>,
-  /** The route being navigated from, if any */
-  from: RouteComponentProps<Record<string, any>> | null,
-  /** The guard's next function */
-  next: NextFunction<Data>,
   /** Context for this guard's execution */
   context: GuardFunctionContext,
-) => void;
+  /** The guard's next function */
+  next: NextFunction<Data>,
+) => NextAction | Promise<NextAction>;
 
 ///////////////////////////////
 // Page Types

@@ -87,22 +87,16 @@ export const Guard = withRouter<GuardProps & RouteComponentProps>(function Guard
     if (status.type === 'resolving') {
       const abortController = new AbortController();
       routeChangeAbortControllerRef.current = abortController;
-      try {
-        // Resolve the guards to get the render status
-        const status = await resolveGuards(guards || [], {
-          to: routeProps,
-          from: fromRouteProps,
-          context: {
-            meta: meta || {},
-            signal: abortController.signal,
-          },
-        });
-        // If the signal hasn't been aborted, set the new status!
-        if (isMountedRef.current && !abortController.signal.aborted) {
-          setStatus(status);
-        }
-      } catch (error) {
-        // Route has changed, wait until the effect runs again...
+      // Resolve the guards to get the render status
+      const status = await resolveGuards(guards || [], {
+        to: routeProps,
+        from: fromRouteProps,
+        meta: meta || {},
+        signal: abortController.signal,
+      });
+      // If the signal hasn't been aborted, set the new status!
+      if (isMountedRef.current && !abortController.signal.aborted) {
+        setStatus(status);
       }
     }
   });

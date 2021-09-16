@@ -23,7 +23,7 @@ const List = () => {
       name,
     }));
 
-  const getPokemon = async (signal: AbortSignal) => {
+  const getPokemon = async (signal?: AbortSignal) => {
     try {
       const { next, results: newResults } = await api.list(offset, { signal });
       setResults([...results, ...serializeResults(newResults)]);
@@ -59,7 +59,7 @@ const List = () => {
           </Fragment>
         ))}
       </ul>
-      <Waypoint onEnter={getPokemon} />
+      <Waypoint onEnter={() => getPokemon()} />
       {hasMore && (
         <div className={styles.loader}>
           <Pokeball isAnimated />

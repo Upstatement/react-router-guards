@@ -167,15 +167,17 @@ const Detail: React.FunctionComponent = () => {
 
 export default Detail;
 
-export const beforeRouteEnter: GuardFunction<DetailGuardData> = async (to, from, next, ctx) => {
-  const { name } = to.match.params;
+export const beforeRouteEnter: GuardFunction<DetailGuardData> = async (ctx, next) => {
+  const { name } = ctx.to.match.params;
   try {
     const pokemon = await api.get(name, { signal: ctx.signal });
-    next.data({
+    return next.data({
       pokemon: serializePokemon(pokemon),
     });
   } catch (error) {
-    if (error.name !== 'AbortError') {
+    if (error.name === 'AbortError') {
+      throw error;
+    } else {
       throw new Error('Pokemon does not exist.');
     }
   }
