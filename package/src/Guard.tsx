@@ -8,7 +8,7 @@ import {
 import { Redirect, Route } from 'react-router-dom';
 import { ErrorPageContext, GuardContext, LoadingPageContext, FromRouteContext } from './contexts';
 import { GuardStatus, resolveGuards } from './resolveGuards';
-import { useRouteChangeEffect } from './hooks/useRouteChangeEffect';
+import { useRouteChangeEffect } from './useRouteChangeEffect';
 import { Meta, Page, PageComponentType } from './types';
 
 /**

@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
-import { useGlobalGuards } from './hooks/useGlobalGuards';
+import { useGlobalGuards } from './useGlobalGuards';
 import { BaseGuardProps } from './types';
-import { useRouteChangeEffect } from './hooks/useRouteChangeEffect';
+import { useRouteChangeEffect } from './useRouteChangeEffect';
 
 export type GuardProviderProps = BaseGuardProps;
 

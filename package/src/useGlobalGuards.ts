@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import { GuardContext } from '../contexts';
-import { GuardFunction } from '../types';
+import { GuardContext } from './contexts';
+import { GuardFunction } from './types';
 
 /**
  * React hook for creating the guards array for a Guarded

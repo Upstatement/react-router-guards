@@ -3,7 +3,7 @@ import { Route, RouteProps } from 'react-router-dom';
 import invariant from 'tiny-invariant';
 import { Guard } from './Guard';
 import { ErrorPageContext, GuardContext, LoadingPageContext } from './contexts';
-import { useGlobalGuards } from './hooks/useGlobalGuards';
+import { useGlobalGuards } from './useGlobalGuards';
 import { BaseGuardProps, Meta } from './types';
 
 export interface GuardedRouteProps extends BaseGuardProps, RouteProps {
