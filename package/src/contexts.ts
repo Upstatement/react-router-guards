@@ -8,4 +8,6 @@ export const FromRouteContext = createContext<RouteComponentProps | null>(null);
 
 export const GuardContext = createContext<GuardFunction[] | null>(null);
 
+export const GuardDataContext = createContext({});
+
 export const LoadingPageContext = createContext<LoadingPage>(null);

@@ -14,10 +14,10 @@ export interface NextContinueAction {
   type: 'continue';
 }
 
-export type NextPropsPayload = Record<string, any>;
-export interface NextPropsAction {
-  type: 'props';
-  payload: NextPropsPayload;
+export type NextDataPayload = Record<string, any>;
+export interface NextDataAction {
+  type: 'data';
+  payload: NextDataPayload;
 }
 
 export type NextRedirectPayload = LocationDescriptor;
@@ -26,13 +26,13 @@ export interface NextRedirectAction {
   payload: NextRedirectPayload;
 }
 
-export type NextAction = NextContinueAction | NextPropsAction | NextRedirectAction;
+export type NextAction = NextContinueAction | NextDataAction | NextRedirectAction;
 
-export interface NextFunction<Props extends {}> {
+export interface NextFunction<Data extends {}> {
   /** Resolve the guard and continue to the next, if any. */
   (): void;
-  /** Pass the props to the resolved route and continue to the next, if any. */
-  props(props: Props): void;
+  /** Pass the data to the resolved route and continue to the next, if any. */
+  data(data: Data): void;
   /** Redirect to the given route. */
   redirect(to: LocationDescriptor): void;
 }
@@ -50,13 +50,13 @@ export interface GuardFunctionContext {
   signal: AbortSignal;
 }
 
-export type GuardFunction<Props extends {} = {}> = (
+export type GuardFunction<Data extends {} = {}> = (
   /** The route being navigated to. */
   to: RouteComponentProps<Record<string, any>>,
   /** The route being navigated from, if any */
   from: RouteComponentProps<Record<string, any>> | null,
   /** The guard's next function */
-  next: NextFunction<Props>,
+  next: NextFunction<Data>,
   /** Context for this guard's execution */
   context: GuardFunctionContext,
 ) => void;

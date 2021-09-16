@@ -3,7 +3,7 @@ import {
   GuardFunction,
   NextFunction,
   NextAction,
-  NextPropsPayload,
+  NextDataPayload,
   NextRedirectPayload,
   GuardFunctionContext,
 } from './types';
@@ -11,7 +11,7 @@ import {
 export type ResolvedGuardStatus =
   | { type: 'error'; error: unknown }
   | { type: 'redirect'; redirect: NextRedirectPayload }
-  | { type: 'render'; props: NextPropsPayload };
+  | { type: 'render'; data: NextDataPayload };
 
 export interface ResolveGuardsContext {
   to: RouteComponentProps<Record<string, string>>;
@@ -29,8 +29,8 @@ export const NextFunctionFactory = {
     }
 
     return Object.assign(next, {
-      props(payload: NextPropsPayload) {
-        resolve({ type: 'props', payload });
+      data(payload: NextDataPayload) {
+        resolve({ type: 'data', payload });
       },
       redirect(payload: NextRedirectPayload) {
         resolve({ type: 'redirect', payload });
@@ -74,19 +74,19 @@ export async function resolveGuards(
   context: ResolveGuardsContext,
 ): Promise<ResolvedGuardStatus> {
   try {
-    let props: NextPropsPayload = {};
+    let data: NextDataPayload = {};
     for (const guard of guards) {
       const action = await runGuard(guard, context);
       if (action.type === 'redirect') {
         // If the guard calls for a redirect, do so immediately!
         return { type: 'redirect', redirect: action.payload };
-      } else if (action.type === 'props') {
-        // Otherwise, continue to merge props
-        props = Object.assign(props, action.payload);
+      } else if (action.type === 'data') {
+        // Otherwise, continue to merge data
+        data = Object.assign(data, action.payload);
       }
     }
     // Then return the props after all guards have resolved
-    return { type: 'render', props };
+    return { type: 'render', data };
   } catch (error) {
     // If the guard fails because the signal is aborted, bubbles up the error
     if (error && error.name === 'AbortError') {

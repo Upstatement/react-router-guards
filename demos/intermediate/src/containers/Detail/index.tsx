@@ -1,18 +1,19 @@
 import React, { useCallback } from 'react';
 import { Switch, useRouteMatch, Redirect } from 'react-router-dom';
-import { GuardFunction, GuardedRoute } from 'react-router-guards';
+import { GuardFunction, GuardedRoute, useGuardData } from 'react-router-guards';
 import { LabeledSection, Recirculation, SpriteList, StatChart, Type, Link } from 'components';
 import { waitOneSecond } from 'router/guards';
 import { MoveLearnType, SerializedPokemon } from 'types';
 import { api, className, serializePokemon } from 'utils';
 import styles from './detail.module.scss';
 
-interface Props {
+interface DetailGuardData {
   pokemon: SerializedPokemon;
 }
 
-const Detail: React.FunctionComponent<Props> = ({
-  pokemon: {
+const Detail: React.FunctionComponent = () => {
+  const data = useGuardData<DetailGuardData>();
+  const {
     abilities,
     baseExperience,
     entryNumber,
@@ -24,8 +25,8 @@ const Detail: React.FunctionComponent<Props> = ({
     sprites,
     types,
     weight,
-  },
-}) => {
+  } = data.pokemon;
+
   const renderMoveList = useCallback(
     (type: MoveLearnType, renderLevel: boolean = false) => (
       <ul className={styles.list}>
@@ -166,16 +167,11 @@ const Detail: React.FunctionComponent<Props> = ({
 
 export default Detail;
 
-export const beforeRouteEnter: GuardFunction<{ pokemon: SerializedPokemon }> = async (
-  to,
-  from,
-  next,
-  ctx,
-) => {
+export const beforeRouteEnter: GuardFunction<DetailGuardData> = async (to, from, next, ctx) => {
   const { name } = to.match.params;
   try {
     const pokemon = await api.get(name, { signal: ctx.signal });
-    next.props({
+    next.data({
       pokemon: serializePokemon(pokemon),
     });
   } catch (error) {

@@ -1,12 +1,13 @@
 import React, { useContext, useRef, useState, useEffect, Fragment, createElement } from 'react';
-import {
-  __RouterContext as RouterContext,
-  RouteComponentProps,
-  withRouter,
-  RouteProps,
-} from 'react-router';
+import { RouteComponentProps, withRouter, RouteProps } from 'react-router';
 import { Redirect, Route } from 'react-router-dom';
-import { ErrorPageContext, GuardContext, LoadingPageContext, FromRouteContext } from './contexts';
+import {
+  ErrorPageContext,
+  GuardContext,
+  LoadingPageContext,
+  FromRouteContext,
+  GuardDataContext,
+} from './contexts';
 import { resolveGuards, ResolvedGuardStatus } from './resolveGuards';
 import { useRouteChangeEffect } from './useRouteChangeEffect';
 import { Meta, Page, PageComponentType } from './types';
@@ -53,7 +54,7 @@ export const Guard = withRouter<GuardProps & RouteComponentProps>(function Guard
   function getInitialStatus(): GuardStatus {
     // If there are no guards in context, the route should immediately render
     if (!guards || guards.length === 0) {
-      return { type: 'render', props: {} };
+      return { type: 'render', data: {} };
     }
     // Otherwise, the component should start resolving
     return { type: 'resolving' };
@@ -116,19 +117,13 @@ export const Guard = withRouter<GuardProps & RouteComponentProps>(function Guard
 
     case 'render': {
       return (
-        <RouterContext.Provider
-          value={{
-            ...routeProps,
-            // Add resolved guard props to context in order to pass to route child component
-            // https://github.com/remix-run/react-router/blob/main/packages/react-router/modules/Route.js#L54-L74
-            ...status.props,
-          }}>
-          <GuardContext.Provider value={[]}>
+        <GuardContext.Provider value={[]}>
+          <GuardDataContext.Provider value={status.data}>
             <Route component={component} render={render}>
               {children}
             </Route>
-          </GuardContext.Provider>
-        </RouterContext.Provider>
+          </GuardDataContext.Provider>
+        </GuardContext.Provider>
       );
     }
 
