@@ -1,13 +1,24 @@
 import React, { useContext } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { ErrorPageContext, FromRouteContext, GuardContext, LoadingPageContext } from './contexts';
-import { useGlobalGuards } from './hooks';
-import { GuardProviderProps } from './types';
+import { useGlobalGuards } from './hooks/useGlobalGuards';
+import { BaseGuardProps } from './types';
 import { useRouteChangeEffect } from './hooks/useRouteChangeEffect';
 
-const GuardProvider: React.FunctionComponent<
+export type GuardProviderProps = BaseGuardProps;
+
+export const GuardProvider = withRouter<
   GuardProviderProps & RouteComponentProps<Record<string, any>>
-> = ({ children, guards, ignoreGlobal, loading, error, history, location, match }) => {
+>(function GuardProviderWithRouter({
+  children,
+  guards,
+  ignoreGlobal,
+  loading,
+  error,
+  history,
+  location,
+  match,
+}) {
   const routeProps = { history, location, match };
   const fromRouteProps = useRouteChangeEffect(routeProps, () => {});
 
@@ -25,6 +36,4 @@ const GuardProvider: React.FunctionComponent<
       </LoadingPageContext.Provider>
     </GuardContext.Provider>
   );
-};
-
-export default withRouter(GuardProvider);
+});

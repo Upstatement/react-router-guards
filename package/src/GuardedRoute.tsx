@@ -1,12 +1,16 @@
 import React, { useContext } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, RouteProps } from 'react-router-dom';
 import invariant from 'tiny-invariant';
-import Guard from './Guard';
+import { Guard } from './Guard';
 import { ErrorPageContext, GuardContext, LoadingPageContext } from './contexts';
-import { useGlobalGuards } from './hooks';
-import { GuardedRouteProps } from './types';
+import { useGlobalGuards } from './hooks/useGlobalGuards';
+import { BaseGuardProps, Meta } from './types';
 
-const GuardedRoute: React.FunctionComponent<GuardedRouteProps> = ({
+export interface GuardedRouteProps extends BaseGuardProps, RouteProps {
+  meta?: Meta;
+}
+
+export const GuardedRoute: React.FunctionComponent<GuardedRouteProps> = ({
   children,
   component,
   error,
@@ -40,5 +44,3 @@ const GuardedRoute: React.FunctionComponent<GuardedRouteProps> = ({
     </Route>
   );
 };
-
-export default GuardedRoute;

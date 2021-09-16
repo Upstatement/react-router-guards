@@ -1,15 +1,14 @@
 import { ComponentType } from 'react';
 import { LocationDescriptor } from 'history';
-import { RouteComponentProps, RouteProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 
 /**
  * General
  */
 export type Meta = Record<string, any>;
-export type RouteMatchParams = Record<string, string>;
+
 export interface NextContinueAction {
   type: 'continue';
-  payload?: any;
 }
 
 export type NextPropsPayload = Record<string, any>;
@@ -25,22 +24,21 @@ export interface NextRedirectAction {
 }
 
 export type NextAction = NextContinueAction | NextPropsAction | NextRedirectAction;
-export type GuardType = NextAction['type'];
 
-export interface Next {
+export interface Next<Props extends {}> {
   (): void;
-  props(props: NextPropsPayload): void;
+  props(props: Props): void;
   redirect(to: LocationDescriptor): void;
 }
 
-export type GuardFunctionRouteProps = RouteComponentProps<RouteMatchParams>;
+export type GuardFunctionRouteProps = RouteComponentProps<Record<string, any>>;
 export type GuardToRoute = GuardFunctionRouteProps & {
   meta: Meta;
 };
-export type GuardFunction = (
+export type GuardFunction<Props extends {} = {}> = (
   to: GuardToRoute,
   from: GuardFunctionRouteProps | null,
-  next: Next,
+  next: Next<Props>,
   signal: AbortSignal,
 ) => void;
 
@@ -58,13 +56,3 @@ export interface BaseGuardProps {
   loading?: PageComponent;
   error?: PageComponent;
 }
-
-export type PropsWithMeta<T> = T & {
-  meta?: Meta;
-};
-
-export type GuardProviderProps = BaseGuardProps;
-export type GuardedRouteProps = PropsWithMeta<BaseGuardProps & RouteProps>;
-export type GuardProps = PropsWithMeta<RouteProps> & {
-  name?: string | string[];
-};

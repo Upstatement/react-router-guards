@@ -2,7 +2,7 @@ import React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { GuardFunction } from '../../types';
 import { GuardContext } from '../../contexts';
-import useGlobalGuards from '../useGlobalGuards';
+import { useGlobalGuards } from '../useGlobalGuards';
 
 const guardOne: GuardFunction = (to, from, next) => next();
 const guardTwo: GuardFunction = (to, from, next) => next.props({});

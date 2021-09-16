@@ -10,7 +10,7 @@ type BaseProps = Record<string, any>;
  * @param props the props to pass to the page
  * @returns the page component
  */
-function renderPage<Props extends BaseProps>(
+export function renderPage<Props extends BaseProps>(
   page: PageComponent,
   props?: Props,
 ): React.ReactElement | null {
@@ -21,5 +21,3 @@ function renderPage<Props extends BaseProps>(
   }
   return <Fragment>{page}</Fragment>;
 }
-
-export default renderPage;

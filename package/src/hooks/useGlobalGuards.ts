@@ -10,7 +10,7 @@ import { GuardFunction } from '../types';
  * @param ignoreGlobal whether to ignore the global guards or not
  * @returns the guards to use on the component
  */
-const useGlobalGuards = (guards: GuardFunction[] = [], ignoreGlobal: boolean = false) => {
+export const useGlobalGuards = (guards: GuardFunction[] = [], ignoreGlobal: boolean = false) => {
   const globalGuards = useContext(GuardContext);
 
   const componentGuards = useMemo(() => {
@@ -24,5 +24,3 @@ const useGlobalGuards = (guards: GuardFunction[] = [], ignoreGlobal: boolean = f
 
   return componentGuards;
 };
-
-export default useGlobalGuards;
