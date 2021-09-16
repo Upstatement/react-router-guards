@@ -88,15 +88,15 @@ export const Guard = withRouter<GuardProps & RouteComponentProps>(function Guard
       const abortController = new AbortController();
       routeChangeAbortControllerRef.current = abortController;
       // Resolve the guards to get the render status
-      const status = await resolveGuards(guards || [], {
+      const resolvedStatus = await resolveGuards(guards || [], {
         to: routeProps,
         from: fromRouteProps,
         meta: meta || {},
         signal: abortController.signal,
       });
-      // If the signal hasn't been aborted, set the new status!
+      // If the route hasn't changed during async resolution, set the newly resolved status!
       if (isMountedRef.current && !abortController.signal.aborted) {
-        setStatus(status);
+        setStatus(resolvedStatus);
       }
     }
   });
