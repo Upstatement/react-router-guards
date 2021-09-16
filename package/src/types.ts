@@ -2,11 +2,14 @@ import { ComponentType } from 'react';
 import { LocationDescriptor } from 'history';
 import { RouteComponentProps } from 'react-router-dom';
 
-/**
- * General
- */
+///////////////////////////////
+// General
+///////////////////////////////
 export type Meta = Record<string, any>;
 
+///////////////////////////////
+// Next Functions
+///////////////////////////////
 export interface NextContinueAction {
   type: 'continue';
 }
@@ -31,6 +34,9 @@ export interface Next<Props extends {}> {
   redirect(to: LocationDescriptor): void;
 }
 
+///////////////////////////////
+// Guards
+///////////////////////////////
 export type GuardFunctionRouteProps = RouteComponentProps<Record<string, any>>;
 export type GuardToRoute = GuardFunctionRouteProps & {
   meta: Meta;
@@ -42,17 +48,24 @@ export type GuardFunction<Props extends {} = {}> = (
   signal: AbortSignal,
 ) => void;
 
-/**
- * Page Component Types
- */
-export type PageComponent = ComponentType | null | undefined | string | boolean | number;
+///////////////////////////////
+// Page Types
+///////////////////////////////
+export type PageComponentType<P = {}> = ComponentType<RouteComponentProps & P>;
+export type Page<P = {}> = PageComponentType<P> | null | undefined | string | boolean | number;
 
-/**
- * Props
- */
+export type LoadingPage = Page;
+export type ErrorPage = Page<{ error: unknown }>;
+
+export type LoadingPageComponentType = PageComponentType;
+export type ErrorPageComponentType = PageComponentType<{ error: unknown }>;
+
+///////////////////////////////
+// Props
+///////////////////////////////
 export interface BaseGuardProps {
   guards?: GuardFunction[];
   ignoreGlobal?: boolean;
-  loading?: PageComponent;
-  error?: PageComponent;
+  loading?: LoadingPage;
+  error?: ErrorPage;
 }

@@ -35,7 +35,7 @@ export const GuardedRoute: React.FunctionComponent<GuardedRouteProps> = ({
       <GuardContext.Provider value={routeGuards}>
         <LoadingPageContext.Provider value={loading || loadingPage}>
           <ErrorPageContext.Provider value={error || errorPage}>
-            <Guard name={path} component={component} meta={meta} render={render}>
+            <Guard name={path} meta={meta} component={component} render={render}>
               {children}
             </Guard>
           </ErrorPageContext.Provider>
