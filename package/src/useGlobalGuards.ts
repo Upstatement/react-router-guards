@@ -3,8 +3,7 @@ import { GuardContext } from './contexts';
 import { GuardFunction } from './types';
 
 /**
- * React hook for creating the guards array for a Guarded
- * component.
+ * React hook for creating the guards array for a Guarded component.
  *
  * @param guards the component-level guards
  * @param ignoreGlobal whether to ignore the global guards or not

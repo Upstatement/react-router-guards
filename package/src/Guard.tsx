@@ -12,22 +12,18 @@ import { useRouteChangeEffect } from './useRouteChangeEffect';
 import { Meta, Page, PageComponentType } from './types';
 
 /**
- * Checks whether the given page component is a React component type.
+ * Type checks whether the given page is a React component type.
  *
- * @param pageComponent the page component to check
+ * @param page the page to type check
  */
-function isPageComponentType<P>(pageComponent: Page<P>): pageComponent is PageComponentType<P> {
+function isPageComponentType<P>(page: Page<P>): page is PageComponentType<P> {
   return (
-    !!pageComponent &&
-    typeof pageComponent !== 'string' &&
-    typeof pageComponent !== 'boolean' &&
-    typeof pageComponent !== 'number'
+    !!page && typeof page !== 'string' && typeof page !== 'boolean' && typeof page !== 'number'
   );
 }
 
 export interface GuardProps extends RouteProps {
   meta?: Meta;
-  name?: RouteProps['path'];
 }
 
 export const Guard = withRouter<GuardProps & RouteComponentProps>(function GuardWithRouter({
