@@ -120,7 +120,7 @@ We've included some demos below to help provide more context on how to use this 
 
 ### Basic
 
-[Demo + Source](https://codesandbox.io/s/react-router-guards-basic-demo-0m48v)
+[Demo + Source](https://codesandbox.io/s/react-router-guards-basic-demo-forked-83dkh)
 
 The basic demo showcases some basic functionality of route guard API with an auth example.
 
